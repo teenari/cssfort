@@ -1,6 +1,6 @@
 $(document).ready(async () => {
     const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
-        credentials: 'same-origin', // glitching testing currently
+        credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'
         }
