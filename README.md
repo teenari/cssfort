@@ -1,2 +1,0 @@
-# fortnitebt
-Official FortniteBT repository.
