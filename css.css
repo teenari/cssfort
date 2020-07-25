@@ -14,7 +14,17 @@ html {
     -ms-user-select: none;
     user-select: none;
     color: white;
-    padding: 200px;
+    padding: 60px;
+}
+
+.loginDiscord {
+    background-color: #7289DA;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 40px;
+    position: relative;
+    cursor: pointer;
 }
 
 #copyright {
