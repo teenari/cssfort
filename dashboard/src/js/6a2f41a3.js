@@ -384,7 +384,7 @@ $(document).ready(async () => {
         changeColorScheme('black');
     }
 
-    await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/');
+    await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {withCredentials: 'include'});
     const source = new EventSource("https://fortnitebtapi.herokuapp.com/api/account/session/start", {withCredentials: 'include'});
 
     await new Promise((resolve) => {
@@ -394,7 +394,7 @@ $(document).ready(async () => {
             setLoadingText(json.message);
         }
     });
-    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/')).json();
+    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {withCredentials: 'include'})).json();
     $('#username')[0].innerText = account.displayName;
 
     // const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
