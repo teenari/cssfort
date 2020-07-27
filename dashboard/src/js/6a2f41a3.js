@@ -367,20 +367,20 @@ $(document).ready(async () => {
         changeColorScheme('black');
     }
 
-    const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
-        credentials: 'include',
-        headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
-    })).json();
-    if(user.authorization !== false) {
-        if(!user.inServer) {
-            return window.location = 'https://discord.gg/xkURTCz';
-        }
-    }
-    else {
-        return window.location = 'https://teenari.github.io/fortnitebt/';
-    }
+    // const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
+    //     credentials: 'include',
+    //     headers: {
+    //         'Access-Control-Allow-Origin': '*'
+    //     }
+    // })).json();
+    // if(user.authorization !== false) {
+    //     if(!user.inServer) {
+    //         return window.location = 'https://discord.gg/xkURTCz';
+    //     }
+    // }
+    // else {
+    //     return window.location = 'https://teenari.github.io/fortnitebt/';
+    // }
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
