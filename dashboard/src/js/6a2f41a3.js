@@ -319,11 +319,11 @@ async function createImageInElement(element, hidden, argumen, callback) {
 
 function changeItem(id, cosmeticType) {
     if(cosmeticType.toLowerCase() === 'banner') return;
-    fetch(`http://localhost:5000/item?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`);
+    fetch(`http://localhost:5000/item?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 function addVariant(array, cosmeticType) {
-    fetch(`http://localhost:5000/item?array=["${items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+    fetch(`https://fortnitebtapi.herokuapp.com/api/account/party/item?array=["${items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
         mode: 'no-cors'
     });
 }
