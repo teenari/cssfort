@@ -394,7 +394,7 @@ $(document).ready(async () => {
             setLoadingText(json.message);
         }
     });
-    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {withCredentials: 'include'})).json();
+    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     $('#username')[0].innerText = account.displayName;
 
     // const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
