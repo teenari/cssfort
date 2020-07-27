@@ -384,7 +384,7 @@ $(document).ready(async () => {
         changeColorScheme('black');
     }
 
-    await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include'});
+    await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     const source = new EventSource("https://fortnitebtapi.herokuapp.com/api/account/session/start", {withCredentials: true});
 
     await new Promise((resolve) => {
