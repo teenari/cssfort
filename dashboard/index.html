@@ -1,27 +1,54 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="icon" type="image/png" href="../src/images/74d1fa16.png"/>
+        <link rel="icon" type="image/png" href="./src/images/5c2f428e.png"/>
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
         <title>FortniteBT Dashboard</title>
         <meta name="author" content="Teenari">
         <meta property="og:title" content="FortniteBT"/>
         <meta property="og:url" content="https://teenari.github.io/fortnitebt/"/>
-        <link rel="icon" type="image/png" href="../src/images/74d1fa16.png"/>
-        <meta property="og:image" content="../src/images/74d1fa16.png">
+        <link rel="icon" type="image/png" href="../src/images/5c2f428e.png"/>
+        <meta property="og:image" content="../src/images/5c2f428e.png">
         <meta property="og:type" content="website"/>
         <meta property="og:description" content="FortniteBT dashboard, more information is at https://discord.gg/xkURTCz!"/>
-        <link rel="stylesheet" href="../src/css/a05938c0.css">
+        <link rel="stylesheet" href="./src/css/b3c53bd6.css">
         <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+        <script src="./src/js/6a2f41a3.js"></script>
     </head>
     <body>
+        <div class="menu" id="menu" hidden></div>
+        <div class="fn-container" style="display: none;">
+            <div id="SettingsButton">
+                <img width="100" height="100" draggable="false" src="./src/images/schemes/black/faceplate.png" style="cursor: pointer; position: absolute; top: 6px; left: 6px;">
+                <div style="cursor: pointer;font-family: t;color: white;font-size: 100px;position: absolute;left: 35px;top: 15px;">
+                    S
+                </div>
+            </div>
+        </div>
+        <div id="avatar" hidden>
+            <div class="username" style="font-size: 30px;top: 10px;" id="username">
+                FortniteBT
+            </div>
+            <div class="username" id="username">
+                NOT LOADED YET
+            </div>
+            <div class="username" style="font-size: 30px;top: 70px;" id="username">
+                30 Minutes left
+            </div>
+            <div id="fnItems"></div>
+        </div>
         <div id="fortnite" class="text-container">
             <div id="items">
-                <img id="logo" src="../src/images/74d1fa16.png" width="150" height="150">
-                <div style="font-size: 100px">FORTNITEBT</div>
-                <div style="font-size: 30px">Dashboard is being worked on, please wait.</div>
-                <!-- <script src="index.js"></script> -->
+                <img id="logo" src="./src/images/5c2f428e.png" width="150" height="150">
+                <div id="status" style="color: white"></div>
+            </div>
+            <div id="copyright">
+                Portions of the materials used are trademarks and/or copyrighted works of Epic Games, Inc. All rights reserved by Epic. This material is not official and is not endorsed by Epic.
+                Epic Games, Inc. Epic, Epic Games, the Epic Games logo, Fortnite, the Fortnite logo, Unreal, Unreal Engine 4 and UE4 are trademarks or registered trademarks of Epic Games, Inc. in the United States of America and elsewhere. All rights reserved. 
+                <br>
+                Portions of this website use images from "Athena", check here for the LICENSE <a href="https://raw.githubusercontent.com/EthanC/Athena/master/LICENSE">https://raw.githubusercontent.com/EthanC/Athena/master/LICENSE</a>.
             </div>
         </div>
     </body>
