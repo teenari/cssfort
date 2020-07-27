@@ -12,6 +12,7 @@
  */
 
 let LoadingText = '';
+let account = null;
 let stream;
 const settings = {
     "colorScheme": {
@@ -152,6 +153,15 @@ async function showMenu(cosmeticType) {
             const img = $(`#${id}`)[0].children[0];
             if($(`#${id}`)[0].children[2].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[2].remove();
             $(`#${id}`)[0].children[1].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
+            const variants = [];
+            for (const variant of selectedVariants) {
+                variants.push({
+                    "item": items[cosmeticType.toLowerCase()].type.backendValue,
+                    "channel": variant.channel,
+                    "variant": variant.tag
+                })
+            }
+            addVariant(variants, cosmeticType.toLowerCase());
             await hideMenu();
         });
     });
@@ -224,6 +234,7 @@ async function showMenu(cosmeticType) {
                     await showMenu(selectedItem.type.value.toUpperCase());
                 }
             }
+            changeItem(selectedItem.id, cosmeticType.toLowerCase());
             items.variants[cosmeticType] = [];
             await hideMenu();
         });
@@ -308,7 +319,13 @@ async function createImageInElement(element, hidden, argumen, callback) {
 
 function changeItem(id, cosmeticType) {
     if(cosmeticType.toLowerCase() === 'banner') return;
-    fetch(`http://localhost:5000/item?path=/Game/Athena/Items/Cosmetics/${items.conversions[cosmeticType.toLowerCase()]}/${id}.${id}&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`);
+    fetch(`http://localhost:5000/item?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`);
+}
+
+function addVariant(array, cosmeticType) {
+    fetch(`http://localhost:5000/item?array=["${items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+        mode: 'no-cors'
+    });
 }
 
 function setDefaultItems() {
@@ -366,6 +383,19 @@ $(document).ready(async () => {
         Cookies.set('colorScheme', 'black');
         changeColorScheme('black');
     }
+
+    await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/');
+    const source = new EventSource("https://fortnitebtapi.herokuapp.com/api/account/session/start", {withCredentials: 'include'});
+
+    await new Promise((resolve) => {
+        source.onmessage = (data) => {
+            const json = JSON.parse(data.data);
+            if(json.done) return resolve();
+            setLoadingText(json.message);
+        }
+    });
+    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/')).json();
+    $('#username')[0].innerText = account.displayName;
 
     // const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
     //     credentials: 'include',
@@ -472,6 +502,7 @@ $(document).ready(async () => {
             }
             $('#SaveAvatar').click(async () => {
                 if(!selectedItem) return;
+                changeItem(selectedItem.id, 'emote');
                 await hideMenu();
             });
         });
