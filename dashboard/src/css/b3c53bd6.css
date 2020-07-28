@@ -177,6 +177,16 @@ html {
     font-family: t;
 }
 
+#items #text {
+    width: 707px;
+    height: 532px;
+    text-align: left;
+    position: absolute;
+    left: 3px;
+    top: 2px;
+    font-size: 30px;
+}
+
 #itemInfo {
     border-radius: 20px 0px 0px;
     background: white;
