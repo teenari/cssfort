@@ -403,13 +403,7 @@ $(document).ready(async () => {
         console.log(error)
         return setLoadingText('ok');
     }
-    let source;
-    try {
-        source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    } catch(error) {
-        console.log(error)
-        return setLoadingText('ok');
-    }
+    const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`).catch(console.log);
 
     await new Promise((resolve) => {
         source.onmessage = (data) => {
