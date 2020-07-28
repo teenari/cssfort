@@ -404,7 +404,9 @@ $(document).ready(async () => {
         return setLoadingText('ok');
     }
     const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    source.onerror = console.log;
+    source.onerror = (e) => {
+        return setLoadingText('Error happend, cannot access the error.')
+    }
 
     await new Promise((resolve) => {
         source.onmessage = (data) => {
@@ -441,134 +443,133 @@ $(document).ready(async () => {
     categorizeItems(true);
     sortItems();
     setLoadingText('Creating default images');
-    const { top, left, width, height } = await setItems(items.default, items);
-    await createImageInElement(document.getElementById('fnItems'), false, [{
-        images: {
-            icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
-        },
-        id: 'Emote'
-    }, top - 20, left, 'absolute', width - 10, height - 1, 'Emote'], async (e) => {
-        const menu = $('#menu');
-        $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
-        menu.fadeIn(250);
-        menu.draggable({
-            "containment": "window"
-        });
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        $(document).click(async (e) => { 
-            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-                await hideMenu();
-                $(document).unbind('click');
-            }        
-        });
-        $('#SaveID').click(async () => {
-            await hideMenu();
-        });
-        $('#selectItem').click(async () => {
-            let selectedItem = null;
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
-            $('#search').keyup(() => {
-                const searchQuery = $('#search').val();
-                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
-                    element.hidden = true;
-                }
-                for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
-                    element.hidden = false;
-                }
-            });
-            for (const item of items.sort.emote) {
-                const div = document.createElement("div");
-                div.id = `ITEM/${item.id}`;
-                for (const src of [{
-                    src: settings.colorScheme[settings.currentScheme].back
-                }, {
-                    src: item.images.icon,
-                    position: 'relative',
-                    right: '100px'
-                }, {
-                    src: settings.colorScheme[settings.currentScheme].faceplate,
-                    position: 'relative',
-                    right: '200px'
-                }]) {
-                    const IMAGE = document.createElement("IMG");
-                    if(src.src || src.back) IMAGE.width = 100;
-                    if(src.src || src.back) IMAGE.height = 100;
-                    IMAGE.draggable = false;
-                    IMAGE.style.cursor = 'pointer';
-                    if(src.src) IMAGE.src = src.src;
-                    if(src.position) IMAGE.style.position = src.position;
-                    if(src.right) IMAGE.style.right = src.right;
-                    const element = $('#cosmetics')[0].appendChild(div);
-                    ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
-                        if(selectedItem === item) return;
-                        if(selectedItem && selectedItem !== item) {
-                            $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
-                        }
-                        e.srcElement.src = settings.colorScheme.faceplate;
-                        selectedItem = item;
-                    }
-                    if(src.src.includes('faceplate.png')) {
-                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
-                        element.onclick = async () => {
-                            if(selectedItem === item) return;
-                            if(selectedItem && selectedItem !== item) {
-                                $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
-                            }
-                            $(`[id="ITEM/${item.id}"]`).children()[2].src = settings.colorScheme.faceplate;
-                            selectedItem = item;
-                        }
-                    }
-                }
-            }
-            $('#SaveAvatar').click(async () => {
-                if(!selectedItem) return;
-                changeItem(selectedItem.id, 'emote');
-                await hideMenu();
-            });
-        });
-    });
-    $('#SettingsButton').children().click(async () => {
-        const menu = $('#menu');
-        $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">Settings<div id="PartyButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="AccountSettings" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Account</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
-        menu[0].style.left = '1093px';
-        menu[0].style.top = '14px';
-        menu.fadeIn(250);
-        menu.draggable({
-            "containment": "window"
-        });
-        $('#PartyButton').click(async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            menu[0].innerHTML = '<div class="cosmetic"><div class="textBackground gradient">Party</div><div id="MemberCount" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="PrivacyName" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="LeaderName" style="font-size: 20px; margin: 10px;">TEMPLATE</div></div>';
-        });
-        $('#ColorSchemeButton').click(async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            menu[0].innerHTML = '';
-            for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
-                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;" id="ColorScheme#${colorScheme}">${colorScheme}</div>`;
-            }
-            menu[0].innerHTML = `<div class="cosmetic"><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
-            for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
-                $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
-                    changeColorScheme(colorScheme);
-                    await hideMenu();
-                });
-            }
-        });
-        await new Promise((resolve) => setTimeout(resolve, 250));
-        $(document).click(async (e) => { 
-            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-                await hideMenu();
-                $(document).unbind('click');
-            }        
-        });
-    });
+    // const { top, left, width, height } = await setItems(items.default, items);
+    // await createImageInElement(document.getElementById('fnItems'), false, [{
+    //     images: {
+    //         icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
+    //     },
+    //     id: 'Emote'
+    // }, top - 20, left, 'absolute', width - 10, height - 1, 'Emote'], async (e) => {
+    //     const menu = $('#menu');
+    //     $(document).unbind('click');
+    //     menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
+    //     menu.fadeIn(250);
+    //     menu.draggable({
+    //         "containment": "window"
+    //     });
+    //     await new Promise((resolve) => setTimeout(resolve, 300));
+    //     $(document).click(async (e) => { 
+    //         if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+    //             await hideMenu();
+    //             $(document).unbind('click');
+    //         }        
+    //     });
+    //     $('#SaveID').click(async () => {
+    //         await hideMenu();
+    //     });
+    //     $('#selectItem').click(async () => {
+    //         let selectedItem = null;
+    //         await new Promise((resolve) => setTimeout(resolve, 1));
+    //         $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
+    //         $('#search').keyup(() => {
+    //             const searchQuery = $('#search').val();
+    //             for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
+    //                 element.hidden = true;
+    //             }
+    //             for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
+    //                 element.hidden = false;
+    //             }
+    //         });
+    //         for (const item of items.sort.emote) {
+    //             const div = document.createElement("div");
+    //             div.id = `ITEM/${item.id}`;
+    //             for (const src of [{
+    //                 src: settings.colorScheme[settings.currentScheme].back
+    //             }, {
+    //                 src: item.images.icon,
+    //                 position: 'relative',
+    //                 right: '100px'
+    //             }, {
+    //                 src: settings.colorScheme[settings.currentScheme].faceplate,
+    //                 position: 'relative',
+    //                 right: '200px'
+    //             }]) {
+    //                 const IMAGE = document.createElement("IMG");
+    //                 if(src.src || src.back) IMAGE.width = 100;
+    //                 if(src.src || src.back) IMAGE.height = 100;
+    //                 IMAGE.draggable = false;
+    //                 IMAGE.style.cursor = 'pointer';
+    //                 if(src.src) IMAGE.src = src.src;
+    //                 if(src.position) IMAGE.style.position = src.position;
+    //                 if(src.right) IMAGE.style.right = src.right;
+    //                 const element = $('#cosmetics')[0].appendChild(div);
+    //                 ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
+    //                     if(selectedItem === item) return;
+    //                     if(selectedItem && selectedItem !== item) {
+    //                         $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+    //                     }
+    //                     e.srcElement.src = settings.colorScheme.faceplate;
+    //                     selectedItem = item;
+    //                 }
+    //                 if(src.src.includes('faceplate.png')) {
+    //                     IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
+    //                     element.onclick = async () => {
+    //                         if(selectedItem === item) return;
+    //                         if(selectedItem && selectedItem !== item) {
+    //                             $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+    //                         }
+    //                         $(`[id="ITEM/${item.id}"]`).children()[2].src = settings.colorScheme.faceplate;
+    //                         selectedItem = item;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         $('#SaveAvatar').click(async () => {
+    //             if(!selectedItem) return;
+    //             changeItem(selectedItem.id, 'emote');
+    //             await hideMenu();
+    //         });
+    //     });
+    // });
+    // $('#SettingsButton').children().click(async () => {
+    //     const menu = $('#menu');
+    //     $(document).unbind('click');
+    //     menu[0].innerHTML = `<div class="cosmetic">Settings<div id="PartyButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="AccountSettings" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Account</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
+    //     menu[0].style.left = '1093px';
+    //     menu[0].style.top = '14px';
+    //     menu.fadeIn(250);
+    //     menu.draggable({
+    //         "containment": "window"
+    //     });
+    //     $('#PartyButton').click(async () => {
+    //         await new Promise((resolve) => setTimeout(resolve, 1));
+    //         menu[0].innerHTML = '<div class="cosmetic"><div class="textBackground gradient">Party</div><div id="MemberCount" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="PrivacyName" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="LeaderName" style="font-size: 20px; margin: 10px;">TEMPLATE</div></div>';
+    //     });
+    //     $('#ColorSchemeButton').click(async () => {
+    //         await new Promise((resolve) => setTimeout(resolve, 1));
+    //         menu[0].innerHTML = '';
+    //         for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
+    //             menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;" id="ColorScheme#${colorScheme}">${colorScheme}</div>`;
+    //         }
+    //         menu[0].innerHTML = `<div class="cosmetic"><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
+    //         for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
+    //             $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
+    //                 changeColorScheme(colorScheme);
+    //                 await hideMenu();
+    //             });
+    //         }
+    //     });
+    //     await new Promise((resolve) => setTimeout(resolve, 250));
+    //     $(document).click(async (e) => { 
+    //         if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+    //             await hideMenu();
+    //             $(document).unbind('click');
+    //         }        
+    //     });
+    // });
     setLoadingText('Starting');
-    $('[id="items"]').fadeOut(300);
-    $('#copyright').css('position', 'absolute').animate({right: 0}, 700).animate({bottom: 10}, 700);
-    $('.fn-container').css('left', '300vh').show().animate({left: '146vh'}, 700);
+    $('#fortnite').fadeOut(300);
+    $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
     stopText();
     await new Promise((resolve) => setTimeout(resolve, 300));
