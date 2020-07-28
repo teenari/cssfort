@@ -405,7 +405,7 @@ $(document).ready(async () => {
     }
     const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
     source.onerror = (e) => {
-        return setLoadingText('Error happend, cannot access the error.')
+        return setLoadingText('Error happend, cannot access the error.');
     }
 
     await new Promise((resolve) => {
