@@ -388,7 +388,7 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     })).json();
-    if(user.authorization !== false) {
+    if(user.authorization === false) {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
     }
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
