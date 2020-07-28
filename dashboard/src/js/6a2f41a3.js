@@ -324,8 +324,11 @@ function changeItem(id, cosmeticType) {
 
 function addVariant(array, cosmeticType) {
     fetch(`https://fortnitebtapi.herokuapp.com/api/account/party/item?array=["${items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+        credentials: 'include',
         method: "PUT",
-        mode: 'no-cors'
+        headers: {
+            'Access-Control-Allow-Origin': "https://teenari.github.io"
+        }
     });
 }
 
