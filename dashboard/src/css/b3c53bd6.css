@@ -258,3 +258,21 @@ html {
     font-size: xx-large;
     text-align: center;
 }
+
+#accessBar #barButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+    font-family: t;
+    font-size: 30px;
+}
+
+#barButtons .button {
+    padding: 10px;
+    background: black;
+    display: inline-block;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
