@@ -187,6 +187,16 @@ html {
     top: 220px;
 }
 
+#items #text {
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    width: 709px;
+    height: 540px;
+    left: 1px;
+    top: 0px;
+}
+
 #itemInfo {
     border-radius: 20px 0px 0px;
     background: white;
@@ -210,7 +220,7 @@ html {
     font-size: 23px;
     position: absolute;
     top: 20px;
-    left: 69px;
+    left: 114px;
 }
 
 .buttons {
@@ -283,12 +293,15 @@ html {
 }
 
 #accessBar #barButtons {
-    display: flex;
     align-items: center;
     justify-content: center;
     margin: 30px;
     font-family: t;
     font-size: 30px;
+    display: inline-block;
+    align-self: flex-end;
+    position: absolute;
+    left: 21px;
 }
 
 #barButtons .button {

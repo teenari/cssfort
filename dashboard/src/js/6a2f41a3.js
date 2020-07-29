@@ -33,7 +33,7 @@ const settings = {
     "currentScheme": 'partyroyale',
     "boxSizing": 'same-size'
 }
-const items = {
+let items = {
     "outfit": null,
     "backpack": null,
     "pickaxe": null,
@@ -73,10 +73,13 @@ async function hideMenu() {
     if($('#SaveItem')) $('#SaveItem').remove();
     if($('#BackButton')) $('#BackButton').remove();
     $('#stuff')[0].innerHTML = '';
+    $('#itemDescription').html('');
+    $('#taskbarDescription').html('');
+    $('#itemName').html('Pick your cosmetic type');
     await setItems(items, items, 'stuff', 0, 10, 100, 100);
 }
 
-async function showMenu(cosmeticType, type) {
+async function showMenu({cosmeticType, type}) {
     if($('#fnbtitems')) $('#fnbtitems').remove();
     $('#itemName').html(cosmeticType);
     $('#taskbarDescription')[0].outerHTML += '<div id="SaveItem" style="background: black;padding: 5px;width: 50px;height: 18px;position: absolute;top: 7px;left: 632px;color: white;font-size: 23px;font-family: t;text-align: center;border-radius: 10px;user-select: none;cursor: pointer;">SAVE</div><div id="BackButton" style="background: black;padding: 5px;width: 50px;height: 18px;position: absolute;top: 7px;left: 567px;color: white;font-size: 23px;font-family: t;text-align: center;border-radius: 10px;user-select: none;cursor: pointer;">BACK</div>'
@@ -247,7 +250,7 @@ async function createImageInElement(element, hidden, argumen, callback) {
         IMAGE.onclick = callback || function () {
             if($('#fnbtitems')) $('#fnbtitems').remove();
             $('#stuff')[0].innerHTML = `<div id="Item" style="font-size: 50px;background: black;color: white;border-radius: 10px;padding: 5px;margin: 10px;cursor: pointer;">Item</div>${Array.isArray(argumen[0].variants) ? '<div id="Variant" style="font-size: 50px;background: black;color: white;border-radius: 10px;padding: 5px;cursor: pointer;">Variant</div>' : '<div style="font-size: 50px;background: gray;color: white;border-radius: 10px;padding: 5px;cursor: pointer;" disabled>Variants Disabled</div>'}`;
-            $('#Item').click(async () => await showMenu(argumen[0].type.value.toUpperCase()));
+            $('#Item').click(async () => await showMenu({cosmeticType: argumen[0].type.value.toUpperCase()}));
             $('#Variant').click(async () => await showMenu(argumen[0].type.value.toUpperCase(), 'variant'));
         }
     }
@@ -269,13 +272,14 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
-    items.default = {
+    items = {
+        ...items,
         "outfit": items.cosmetics.outfit[Math.floor(Math.random() * items.cosmetics.outfit.length - 1) + 0],
         "backpack": items.cosmetics.backpack[Math.floor(Math.random() * items.cosmetics.backpack.length - 1) + 0],
         "pickaxe": items.cosmetics.pickaxe[Math.floor(Math.random() * items.cosmetics.pickaxe.length - 1) + 0],
         "banner": items.cosmetics.banner[Math.floor(Math.random() * items.cosmetics.banner.length - 1) + 0]
     }
-    return items.default;
+    return items;
 }
 
 function sortItems() {
@@ -301,6 +305,7 @@ function categorizeItems(setDefaultItem) {
 async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) {
     for (const key of Object.keys(items).filter(e => e !== 'conversions' && e !== 'default' && e !== 'variants' && e !== 'cosmetics' && e !== 'sort')) {
         const value = items[key];
+        console.log(key)
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
         itemss.sort[value.type.value].push(value);
         changeItem(value.id, value.type.value);
@@ -361,7 +366,20 @@ $(document).ready(async () => {
     categorizeItems(true);
     sortItems();
     setLoadingText('Creating default images');
-    await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
+    $('#CosmeticsButton').click(async () => {
+        $('#stuff')[0].innerHTML = '';
+        $('#itemDescription').html('');
+        $('#taskbarDescription').html('');
+        $('#itemName').html('Pick your cosmetic type');
+        await setItems(items, items, 'stuff', 0, 10, 100, 100);
+    });
+    $('#PartyButton').click(async () => {
+        $('#stuff')[0].innerHTML = '';
+        $('#itemDescription').html('Party information.');
+        $('#taskbarDescription').html('');
+        $('#itemName').html('PARTY');
+    });
+    // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
     $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
