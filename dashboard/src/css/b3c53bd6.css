@@ -233,6 +233,20 @@ html {
     left: 0px;
 }
 
+#searchBar {
+    top: 14px;
+    right: 29px;
+    z-index: 1;
+    position: absolute;
+    outline: none;
+    font-family: t;
+    font-size: 20px;
+    text-align: center;
+    resize: none;
+    border: none;
+    border-bottom: black solid 1px;
+}
+
 #taskbar {
     border-radius: 0px 0px 0px 20px;
     background: white;

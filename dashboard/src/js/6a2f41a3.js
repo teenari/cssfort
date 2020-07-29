@@ -69,11 +69,17 @@ function changeColorScheme(scheme) {
 }
 
 async function hideMenu() {
+    if($('#fnbtitems')) $('#fnbtitems').remove();
+    if($('#SaveItem')) $('#SaveItem').remove();
+    if($('#BackButton')) $('#BackButton').remove();
+    $('#stuff')[0].innerHTML = '';
+    await setItems(items, items, 'stuff', 0, 10, 100, 100);
 }
 
-async function showMenu(cosmeticType) {
+async function showMenu(cosmeticType, type) {
     if($('#fnbtitems')) $('#fnbtitems').remove();
     $('#itemName').html(cosmeticType);
+    $('#taskbarDescription')[0].outerHTML += '<div id="SaveItem" style="background: black;padding: 5px;width: 50px;height: 18px;position: absolute;top: 7px;left: 632px;color: white;font-size: 23px;font-family: t;text-align: center;border-radius: 10px;user-select: none;cursor: pointer;">SAVE</div><div id="BackButton" style="background: black;padding: 5px;width: 50px;height: 18px;position: absolute;top: 7px;left: 567px;color: white;font-size: 23px;font-family: t;text-align: center;border-radius: 10px;user-select: none;cursor: pointer;">BACK</div>'
     $('#itemDescription').html('');
     $('#taskbarDescription').html('');
     $('#stuff')[0].innerHTML = '';
@@ -81,23 +87,115 @@ async function showMenu(cosmeticType) {
 
     let top = 20;
 
-    for (const item of items.sort[cosmeticType.toLowerCase()]) {
-        const div = document.createElement('div');
-        div.id = `ITEM/${item.id}`;
-        div.innerHTML = '';
-        document.getElementById('fnbtitems').appendChild(div);
-        let imageLeft = 7;
-        for (const image of createImage(item, top, imageLeft, 'relative', 100, 100)) {
-            image.style.left = `${imageLeft}px`;
-            div.appendChild(image);
-            imageLeft = imageLeft - 100;
+    if(!type) {
+        let selectedItem = null;
+        $('#taskbarDescription').html('Pick your item!');
+        for (const item of items.sort[cosmeticType.toLowerCase()]) {
+            const div = document.createElement('div');
+            div.id = `ITEM/${item.id}`;
+            div.innerHTML = '';
+            document.getElementById('fnbtitems').appendChild(div);
+            let imageLeft = 7;
+            for (const image of createImage(item, top, imageLeft, 'relative', 100, 100)) {
+                image.style.left = `${imageLeft}px`;
+                div.appendChild(image);
+                imageLeft = imageLeft - 100;
+            }
+            div.innerHTML += `<div style="position: relative;left: 135px;top: ${top - 70}px;font-size: 30px;">${item.name}</div>`;
+            $(`[id="ITEM/${item.id}"]`).children().unbind('click').click(async () => {
+                selectedItem = item;
+                for (const e of $(`[src="${settings.colorScheme.faceplate}"]`)) e.src = settings.colorScheme[settings.currentScheme].faceplate;
+                div.children[2].src = settings.colorScheme.faceplate;
+            });
+            top += 50;
         }
-        div.innerHTML += `<div style="position: relative;left: 135px;top: ${top - 70}px;font-size: 30px;">${item.name}</div>`;
-        $(`[id="ITEM/${item.id}"]`).children().click(async () => {
-            changeItem(item.id, cosmeticType);
+        $('#SaveItem').unbind('click').click(async () => {
+            console.log(selectedItem);
+            items[cosmeticType.toLowerCase()] = selectedItem;
+            $('#BackButton').click();
+            changeItem(selectedItem.id, cosmeticType.toLowerCase());
         });
-        top += 50;
     }
+
+    if(type) switch(type) {
+        case 'variant': {
+            let selectedVariants = [];
+            $('#itemName').html(`VARIANT`);
+            $('#taskbarDescription').html('Pick your variant!');
+            for (const item of items[cosmeticType.toLowerCase()].variants) {
+                for (const variant of item.options) {
+                    const div = document.createElement('div');
+                    div.id = `VARIANT/${variant.tag}`;
+                    div.innerHTML = '';
+                    document.getElementById('fnbtitems').appendChild(div);
+                    let imageLeft = 7;
+                    for (const image of createImage({ images: { icon: variant.image } }, top, imageLeft, 'relative', 100, 100)) {
+                        image.style.left = `${imageLeft}px`;
+                        div.appendChild(image);
+                        imageLeft = imageLeft - 100;
+                    }
+                    div.innerHTML += `<div style="position: relative;left: 135px;top: ${top - 70}px;font-size: 30px;">${variant.name}</div>`;
+                    $(`[id="VARIANT/${variant.tag}"]`).children().click(async () => {
+                        if(div.children[2].src.includes('src/images/schemes/a77ecea5.png')) {
+                            div.children[2].src = settings.colorScheme[settings.currentScheme].faceplate;
+                            console.log(selectedVariants.filter(e => {
+                                console.log(e.channel)
+                                console.log(item.channel)
+                                console.log(e.variant)
+                                console.log(variant.tag)
+                                console.log(e.variant === variant.tag && e.channel === item.channel)
+                                return e.variant !== variant.tag && e.channel !== item.channel ? true : false;
+                            }));
+                        }
+                        else {
+                            console.log(div.children[2].src);
+                            div.children[2].src = settings.colorScheme.faceplate;
+                            selectedVariants.push({
+                                item: items[cosmeticType.toLowerCase()].type.backendValue,
+                                channel: item.channel,
+                                variant: variant.tag
+                            });
+                        }
+                    });
+                }
+                top += 150;
+            }
+            if(items.variants[cosmeticType.toLowerCase()]) for (const variant of items.variants[cosmeticType.toLowerCase()]) {
+                selectedVariants.push(variant);
+                $(`[id="VARIANT/${variant.variant}"]`).children()[2].src = settings.colorScheme.faceplate;
+            }
+            $('#SaveItem').unbind('click').click(async () => {
+                items.variants[cosmeticType.toLowerCase()] = selectedVariants;
+                $('#BackButton').click();
+                addVariant(selectedVariants, cosmeticType.toLowerCase());
+            });
+        } break;
+        
+        default: {
+            console.log('Unknown Type');
+        } break;
+    }
+
+    $('#BackButton').unbind('click').click(hideMenu);
+    $('#searchBar').keyup(() => {
+        const search = $('#searchBar').val();
+    //     $('#fnbtitems').children().children(`div`).filter(function(){
+    //         var c = this.textContent || this.innerText;
+    //         return c.startsWith('Re');
+    //   });
+        for (const item of $('#fnbtitems').children().children(`div`).filter(function() {
+            const text = this.textContent || this.innerText;
+            return text.startsWith(search);
+        })) {
+            item.parentNode.hidden = false;
+        }
+        for (const item of $('#fnbtitems').children().children(`div`).filter(function() {
+            const text = this.textContent || this.innerText;
+            return !text.startsWith(search);
+        })) {
+            item.parentNode.hidden = true;
+        }
+    });
 }
 
 function setLoadingText(text) {
@@ -146,8 +244,11 @@ async function createImageInElement(element, hidden, argumen, callback) {
     for (const IMAGE of html) {
         IMAGE.style.position = 'absolute';
         div.appendChild(IMAGE);
-        IMAGE.onclick = callback || async function() {
-            await showMenu(argumen[0].type.value.toUpperCase());
+        IMAGE.onclick = callback || function () {
+            if($('#fnbtitems')) $('#fnbtitems').remove();
+            $('#stuff')[0].innerHTML = `<div id="Item" style="font-size: 50px;background: black;color: white;border-radius: 10px;padding: 5px;margin: 10px;cursor: pointer;">Item</div>${Array.isArray(argumen[0].variants) ? '<div id="Variant" style="font-size: 50px;background: black;color: white;border-radius: 10px;padding: 5px;cursor: pointer;">Variant</div>' : '<div style="font-size: 50px;background: gray;color: white;border-radius: 10px;padding: 5px;cursor: pointer;" disabled>Variants Disabled</div>'}`;
+            $('#Item').click(async () => await showMenu(argumen[0].type.value.toUpperCase()));
+            $('#Variant').click(async () => await showMenu(argumen[0].type.value.toUpperCase(), 'variant'));
         }
     }
 }
@@ -198,7 +299,7 @@ function categorizeItems(setDefaultItem) {
 }
 
 async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) {
-    for (const key of Object.keys(items)) {
+    for (const key of Object.keys(items).filter(e => e !== 'conversions' && e !== 'default' && e !== 'variants' && e !== 'cosmetics' && e !== 'sort')) {
         const value = items[key];
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
         itemss.sort[value.type.value].push(value);
@@ -213,46 +314,46 @@ async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) 
 
 $(document).ready(async () => {
     setLoadingText('Loading account');
-    const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
-        credentials: 'include',
-        headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
-    })).json();
-    if(user.authorization === false) {
-        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
-    }
-    if(!user.inServer) {
-        return window.location = 'https://discord.gg/xkURTCz';
-    }
-    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
-    else {
-        Cookies.set('colorScheme', 'black');
-        changeColorScheme('black');
-    }
+    // const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
+    //     credentials: 'include',
+    //     headers: {
+    //         'Access-Control-Allow-Origin': '*'
+    //     }
+    // })).json();
+    // if(user.authorization === false) {
+    //     return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
+    // }
+    // if(!user.inServer) {
+    //     return window.location = 'https://discord.gg/xkURTCz';
+    // }
+    // if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
+    // else {
+    //     Cookies.set('colorScheme', 'black');
+    //     changeColorScheme('black');
+    // }
 
-    try {
-        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    } catch(error) {
-        return setLoadingText('ok');
-    }
-    const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    source.onerror = () => {
-        return setLoadingText('Error happend, cannot access the error.');
-    }
+    // try {
+    //     await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    // } catch(error) {
+    //     return setLoadingText('ok');
+    // }
+    // const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
+    // source.onerror = () => {
+    //     return setLoadingText('Error happend, cannot access the error.');
+    // }
 
-    await new Promise((resolve) => {
-        source.onmessage = (data) => {
-            const json = JSON.parse(data.data);
-            if(json.done) return resolve();
-            setLoadingText(json.message);
-        }
-    });
-    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    window.onbeforeunload = async () => {
-        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    };
-    $('#username')[0].innerText = account.displayName;
+    // await new Promise((resolve) => {
+    //     source.onmessage = (data) => {
+    //         const json = JSON.parse(data.data);
+    //         if(json.done) return resolve();
+    //         setLoadingText(json.message);
+    //     }
+    // });
+    // account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    // window.onbeforeunload = async () => {
+    //     await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    // };
+    // $('#username')[0].innerText = account.displayName;
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
     items.cosmetics = cos;
@@ -260,7 +361,6 @@ $(document).ready(async () => {
     categorizeItems(true);
     sortItems();
     setLoadingText('Creating default images');
-    await setItems(items.default, items, 'buttons');
     await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
