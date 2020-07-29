@@ -319,46 +319,46 @@ async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) 
 
 $(document).ready(async () => {
     setLoadingText('Loading account');
-    // const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
-    //     credentials: 'include',
-    //     headers: {
-    //         'Access-Control-Allow-Origin': '*'
-    //     }
-    // })).json();
-    // if(user.authorization === false) {
-    //     return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
-    // }
-    // if(!user.inServer) {
-    //     return window.location = 'https://discord.gg/xkURTCz';
-    // }
-    // if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
-    // else {
-    //     Cookies.set('colorScheme', 'black');
-    //     changeColorScheme('black');
-    // }
+    const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
+        credentials: 'include',
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+    })).json();
+    if(user.authorization === false) {
+        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
+    }
+    if(!user.inServer) {
+        return window.location = 'https://discord.gg/xkURTCz';
+    }
+    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
+    else {
+        Cookies.set('colorScheme', 'black');
+        changeColorScheme('black');
+    }
 
-    // try {
-    //     await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    // } catch(error) {
-    //     return setLoadingText('ok');
-    // }
-    // const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    // source.onerror = () => {
-    //     return setLoadingText('Error happend, cannot access the error.');
-    // }
+    try {
+        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    } catch(error) {
+        return setLoadingText('ok');
+    }
+    const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
+    source.onerror = () => {
+        return setLoadingText('Error happend, cannot access the error.');
+    }
 
-    // await new Promise((resolve) => {
-    //     source.onmessage = (data) => {
-    //         const json = JSON.parse(data.data);
-    //         if(json.done) return resolve();
-    //         setLoadingText(json.message);
-    //     }
-    // });
-    // account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    // window.onbeforeunload = async () => {
-    //     await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    // };
-    // $('#username')[0].innerText = account.displayName;
+    await new Promise((resolve) => {
+        source.onmessage = (data) => {
+            const json = JSON.parse(data.data);
+            if(json.done) return resolve();
+            setLoadingText(json.message);
+        }
+    });
+    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    window.onbeforeunload = async () => {
+        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    };
+    $('#username')[0].innerText = account.displayName;
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
     items.cosmetics = cos;
