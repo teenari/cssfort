@@ -224,6 +224,15 @@ html {
     height: 630px;
 }
 
+#fnbtitems {
+    top: 0px;
+    overflow: auto;
+    width: 709px;
+    height: 541px;
+    position: absolute;
+    left: 0px;
+}
+
 #taskbar {
     border-radius: 0px 0px 0px 20px;
     background: white;
