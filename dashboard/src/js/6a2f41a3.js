@@ -382,6 +382,7 @@ async function setItems(items, itemss) {
 }
 
 $(document).ready(async () => {
+    setLoadingText('Loading account');
     const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
@@ -435,7 +436,6 @@ $(document).ready(async () => {
     // else {
     //     return window.location = 'https://teenari.github.io/fortnitebt/';
     // }
-    setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
     items.cosmetics = cos;
