@@ -213,10 +213,10 @@ html {
     left: 69px;
 }
 
-#buttons {
+.buttons {
     border-radius: 0px 20px 20px 0px;
     background: white;
-    width: 177px;
+    width: 80px;
     position: relative;
     left: 1312px;
     bottom: 215px;
