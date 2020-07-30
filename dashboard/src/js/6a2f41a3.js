@@ -417,7 +417,7 @@ $(document).ready(async () => {
                     } break;
 
                     case img.src.includes(fnapiImage): { // api image
-                        img.style.left = '-3px';
+                        img.style.left = '1px';
                     } break;
 
                     case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): { // faceplate
