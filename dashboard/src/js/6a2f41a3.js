@@ -12,10 +12,15 @@
  */
 
  /**
-  * <div id="members"><div style="
-    position: relative;
-    display: inline-block;
-"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/back.png" style="cursor: auto;position: relative;left: 1px;"><img width="100" height="100" draggable="false" src="https://fortnite-api.com/images/cosmetics/br/CID_319_Athena_Commando_F_Nautilus/icon.png" style="cursor: auto;position: absolute;left: -3px;"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/faceplate.png" style="left: 1px;cursor: auto;position: absolute;"></div></div>
+  * member
+  * first div members
+  * add member div class
+  * back png is left 1px relative
+  * image fnapi -3px absolute
+  * faceplate 1px absolute
+  * add to #text div
+  * now it'll be sorted
+  * <div id="members"><div class="member"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/back.png" style="cursor: auto;position: relative;left: 1px;"><img width="100" height="100" draggable="false" src="https://fortnite-api.com/images/cosmetics/br/CID_319_Athena_Commando_F_Nautilus/icon.png" style="cursor: auto;position: absolute;left: -3px;"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/faceplate.png" style="left: 1px;cursor: auto;position: absolute;"></div></div>
   */
 
 let LoadingText = '';
