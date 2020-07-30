@@ -171,6 +171,8 @@ async function showMenu({cosmeticType, type}) {
             $('#SaveItem').unbind('click').click(async () => {
                 items.variants[cosmeticType.toLowerCase()] = selectedVariants;
                 $('#BackButton').click();
+                await refreshParty();
+                refreshMembers(party.members);
                 addVariant(selectedVariants, cosmeticType.toLowerCase());
             });
         } break;
@@ -322,6 +324,10 @@ async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) 
     return {top, left, width, height};
 }
 
+async function refreshParty() {
+    return party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+}
+
 function refreshMembers(members) {
     document.getElementById('members').innerHTML = '';
     for (const member of members) {
@@ -434,6 +440,10 @@ $(document).ready(async () => {
     });
     party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     refreshMembers(party.members);
+    $('#RefreshMembers').click(async () => {
+        await refreshParty();
+        refreshMembers(party.members);
+    });
     // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
