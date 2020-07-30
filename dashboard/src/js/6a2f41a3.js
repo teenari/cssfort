@@ -412,16 +412,16 @@ $(document).ready(async () => {
                 img.style.cursor = 'auto';
                 switch(true) {
                     case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): { // back
-                        img.style.position = '1px';
-                        img.style.left = 'relative';
+                        img.style.position = 'relative';
+                        img.style.left = '1px';
                     } break;
 
                     case img.src.includes(fnapiImage): { // api image
-                        img.style.position = '-3px';
+                        img.style.left = '-3px';
                     } break;
 
                     case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): { // faceplate
-                        img.style.position = '1px';
+                        img.style.left = '1px';
                     } break;
                 }
                 div.appendChild(img);
