@@ -213,7 +213,7 @@ html {
     cursor: pointer;
 }
 
-#member {
+.member {
     position: relative;
     display: inline-block;
 }
