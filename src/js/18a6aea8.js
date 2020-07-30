@@ -18,6 +18,7 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     })).json();
+    $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
         if(!user.inServer) {
             return window.location = 'https://discord.gg/xkURTCz';
