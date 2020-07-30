@@ -417,7 +417,7 @@ $(document).ready(async () => {
                         console.log('hi testr one p42')
                     } break;
 
-                    case img.src.includes(fnapiImage): { // faceplate
+                    case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): { // faceplate
                         console.log('hi testr one p43')
                     } break;
                 }
