@@ -329,7 +329,7 @@ async function refreshParty() {
 function refreshMembers(members) {
     document.getElementById('members').innerHTML = '';
     for (const member of members) {
-        const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
+        const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop().replace(/'/g, '')}/icon.png`;
         const images = createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute');
         const div = document.createElement('div');
         div.id = `${member.displayName}#${member.id}`;
