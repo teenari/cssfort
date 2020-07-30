@@ -382,7 +382,7 @@ $(document).ready(async () => {
         $('#itemDescription').html('Party information.');
         $('#taskbarDescription').html('');
         $('#itemName').html('PARTY');
-        const party = (await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).data;
+        const party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
         console.log(party)
     });
     // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
