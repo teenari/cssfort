@@ -390,9 +390,9 @@ $(document).ready(async () => {
         const party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
         for (const member of party.members) {
             const images = [];
-            const image = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
-            for (const image of createImage({ images: { icon: image } }, 0, 0, 'absolute')) {
-                console.log(image)
+            const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
+            for (const img of createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute')) {
+                console.log(img)
             }
         }
     });
