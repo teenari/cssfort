@@ -394,9 +394,19 @@ $(document).ready(async () => {
             setLoadingText(json.message);
         }
     });
-    source.onmessage = (data) => {
+    source.onmessage = async (data) => {
         if((JSON.parse(data.data)).exit) {
             $(`[style="background-color: black;color: white;position: absolute;font-family: t;text-align: -webkit-center;margin: 0;padding:0;height:100%;width:100%;display: none;justify-content: center;align-items: center;font-size: 100px;user-select: none;"]`).fadeIn().css('display', 'flex');
+        }
+        if((JSON.parse(data.data)).event) {
+            switch(JSON.parse(data.data).event) {
+
+                case 'refresh:party': {
+                    await refreshParty();
+                    refreshMembers(party.members);
+                } break;
+
+            }
         }
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
