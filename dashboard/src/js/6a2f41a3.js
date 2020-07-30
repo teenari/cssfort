@@ -401,12 +401,12 @@ $(document).ready(async () => {
   */
         ///  for (const src of [settings.colorScheme[settings.currentScheme].back, item.images.icon, settings.colorScheme[settings.currentScheme].faceplate]) {
         for (const member of party.members) {
-            const images = createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute');
             const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
+            const images = createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute');
             const div = document.createElement('div');
             div.id = `${member.displayName}#${member.id}`;
             div.innerHTML = '';
-            for (const img of createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute')) {
+            for (const img of images) {
                 img.style.cursor = 'auto';
                 switch(true) {
                     case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): {
