@@ -132,6 +132,7 @@ html {
     bottom: 215px;
     top: -563px;
     height: 630px;
+    overflow: auto;
 }
 
 #fnbtitems {
@@ -166,6 +167,19 @@ html {
     top: 607px;
     position: relative;
     left: 585px;
+}
+
+#RefreshMembers {
+    margin: 10px;
+    padding: 10px;
+    font-family: t;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    background-color: black;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
 }
 
 #taskbar #taskbarDescription {
