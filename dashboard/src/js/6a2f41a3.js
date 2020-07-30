@@ -11,18 +11,6 @@
  * limitations under the License.
  */
 
- /**
-  * member
-  * first div members
-  * add member div class
-  * back png is left 1px relative
-  * image fnapi -3px absolute
-  * faceplate 1px absolute
-  * add to #text div
-  * now it'll be sorted
-  * <div id="members"><div class="member"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/back.png" style="cursor: auto;position: relative;left: 1px;"><img width="100" height="100" draggable="false" src="https://fortnite-api.com/images/cosmetics/br/CID_319_Athena_Commando_F_Nautilus/icon.png" style="cursor: auto;position: absolute;left: -3px;"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/faceplate.png" style="left: 1px;cursor: auto;position: absolute;"></div></div>
-  */
-
 let LoadingText = '';
 let account = null;
 let stream;
@@ -400,11 +388,31 @@ $(document).ready(async () => {
         $('#taskbarDescription').html('');
         $('#itemName').html('PARTY');
         const party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+         /**
+  * member
+  * first div members
+  * add member div class
+  * back png is left 1px relative
+  * image fnapi -3px absolute
+  * faceplate 1px absolute
+  * add to #text div
+  * now it'll be sorted
+  * <div id="members"><div class="member"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/back.png" style="cursor: auto;position: relative;left: 1px;"><img width="100" height="100" draggable="false" src="https://fortnite-api.com/images/cosmetics/br/CID_319_Athena_Commando_F_Nautilus/icon.png" style="cursor: auto;position: absolute;left: -3px;"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/faceplate.png" style="left: 1px;cursor: auto;position: absolute;"></div></div>
+  */
+        ///  for (const src of [settings.colorScheme[settings.currentScheme].back, item.images.icon, settings.colorScheme[settings.currentScheme].faceplate]) {
         for (const member of party.members) {
-            const images = [];
+            const images = createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute');
             const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
+            const div = document.createElement('div');
+            div.id = `${member.displayName}#${member.id}`;
+            div.innerHTML = '';
             for (const img of createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute')) {
                 img.style.cursor = 'auto';
+                switch(true) {
+                    case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): {
+                        console.log('hi testr one p43')
+                    } break;
+                }
                 document.getElementById('stuff').appendChild(img);
             }
         }
