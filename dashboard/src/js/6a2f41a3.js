@@ -406,22 +406,25 @@ $(document).ready(async () => {
             const div = document.createElement('div');
             div.id = `${member.displayName}#${member.id}`;
             div.innerHTML = '';
+            div.classList.add('member');
+            document.getElementById('text').appendChild(div);
             for (const img of images) {
                 img.style.cursor = 'auto';
                 switch(true) {
                     case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): { // back
-                        console.log('hi testr one p41')
+                        img.style.position = '1px';
+                        img.style.left = 'relative';
                     } break;
 
                     case img.src.includes(fnapiImage): { // api image
-                        console.log('hi testr one p42')
+                        img.style.position = '-3px';
                     } break;
 
                     case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): { // faceplate
-                        console.log('hi testr one p43')
+                        img.style.position = '1px';
                     } break;
                 }
-                document.getElementById('stuff').appendChild(img);
+                div.appendChild(img);
             }
         }
     });
