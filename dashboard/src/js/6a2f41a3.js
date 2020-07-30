@@ -409,7 +409,15 @@ $(document).ready(async () => {
             for (const img of images) {
                 img.style.cursor = 'auto';
                 switch(true) {
-                    case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): {
+                    case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): { // back
+                        console.log('hi testr one p41')
+                    } break;
+
+                    case img.src.includes(fnapiImage): { // api image
+                        console.log('hi testr one p42')
+                    } break;
+
+                    case img.src.includes(fnapiImage): { // faceplate
                         console.log('hi testr one p43')
                     } break;
                 }
