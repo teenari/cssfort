@@ -311,10 +311,8 @@ function categorizeItems(setDefaultItem) {
 async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) {
     for (const key of Object.keys(items).filter(e => e !== 'conversions' && e !== 'default' && e !== 'variants' && e !== 'cosmetics' && e !== 'sort')) {
         const value = items[key];
-        console.log(key)
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
         itemss.sort[value.type.value].push(value);
-        changeItem(value.id, value.type.value);
         itemss[key] = value;
         await createImageInElement(document.getElementById(id), false, [value, top, left, id, width, height, value.id]);
         left += 50;
