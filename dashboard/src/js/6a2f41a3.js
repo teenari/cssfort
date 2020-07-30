@@ -114,8 +114,9 @@ async function showMenu({cosmeticType, type}) {
             top += 50;
         }
         $('#SaveItem').unbind('click').click(async () => {
-            console.log(selectedItem);
             items[cosmeticType.toLowerCase()] = selectedItem;
+            await refreshParty();
+            refreshMembers(party.members);
             $('#BackButton').click();
             changeItem(selectedItem.id, cosmeticType.toLowerCase());
         });
@@ -152,7 +153,6 @@ async function showMenu({cosmeticType, type}) {
                             }));
                         }
                         else {
-                            console.log(div.children[2].src);
                             div.children[2].src = settings.colorScheme.faceplate;
                             selectedVariants.push({
                                 item: items[cosmeticType.toLowerCase()].type.backendValue,
@@ -171,8 +171,6 @@ async function showMenu({cosmeticType, type}) {
             $('#SaveItem').unbind('click').click(async () => {
                 items.variants[cosmeticType.toLowerCase()] = selectedVariants;
                 $('#BackButton').click();
-                await refreshParty();
-                refreshMembers(party.members);
                 addVariant(selectedVariants, cosmeticType.toLowerCase());
             });
         } break;
