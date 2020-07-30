@@ -400,7 +400,6 @@ $(document).ready(async () => {
     };
     $('#username')[0].innerText = account.displayName;
     party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    refreshMembers(party.members);
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
     items.cosmetics = cos;
@@ -433,6 +432,7 @@ $(document).ready(async () => {
   */
         ///  for (const src of [settings.colorScheme[settings.currentScheme].back, item.images.icon, settings.colorScheme[settings.currentScheme].faceplate]) {
     });
+    refreshMembers(party.members);
     // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
