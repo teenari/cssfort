@@ -388,7 +388,11 @@ $(document).ready(async () => {
         $('#taskbarDescription').html('');
         $('#itemName').html('PARTY');
         const party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-        console.log(party)
+        for (const member of party.members) {
+            const images = [];
+            console.log(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop());
+            // for (const image of createImage({images: {icon: member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout}}))
+        }
     });
     // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
