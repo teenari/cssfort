@@ -115,10 +115,10 @@ async function showMenu({cosmeticType, type}) {
         }
         $('#SaveItem').unbind('click').click(async () => {
             items[cosmeticType.toLowerCase()] = selectedItem;
-            await refreshParty();
-            refreshMembers(party.members);
             $('#BackButton').click();
             changeItem(selectedItem.id, cosmeticType.toLowerCase());
+            await refreshParty();
+            refreshMembers(party.members);
         });
     }
 
