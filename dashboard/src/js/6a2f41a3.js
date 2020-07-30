@@ -323,6 +323,7 @@ async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) 
 }
 
 function refreshMembers(members) {
+    document.getElementById('members').innerHTML = '';
     for (const member of members) {
         const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
         const images = createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute');
@@ -399,7 +400,6 @@ $(document).ready(async () => {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
     $('#username')[0].innerText = account.displayName;
-    party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
     items.cosmetics = cos;
@@ -432,6 +432,7 @@ $(document).ready(async () => {
   */
         ///  for (const src of [settings.colorScheme[settings.currentScheme].back, item.images.icon, settings.colorScheme[settings.currentScheme].faceplate]) {
     });
+    party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     refreshMembers(party.members);
     // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
