@@ -185,6 +185,7 @@ html {
     height: 269px;
     left: 131px;
     top: 220px;
+    overflow: auto;
 }
 
 #items #text {
@@ -195,6 +196,7 @@ html {
     height: 540px;
     left: 1px;
     top: 0px;
+    overflow: auto;
 }
 
 #itemInfo {
