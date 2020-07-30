@@ -272,12 +272,18 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
-    items = {
-        ...items,
+    const itemss = {
         "outfit": items.cosmetics.outfit[Math.floor(Math.random() * items.cosmetics.outfit.length - 1) + 0],
         "backpack": items.cosmetics.backpack[Math.floor(Math.random() * items.cosmetics.backpack.length - 1) + 0],
         "pickaxe": items.cosmetics.pickaxe[Math.floor(Math.random() * items.cosmetics.pickaxe.length - 1) + 0],
         "banner": items.cosmetics.banner[Math.floor(Math.random() * items.cosmetics.banner.length - 1) + 0]
+    }
+    items = {
+        ...items,
+        ...itemss
+    }
+    for (const item of Object.keys(itemss)) {
+        changeItem(itemss[item].id, item);
     }
     return items;
 }
