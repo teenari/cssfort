@@ -392,7 +392,8 @@ $(document).ready(async () => {
             const images = [];
             const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop()}/icon.png`;
             for (const img of createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute')) {
-                console.log(img)
+                img.style.cursor = 'auto';
+                $('#stuff').appendChild(img);
             }
         }
     });
