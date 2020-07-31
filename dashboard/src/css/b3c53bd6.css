@@ -1,9 +1,106 @@
 html {
+    /* background-image: url('https://cdn2.unrealengine.com/Fortnite%2Flanding-pages%2Fparty-royale-test%2F01-logo-video%2Fparty-royale-v2-background-desktop-1920x1645-20671ae7461b1d5ed7aec74e669b7da33789e536.png');
+    background-repeat: no-repeat;
+    background-size: cover; */
     height: 100%;
     margin: 0;
     overflow: hidden;
     background: black;
 }
+
+/* .gradient {
+    background: -webkit-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
+    background: -o-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
+    background: -ms-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
+    background: -moz-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
+    background: linear-gradient(135deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
+}
+
+.blueGradient {
+    background: rgb(50,152,234);
+    background: radial-gradient(circle, rgba(50,152,234,1) 0%, rgba(17,51,154,1) 96%);
+}
+
+.backgroundImage {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.textBackground {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+#SettingsButton {
+    right: 130px;
+    position: absolute;
+}
+
+#cosmeticID {
+    margin: 0px;
+    width: 300px;
+    height: 13px;
+    resize: none;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    overflow: hidden;
+    font-family: t;
+    position: relative;
+}
+
+.fn-container {
+    float: right;
+    margin: 0 auto;
+    width: 30%;
+    position: absolute;
+    display: block;
+    left: 146vh;
+    z-index: -1;
+}
+
+.fn {
+    font-family: t;
+    font-size: 80px;
+    padding: 10px;
+    right: 2vh;
+    top: 15vh;
+}
+
+.playlistName {
+    margin: 30px;
+    font-size: 100px;
+}
+
+.changePlaylistButton {
+    margin: 10px;
+    margin-top: -10%;
+    background-color: black;
+    border-radius: 3px;
+    color: white;
+    width: 90px;
+    text-align: center;
+    font-size: 30px;
+    position: relative;
+    left: 45px;
+    border: 1px solid black;
+    cursor: pointer;
+    padding: 15px;
+}
+
+.readyPlaylistButton {
+    margin: 10px;
+    padding: 5px;
+}
+
+/* .menu {
+    background-color: white;
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
+} */
 
 .cosmetic {
     font-size: 35px;
@@ -54,6 +151,11 @@ html {
     font-size: 40px;
 }
 
+@font-face {
+    font-family: t;
+    src: url(../fonts/BurbankBigCondensed-Black.otf);
+}
+
 .menu-container {
     float: right;
     position: absolute;
@@ -73,28 +175,6 @@ html {
     top: 23px;
     position: relative;
     font-family: t;
-}
-
-#items #stuff {
-    align-items: center;
-    text-align: center;
-    position: absolute;
-    width: 440px;
-    height: 269px;
-    left: 131px;
-    top: 220px;
-    overflow: auto;
-}
-
-#items #text {
-    align-items: center;
-    text-align: center;
-    position: absolute;
-    width: 709px;
-    height: 540px;
-    left: 1px;
-    top: 0px;
-    overflow: auto;
 }
 
 #itemInfo {
@@ -120,42 +200,18 @@ html {
     font-size: 23px;
     position: absolute;
     top: 20px;
-    left: 114px;
+    left: 69px;
 }
 
-.buttons {
+#buttons {
     border-radius: 0px 20px 20px 0px;
     background: white;
-    width: 231px;
+    width: 177px;
     position: relative;
     left: 1312px;
     bottom: 215px;
     top: -563px;
     height: 630px;
-    overflow: auto;
-}
-
-#fnbtitems {
-    top: 0px;
-    overflow: auto;
-    width: 709px;
-    height: 541px;
-    position: absolute;
-    left: 0px;
-}
-
-#searchBar {
-    top: 14px;
-    right: 29px;
-    z-index: 1;
-    position: absolute;
-    outline: none;
-    font-family: t;
-    font-size: 20px;
-    text-align: center;
-    resize: none;
-    border: none;
-    border-bottom: black solid 1px;
 }
 
 #taskbar {
@@ -167,32 +223,6 @@ html {
     top: 607px;
     position: relative;
     left: 585px;
-}
-
-#RefreshMembers {
-    margin: 10px;
-    padding: 10px;
-    font-family: t;
-    color: white;
-    font-size: 30px;
-    text-align: center;
-    background-color: black;
-    cursor: pointer;
-    user-select: none;
-    border-radius: 10px;
-}
-
-.item {
-    width: 390px;
-    height: 60px;
-}
-
-.playerName {
-    font-family: t;
-    position: relative;
-    top: -97px;
-    left: 27px;
-    color: white;
 }
 
 #taskbar #taskbarDescription {
@@ -217,35 +247,4 @@ html {
     font-family: t;
     font-size: xx-large;
     text-align: center;
-}
-
-#accessBar #barButtons {
-    align-items: center;
-    justify-content: center;
-    margin: 30px;
-    font-family: t;
-    font-size: 30px;
-    display: inline-block;
-    align-self: flex-end;
-    position: absolute;
-    left: 21px;
-}
-
-#barButtons .button {
-    padding: 10px;
-    background: black;
-    display: inline-block;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.member {
-    position: relative;
-    display: inline-block;
-}
-
-@font-face {
-    font-family: t;
-    src: url(../fonts/BurbankBigCondensed-Black.otf);
 }

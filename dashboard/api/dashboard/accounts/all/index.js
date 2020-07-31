@@ -1,1 +1,0 @@
-window.location = 'https://www.youtube.com/watch?v=0JgF4CMXU9M';

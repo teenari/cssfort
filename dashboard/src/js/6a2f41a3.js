@@ -13,7 +13,6 @@
 
 let LoadingText = '';
 let account = null;
-let party = null;
 let stream;
 const settings = {
     "colorScheme": {
@@ -34,7 +33,7 @@ const settings = {
     "currentScheme": 'partyroyale',
     "boxSizing": 'same-size'
 }
-let items = {
+const items = {
     "outfit": null,
     "backpack": null,
     "pickaxe": null,
@@ -70,134 +69,200 @@ function changeColorScheme(scheme) {
 }
 
 async function hideMenu() {
-    if($('#fnbtitems')) $('#fnbtitems').remove();
-    if($('#SaveItem')) $('#SaveItem').remove();
-    if($('#BackButton')) $('#BackButton').remove();
-    $('#stuff')[0].innerHTML = '';
-    $('#itemDescription').html('');
-    $('#taskbarDescription').html('');
-    $('#itemName').html('Pick your cosmetic type');
-    await setItems(items, items, 'stuff', 0, 10, 100, 100);
+    const menu = $('#menu');
+    menu.fadeOut(250);
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    menu[0].innerHTML = '';
+    menu[0].hidden = true;
 }
 
-async function showMenu({cosmeticType, type}) {
-    if($('#fnbtitems')) $('#fnbtitems').remove();
-    $('#itemName').html(cosmeticType);
-    $('#taskbarDescription')[0].outerHTML += '<div id="SaveItem" style="background: black;padding: 5px;width: 50px;height: 18px;position: absolute;top: 7px;left: 632px;color: white;font-size: 23px;font-family: t;text-align: center;border-radius: 10px;user-select: none;cursor: pointer;">SAVE</div><div id="BackButton" style="background: black;padding: 5px;width: 50px;height: 18px;position: absolute;top: 7px;left: 567px;color: white;font-size: 23px;font-family: t;text-align: center;border-radius: 10px;user-select: none;cursor: pointer;">BACK</div>'
-    $('#itemDescription').html('');
-    $('#taskbarDescription').html('');
-    $('#stuff')[0].innerHTML = '';
-    $('#stuff')[0].outerHTML += '<div id="fnbtitems"></div>';
-
-    let top = 20;
-
-    if(!type) {
-        let selectedItem = null;
-        $('#taskbarDescription').html('Pick your item!');
-        for (const item of items.sort[cosmeticType.toLowerCase()]) {
-            const div = document.createElement('div');
-            div.id = `ITEM/${item.id}`;
-            div.innerHTML = '';
-            div.classList.add('item');
-            document.getElementById('fnbtitems').appendChild(div);
-            let imageLeft = 7;
-            for (const image of createImage(item, top, imageLeft, 'relative', 100, 100)) {
-                image.style.left = `${imageLeft}px`;
-                div.appendChild(image);
-                imageLeft = imageLeft - 100;
+async function showMenu(cosmeticType) {
+    const menu = $('#menu');
+    const id = items[cosmeticType.toLowerCase()].id;
+    $(document).unbind('click');
+    menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
+    menu.fadeIn(250);
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    $('#selectVariant').click(async () => {
+        if(!items[cosmeticType.toLowerCase()].variants) return;
+        let selectedVariants = [];
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+        $('#search').keyup(() => {
+            const searchQuery = $('#search').val();
+            for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
+                element.hidden = true;
             }
-            div.innerHTML += `<div style="position: relative;left: 135px;top: ${top - 70}px;font-size: 30px;">${item.name}</div>`;
-            $(`[id="ITEM/${item.id}"]`).children().unbind('click').click(async () => {
-                selectedItem = item;
-                for (const e of $(`[src="${settings.colorScheme.faceplate}"]`)) e.src = settings.colorScheme[settings.currentScheme].faceplate;
-                div.children[2].src = settings.colorScheme.faceplate;
-            });
-            // top += 50;
-        }
-        $('#SaveItem').unbind('click').click(async () => {
-            items[cosmeticType.toLowerCase()] = selectedItem;
-            $('#BackButton').click();
-            changeItem(selectedItem.id, cosmeticType.toLowerCase());
-            await refreshParty();
-            refreshMembers(party.members);
+            for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
+                element.hidden = false;
+            }
         });
-    }
-
-    if(type) switch(type) {
-        case 'variant': {
-            let selectedVariants = [];
-            $('#itemName').html(`VARIANT`);
-            $('#taskbarDescription').html('Pick your variant!');
-            for (const item of items[cosmeticType.toLowerCase()].variants) {
-                for (const variant of item.options) {
-                    const div = document.createElement('div');
-                    div.id = `VARIANT/${variant.tag}`;
-                    div.classList.add('item');
-                    div.innerHTML = '';
-                    document.getElementById('fnbtitems').appendChild(div);
-                    let imageLeft = 7;
-                    for (const image of createImage({ images: { icon: variant.image } }, top, imageLeft, 'relative', 100, 100)) {
-                        image.style.left = `${imageLeft}px`;
-                        div.appendChild(image);
-                        imageLeft = imageLeft - 100;
+        for (const item of items[cosmeticType.toLowerCase()].variants) {
+            for (const variant of item.options) {
+                const div = document.createElement("div");
+                div.id = `VARIANT/${variant.tag}#${variant.name}`;
+                for (const src of [{
+                    src: settings.colorScheme[settings.currentScheme].back
+                }, {
+                    src: variant.image,
+                    position: 'relative',
+                    right: '100px'
+                }, {
+                    src: settings.colorScheme[settings.currentScheme].faceplate,
+                    position: 'relative',
+                    right: '200px'
+                }]) {
+                    const IMAGE = document.createElement("IMG");
+                    if(src.src) IMAGE.width = 100;
+                    if(src.src) IMAGE.height = 100;
+                    IMAGE.draggable = false;
+                    IMAGE.style.cursor = 'pointer';
+                    if(src.src) IMAGE.src = src.src;
+                    if(src.position) IMAGE.style.position = src.position;
+                    if(src.right) IMAGE.style.right = src.right;
+                    const element = $('#cosmetics')[0].appendChild(div);
+                    $(`[id="VARIANT/${variant.tag}#${variant.name}"]`)[0].appendChild(IMAGE);
+                    if(src.src.includes('faceplate.png')) {
+                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${variant.name}</div>`;
+                        element.onclick = async (e) => {
+                            if(selectedVariants.find((e) => {
+                                return e.image === variant.image;
+                            })) {
+                                selectedVariants = selectedVariants.filter((e) => {
+                                    return e.image !== variant.image;
+                                });
+                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = settings.colorScheme[settings.currentScheme].faceplate;
+                            }
+                            else {
+                                selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
+                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = settings.colorScheme.faceplate;
+                            }
+                        }
                     }
-                    div.innerHTML += `<div style="position: relative;left: 135px;top: ${top - 70}px;font-size: 30px;">${variant.name}</div>`;
-                    $(`[id="VARIANT/${variant.tag}"]`).children().click(async () => {
-                        if(div.children[2].src.includes('src/images/schemes/a77ecea5.png')) {
-                            div.children[2].src = settings.colorScheme[settings.currentScheme].faceplate;
-                            console.log(selectedVariants.filter(e => {
-                                console.log(e.channel)
-                                console.log(item.channel)
-                                console.log(e.variant)
-                                console.log(variant.tag)
-                                console.log(e.variant === variant.tag && e.channel === item.channel)
-                                return e.variant !== variant.tag && e.channel !== item.channel ? true : false;
-                            }));
-                        }
-                        else {
-                            div.children[2].src = settings.colorScheme.faceplate;
-                            selectedVariants.push({
-                                item: items[cosmeticType.toLowerCase()].type.backendValue,
-                                channel: item.channel,
-                                variant: variant.tag
-                            });
-                        }
-                    });
                 }
-                top += 150;
             }
-            if(items.variants[cosmeticType.toLowerCase()]) for (const variant of items.variants[cosmeticType.toLowerCase()]) {
-                selectedVariants.push(variant);
-                $(`[id="VARIANT/${variant.variant}"]`).children()[2].src = settings.colorScheme.faceplate;
+        }
+        if(items.variants[cosmeticType]) for (const variant of items.variants[cosmeticType]) {
+            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = settings.colorScheme.faceplate;
+            selectedVariants.push(variant);
+        }
+        $('#SaveVariant').click(async () => {
+            if(selectedVariants.length === 0) return;
+            if(!items.variants[cosmeticType]) items.variants[cosmeticType] = [];
+            items.variants[cosmeticType] = selectedVariants;
+            const img = $(`#${id}`)[0].children[0];
+            if($(`#${id}`)[0].children[2].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[2].remove();
+            $(`#${id}`)[0].children[1].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
+            const variants = [];
+            for (const variant of selectedVariants) {
+                variants.push({
+                    "item": items[cosmeticType.toLowerCase()].type.backendValue,
+                    "channel": variant.channel,
+                    "variant": variant.tag
+                })
             }
-            $('#SaveItem').unbind('click').click(async () => {
-                items.variants[cosmeticType.toLowerCase()] = selectedVariants;
-                $('#BackButton').click();
-                addVariant(selectedVariants, cosmeticType.toLowerCase());
-            });
-        } break;
-        
-        default: {
-            console.log('Unknown Type');
-        } break;
-    }
-    $('#fnbtitems')[0].innerHTML += '<textarea id="searchBar" placeholder="Search"></textarea>';
-
-    $('#BackButton').unbind('click').click(hideMenu);
-    $('#searchBar').keyup(() => {
-        const search = $('#searchBar').val();
-        for (const item of $('#fnbtitems').children().children(`div`).filter(function() {
-            const text = this.textContent || this.innerText;
-            return text.startsWith(search);
-        })) {
-            item.parentNode.hidden = false;
+            addVariant(variants, cosmeticType.toLowerCase());
+            await hideMenu();
+        });
+    });
+    $('#selectItem').click(async () => {
+        let selectedItem = null;
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+        $('#search').keyup(() => {
+            const searchQuery = $('#search').val();
+            for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
+                element.hidden = true;
+            }
+            for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
+                element.hidden = false;
+            }
+        });
+        for (const item of items.cosmetics[cosmeticType.toLowerCase()]) {
+            const div = document.createElement("div");
+            div.id = `ITEM/${item.id}`;
+            for (const src of [{
+                src: settings.colorScheme[settings.currentScheme].back
+            }, {
+                src: item.images.icon,
+                position: 'relative',
+                right: '100px'
+            }, {
+                src: settings.colorScheme[settings.currentScheme].faceplate,
+                position: 'relative',
+                right: '200px'
+            }]) {
+                const IMAGE = document.createElement("IMG");
+                if(src.src) IMAGE.width = 100;
+                if(src.src) IMAGE.height = 100;
+                IMAGE.draggable = false;
+                IMAGE.style.cursor = 'pointer';
+                if(src.src) IMAGE.src = src.src;
+                if(src.position) IMAGE.style.position = src.position;
+                if(src.right) IMAGE.style.right = src.right;
+                const element = $('#cosmetics')[0].appendChild(div);
+                ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
+                    if(selectedItem === item) return;
+                    if(selectedItem && selectedItem !== item) {
+                        $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                    }
+                    e.srcElement.src = settings.colorScheme.faceplate;
+                    selectedItem = item;
+                }
+                if(src.src.includes('faceplate.png')) {
+                    IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
+                    element.onclick = async () => {
+                        if(selectedItem === item) return;
+                        if(selectedItem && selectedItem !== item) {
+                            $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                        }
+                        $(`[id="ITEM/${item.id}"]`).children()[2].src = settings.colorScheme.faceplate;
+                        selectedItem = item;
+                    }
+                }
+            }
         }
-        for (const item of $('#fnbtitems').children().children(`div`).filter(function() {
-            const text = this.textContent || this.innerText;
-            return !text.startsWith(search);
-        })) {
-            item.parentNode.hidden = true;
+        $('#SaveAvatar').click(async () => {
+           if(!selectedItem) return;
+            items[cosmeticType.toLowerCase()] = selectedItem;
+            const img = $(`#${id}`)[0].children[0];
+            $(`#${id}`)[0].id = selectedItem.id;
+            $(`#${selectedItem.id}`)[0].innerHTML = '';
+            for (const image of createImage(selectedItem, img.style.top.split('px')[0], img.style.left.split('px')[0], 'absolute', img.width, img.height)) {
+                $(`#${selectedItem.id}`).append(image);
+                image.onclick = async () => {
+                    await showMenu(selectedItem.type.value.toUpperCase());
+                }
+            }
+            changeItem(selectedItem.id, cosmeticType.toLowerCase());
+            items.variants[cosmeticType] = [];
+            await hideMenu();
+        });
+    });
+    $('#SaveID').click(async () => {
+        if($('[id="cosmeticID"]').val().trim() === "" || !items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val())) return;
+        const item = items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val());
+        items[cosmeticType.toLowerCase()] = item;
+        const img = $(`#${id}`)[0].children[0];
+        $(`#${id}`)[0].id = $('[id="cosmeticID"]').val();
+        $(`#${$('[id="cosmeticID"]').val()}`)[0].innerHTML = '';
+        for (const image of createImage(item, img.style.top.split('px')[0], img.style.left.split('px')[0], 'absolute', img.width, img.height)) {
+            $(`#${$('[id="cosmeticID"]').val()}`).append(image);
+            image.onclick = async () => {
+                await showMenu(item.type.value.toUpperCase());
+            }
         }
+        await hideMenu();
+    });
+    menu.draggable({
+        "containment": "window"
+    });
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    $(document).click(async (e) => { 
+        if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+            await hideMenu();
+            $(document).unbind('click');
+        }        
     });
 }
 
@@ -245,13 +310,9 @@ async function createImageInElement(element, hidden, argumen, callback) {
     div.innerHTML = '';
     element.appendChild(div);
     for (const IMAGE of html) {
-        IMAGE.style.position = 'absolute';
         div.appendChild(IMAGE);
-        IMAGE.onclick = callback || function () {
-            if($('#fnbtitems')) $('#fnbtitems').remove();
-            $('#stuff')[0].innerHTML = `<div id="Item" style="font-size: 50px;background: black;color: white;border-radius: 10px;padding: 5px;margin: 10px;cursor: pointer;">Item</div>${Array.isArray(argumen[0].variants) ? '<div id="Variant" style="font-size: 50px;background: black;color: white;border-radius: 10px;padding: 5px;cursor: pointer;">Variant</div>' : '<div style="font-size: 50px;background: gray;color: white;border-radius: 10px;padding: 5px;cursor: pointer;" disabled>Variants Disabled</div>'}`;
-            $('#Item').click(async () => await showMenu({cosmeticType: argumen[0].type.value.toUpperCase()}));
-            $('#Variant').click(async () => await showMenu(argumen[0].type.value.toUpperCase(), 'variant'));
+        IMAGE.onclick = callback || async function() {
+            await showMenu(argumen[0].type.value.toUpperCase());
         }
     }
 }
@@ -272,20 +333,13 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
-    const itemss = {
+    items.default = {
         "outfit": items.cosmetics.outfit[Math.floor(Math.random() * items.cosmetics.outfit.length - 1) + 0],
         "backpack": items.cosmetics.backpack[Math.floor(Math.random() * items.cosmetics.backpack.length - 1) + 0],
         "pickaxe": items.cosmetics.pickaxe[Math.floor(Math.random() * items.cosmetics.pickaxe.length - 1) + 0],
         "banner": items.cosmetics.banner[Math.floor(Math.random() * items.cosmetics.banner.length - 1) + 0]
     }
-    items = {
-        ...items,
-        ...itemss
-    }
-    for (const item of Object.keys(itemss)) {
-        changeItem(itemss[item].id, item);
-    }
-    return items;
+    return items.default;
 }
 
 function sortItems() {
@@ -308,57 +362,26 @@ function categorizeItems(setDefaultItem) {
     return items.cosmetics;
 }
 
-async function setItems(items, itemss, id, top=0, left=10, width=50, height=50) {
-    for (const key of Object.keys(items).filter(e => e !== 'conversions' && e !== 'default' && e !== 'variants' && e !== 'cosmetics' && e !== 'sort')) {
+async function setItems(items, itemss) {
+    let top = 6;
+    let left = 6;
+    let width = 100;
+    let height = 100;
+    for (const key of Object.keys(items)) {
         const value = items[key];
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
         itemss.sort[value.type.value].push(value);
+        changeItem(value.id, value.type.value);
         itemss[key] = value;
-        await createImageInElement(document.getElementById(id), false, [value, top, left, id, width, height, value.id]);
-        left += 50;
-        if(width !== 50) left += 50;
+        await createImageInElement(document.getElementById('fnItems'), false, [value, top, left, 'absolute', width, height, value.id]);
+        top += 105;
+        width = width - 10;
+        height = height - 10;
     }
     return {top, left, width, height};
 }
 
-async function refreshParty() {
-    return party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-}
-
-function refreshMembers(members) {
-    document.getElementById('members').innerHTML = '';
-    for (const member of members) {
-        const fnapiImage = `https://fortnite-api.com/images/cosmetics/br/${member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.split('/').pop().split('.').pop().replace(/'/g, '')}/icon.png`;
-        const images = createImage({ images: { icon: fnapiImage } }, 0, 0, 'absolute');
-        const div = document.createElement('div');
-        div.id = `${member.displayName}#${member.id}`;
-        div.innerHTML = '';
-        div.classList.add('member');
-        document.getElementById('members').appendChild(div);
-        for (const img of images) {
-            img.style.cursor = 'auto';
-            switch(true) {
-                case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): {
-                    img.style.position = 'relative';
-                    img.style.left = '1px';
-                } break;
-
-                case img.src.includes(fnapiImage): {
-                    img.style.left = '1px';
-                } break;
-
-                case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): {
-                    img.style.left = '1px';
-                } break;
-            }
-            div.appendChild(img);
-        }
-        div.innerHTML += `<div class="playerName">${member.displayName}</div>`;
-    }
-}
-
 $(document).ready(async () => {
-    setLoadingText('Loading account');
     const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
@@ -368,9 +391,11 @@ $(document).ready(async () => {
     if(user.authorization === false) {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
     }
+
     if(!user.inServer) {
         return window.location = 'https://discord.gg/xkURTCz';
     }
+
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
         Cookies.set('colorScheme', 'black');
@@ -380,10 +405,11 @@ $(document).ready(async () => {
     try {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     } catch(error) {
+        console.log(error)
         return setLoadingText('ok');
     }
     const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    source.onerror = () => {
+    source.onerror = (e) => {
         return setLoadingText('Error happend, cannot access the error.');
     }
 
@@ -394,26 +420,12 @@ $(document).ready(async () => {
             setLoadingText(json.message);
         }
     });
-    source.onmessage = async (data) => {
-        if((JSON.parse(data.data)).exit) {
-            $(`[style="background-color: black;color: white;position: absolute;font-family: t;text-align: -webkit-center;margin: 0;padding:0;height:100%;width:100%;display: none;justify-content: center;align-items: center;font-size: 100px;user-select: none;"]`).fadeIn().css('display', 'flex');
-        }
-        if((JSON.parse(data.data)).event) {
-            switch(JSON.parse(data.data).event) {
-
-                case 'refresh:party': {
-                    await refreshParty();
-                    refreshMembers(party.members);
-                } break;
-
-            }
-        }
-    }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     window.onbeforeunload = async () => {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
     $('#username')[0].innerText = account.displayName;
+    setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
     items.cosmetics = cos;
@@ -421,24 +433,129 @@ $(document).ready(async () => {
     categorizeItems(true);
     sortItems();
     setLoadingText('Creating default images');
-    $('#CosmeticsButton').click(async () => {
-        $('#stuff')[0].innerHTML = '';
-        $('#itemDescription').html('');
-        $('#taskbarDescription').html('');
-        $('#itemName').html('Pick your cosmetic type');
-        await setItems(items, items, 'stuff', 0, 10, 100, 100);
+    const { top, left, width, height } = await setItems(items.default, items);
+    await createImageInElement(document.getElementById('fnItems'), false, [{
+        images: {
+            icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
+        },
+        id: 'Emote'
+    }, top - 20, left, 'absolute', width - 10, height - 1, 'Emote'], async (e) => {
+        const menu = $('#menu');
+        $(document).unbind('click');
+        menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
+        menu.fadeIn(250);
+        menu.draggable({
+            "containment": "window"
+        });
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        $(document).click(async (e) => { 
+            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+                await hideMenu();
+                $(document).unbind('click');
+            }        
+        });
+        $('#SaveID').click(async () => {
+            await hideMenu();
+        });
+        $('#selectItem').click(async () => {
+            let selectedItem = null;
+            await new Promise((resolve) => setTimeout(resolve, 1));
+            $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
+            $('#search').keyup(() => {
+                const searchQuery = $('#search').val();
+                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
+                    element.hidden = true;
+                }
+                for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
+                    element.hidden = false;
+                }
+            });
+            for (const item of items.sort.emote) {
+                const div = document.createElement("div");
+                div.id = `ITEM/${item.id}`;
+                for (const src of [{
+                    src: settings.colorScheme[settings.currentScheme].back
+                }, {
+                    src: item.images.icon,
+                    position: 'relative',
+                    right: '100px'
+                }, {
+                    src: settings.colorScheme[settings.currentScheme].faceplate,
+                    position: 'relative',
+                    right: '200px'
+                }]) {
+                    const IMAGE = document.createElement("IMG");
+                    if(src.src || src.back) IMAGE.width = 100;
+                    if(src.src || src.back) IMAGE.height = 100;
+                    IMAGE.draggable = false;
+                    IMAGE.style.cursor = 'pointer';
+                    if(src.src) IMAGE.src = src.src;
+                    if(src.position) IMAGE.style.position = src.position;
+                    if(src.right) IMAGE.style.right = src.right;
+                    const element = $('#cosmetics')[0].appendChild(div);
+                    ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
+                        if(selectedItem === item) return;
+                        if(selectedItem && selectedItem !== item) {
+                            $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                        }
+                        e.srcElement.src = settings.colorScheme.faceplate;
+                        selectedItem = item;
+                    }
+                    if(src.src.includes('faceplate.png')) {
+                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
+                        element.onclick = async () => {
+                            if(selectedItem === item) return;
+                            if(selectedItem && selectedItem !== item) {
+                                $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                            }
+                            $(`[id="ITEM/${item.id}"]`).children()[2].src = settings.colorScheme.faceplate;
+                            selectedItem = item;
+                        }
+                    }
+                }
+            }
+            $('#SaveAvatar').click(async () => {
+                if(!selectedItem) return;
+                changeItem(selectedItem.id, 'emote');
+                await hideMenu();
+            });
+        });
     });
-    $('#PartyButton').click(async () => {
-        $('#stuff')[0].innerHTML = '';
-        $('#itemDescription').html('Party information.');
-        $('#taskbarDescription').html('');
-        $('#itemName').html('PARTY');
-    });
-    party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    refreshMembers(party.members);
-    $('#RefreshMembers').click(async () => {
-        await refreshParty();
-        refreshMembers(party.members);
+    $('#SettingsButton').children().click(async () => {
+        const menu = $('#menu');
+        $(document).unbind('click');
+        menu[0].innerHTML = `<div class="cosmetic">Settings<div id="PartyButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="AccountSettings" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Account</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
+        menu[0].style.left = '1093px';
+        menu[0].style.top = '14px';
+        menu.fadeIn(250);
+        menu.draggable({
+            "containment": "window"
+        });
+        $('#PartyButton').click(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1));
+            menu[0].innerHTML = '<div class="cosmetic"><div class="textBackground gradient">Party</div><div id="MemberCount" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="PrivacyName" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="LeaderName" style="font-size: 20px; margin: 10px;">TEMPLATE</div></div>';
+        });
+        $('#ColorSchemeButton').click(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1));
+            menu[0].innerHTML = '';
+            for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
+                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;" id="ColorScheme#${colorScheme}">${colorScheme}</div>`;
+            }
+            menu[0].innerHTML = `<div class="cosmetic"><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
+            for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
+                $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
+                    changeColorScheme(colorScheme);
+                    await hideMenu();
+                });
+            }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        $(document).click(async (e) => { 
+            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+                await hideMenu();
+                $(document).unbind('click');
+            }        
+        });
     });
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
