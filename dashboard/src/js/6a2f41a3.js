@@ -383,13 +383,8 @@ $(document).ready(async () => {
         return setLoadingText('ok');
     }
     const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-<<<<<<< HEAD
     source.onerror = () => {
         return setLoadingText('Error happend, cannot access the error.');
-=======
-    source.onerror = (e) => {
-        return setLoadingText('Error happend, cannot access the error.')
->>>>>>> parent of 9dc2a56... summary
     }
 
     await new Promise((resolve) => {
