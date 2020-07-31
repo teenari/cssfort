@@ -112,7 +112,7 @@ async function showMenu({cosmeticType, type}) {
                 for (const e of $(`[src="${settings.colorScheme.faceplate}"]`)) e.src = settings.colorScheme[settings.currentScheme].faceplate;
                 div.children[2].src = settings.colorScheme.faceplate;
             });
-            top += 50;
+            // top += 50;
         }
         $('#SaveItem').unbind('click').click(async () => {
             items[cosmeticType.toLowerCase()] = selectedItem;
