@@ -181,6 +181,7 @@ async function showMenu({cosmeticType, type}) {
             console.log('Unknown Type');
         } break;
     }
+    $('#fnbtitems')[0].innerHTML += '<textarea id="searchBar" placeholder="Search"></textarea>';
 
     $('#BackButton').unbind('click').click(hideMenu);
     $('#searchBar').keyup(() => {
