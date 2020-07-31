@@ -182,6 +182,14 @@ html {
     border-radius: 10px;
 }
 
+.playerName {
+    font-family: t;
+    position: relative;
+    top: -97px;
+    left: 27px;
+    color: white;
+}
+
 #taskbar #taskbarDescription {
     font-size: 25px;
     font-family: t;
