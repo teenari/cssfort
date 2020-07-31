@@ -354,7 +354,7 @@ function refreshMembers(members) {
             }
             div.appendChild(img);
         }
-        div.innerHTML += `<div class="playerName">Teenari</div>`
+        div.innerHTML += `<div class="playerName">${member.displayName}</div>`;
     }
 }
 
