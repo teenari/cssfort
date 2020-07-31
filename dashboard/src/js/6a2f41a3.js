@@ -98,6 +98,7 @@ async function showMenu({cosmeticType, type}) {
             const div = document.createElement('div');
             div.id = `ITEM/${item.id}`;
             div.innerHTML = '';
+            div.classList.add('item');
             document.getElementById('fnbtitems').appendChild(div);
             let imageLeft = 7;
             for (const image of createImage(item, top, imageLeft, 'relative', 100, 100)) {
@@ -131,6 +132,7 @@ async function showMenu({cosmeticType, type}) {
                 for (const variant of item.options) {
                     const div = document.createElement('div');
                     div.id = `VARIANT/${variant.tag}`;
+                    div.classList.add('item');
                     div.innerHTML = '';
                     document.getElementById('fnbtitems').appendChild(div);
                     let imageLeft = 7;
@@ -183,10 +185,6 @@ async function showMenu({cosmeticType, type}) {
     $('#BackButton').unbind('click').click(hideMenu);
     $('#searchBar').keyup(() => {
         const search = $('#searchBar').val();
-    //     $('#fnbtitems').children().children(`div`).filter(function(){
-    //         var c = this.textContent || this.innerText;
-    //         return c.startsWith('Re');
-    //   });
         for (const item of $('#fnbtitems').children().children(`div`).filter(function() {
             const text = this.textContent || this.innerText;
             return text.startsWith(search);
@@ -339,16 +337,16 @@ function refreshMembers(members) {
         for (const img of images) {
             img.style.cursor = 'auto';
             switch(true) {
-                case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): { // back
+                case img.src.includes(settings.colorScheme[settings.currentScheme].back.replace('.', '')): {
                     img.style.position = 'relative';
                     img.style.left = '1px';
                 } break;
 
-                case img.src.includes(fnapiImage): { // api image
+                case img.src.includes(fnapiImage): {
                     img.style.left = '1px';
                 } break;
 
-                case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): { // faceplate
+                case img.src.includes(settings.colorScheme[settings.currentScheme].faceplate.replace('.', '')): {
                     img.style.left = '1px';
                 } break;
             }
@@ -434,18 +432,6 @@ $(document).ready(async () => {
         $('#itemDescription').html('Party information.');
         $('#taskbarDescription').html('');
         $('#itemName').html('PARTY');
-         /**
-  * member
-  * first div members
-  * add member div class
-  * back png is left 1px relative
-  * image fnapi -3px absolute
-  * faceplate 1px absolute
-  * add to #text div
-  * now it'll be sorted
-  * <div id="members"><div class="member"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/back.png" style="cursor: auto;position: relative;left: 1px;"><img width="100" height="100" draggable="false" src="https://fortnite-api.com/images/cosmetics/br/CID_319_Athena_Commando_F_Nautilus/icon.png" style="cursor: auto;position: absolute;left: -3px;"><img width="100" height="100" draggable="false" src="./src/images/schemes/black/faceplate.png" style="left: 1px;cursor: auto;position: absolute;"></div></div>
-  */
-        ///  for (const src of [settings.colorScheme[settings.currentScheme].back, item.images.icon, settings.colorScheme[settings.currentScheme].faceplate]) {
     });
     party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     refreshMembers(party.members);
@@ -453,7 +439,6 @@ $(document).ready(async () => {
         await refreshParty();
         refreshMembers(party.members);
     });
-    // await setItems(items.default, items, 'stuff', 0, 10, 100, 100);
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
     $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);

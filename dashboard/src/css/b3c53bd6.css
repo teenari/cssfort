@@ -182,6 +182,11 @@ html {
     border-radius: 10px;
 }
 
+.item {
+    width: 390px;
+    height: 60px;
+}
+
 .playerName {
     font-family: t;
     position: relative;
