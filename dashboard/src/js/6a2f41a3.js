@@ -443,6 +443,10 @@ $(document).ready(async () => {
             document.getElementById('30MIN').innerText = `None minutes left`;
             clearInterval(timer);
         }
+        if(timerSettings.seconds !== 0) {
+            timerSettings.seconds --;
+            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes left`;
+        }
     }, 500);
     $('#username')[0].innerText = account.displayName;
     setLoadingText('Loading account');
