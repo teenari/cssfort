@@ -375,8 +375,8 @@ async function setItems(items, itemss) {
         itemss[key] = value;
         await createImageInElement(document.getElementById('fnItems'), false, [value, top, left, 'absolute', width, height, value.id]);
         top += 105;
-        width = width - 10;
-        height = height - 10;
+        // width = width - 10;
+        // height = height - 10;
     }
     return {top, left, width, height};
 }
