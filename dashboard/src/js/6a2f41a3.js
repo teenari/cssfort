@@ -424,6 +424,26 @@ $(document).ready(async () => {
     window.onbeforeunload = async () => {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
+    source.onmessage = (data) => {
+        const json = JSON.parse(data.data);
+        // if(json.exit) return resolve();
+        // setLoadingText(json.message);
+    }
+    const timerSettings = {
+        seconds: 60,
+        minutes: 30
+    }
+    const timer = setInterval(() => {
+        if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
+            timerSettings.seconds = 60;
+            timerSettings.minutes --;
+            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes left`;
+        }
+        if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
+            document.getElementById('30MIN').innerText = `None minutes left`;
+            clearInterval(timer);
+        }
+    }, 500);
     $('#username')[0].innerText = account.displayName;
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
