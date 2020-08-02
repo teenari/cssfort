@@ -587,6 +587,6 @@ $(document).ready(async () => {
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
     stopText();
     await new Promise((resolve) => setTimeout(resolve, 300));
-    $('.fn-container').fadeIn();
+    $('#DATA').fadeIn();
     $('#fortnite').css('padding', '0px');
 });

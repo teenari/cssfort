@@ -34,7 +34,26 @@ html {
 
 #SettingsButton {
     right: 130px;
+    top: 0px;
     position: absolute;
+}
+
+#members {
+    color: white;
+    display: inline-block;
+    position: relative;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.member {
+    position: relative;
+    align-items: center;
+    margin: 1px;
 }
 
 #cosmeticID {
