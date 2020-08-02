@@ -420,7 +420,7 @@ $(document).ready(async () => {
         }
     });
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    window.onbeforeunload = async () => {
+    window.onunload = async () => {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
     source.onmessage = (data) => {
