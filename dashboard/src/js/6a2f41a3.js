@@ -447,7 +447,7 @@ $(document).ready(async () => {
             timerSettings.seconds --;
             document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
-    }, 500);
+    }, 1000);
     $('#username')[0].innerText = account.displayName;
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
