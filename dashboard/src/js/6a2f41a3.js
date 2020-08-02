@@ -405,7 +405,6 @@ $(document).ready(async () => {
     try {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     } catch(error) {
-        console.log(error)
         return setLoadingText('ok');
     }
     const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
@@ -434,10 +433,11 @@ $(document).ready(async () => {
         minutes: 30
     }
     const timer = setInterval(() => {
+        console.log(timerSettings)
         if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
             timerSettings.seconds = 60;
             timerSettings.minutes --;
-            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes left`;
+            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
         if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
             document.getElementById('30MIN').innerText = `None minutes left`;
@@ -445,7 +445,7 @@ $(document).ready(async () => {
         }
         if(timerSettings.seconds !== 0) {
             timerSettings.seconds --;
-            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes left`;
+            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
     }, 500);
     $('#username')[0].innerText = account.displayName;
