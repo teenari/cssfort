@@ -420,7 +420,7 @@ $(document).ready(async () => {
         return setLoadingText('Error happend, cannot access the error.');
     }
 
-    window.onunload = async () => {
+    window.onbeforeunload = async () => {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
 
