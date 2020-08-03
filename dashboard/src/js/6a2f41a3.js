@@ -505,6 +505,7 @@ $(document).ready(async () => {
     sortItems();
     setLoadingText('Creating default images');
     const { top, left, width, height } = await setItems(items.default, items);
+    setMembers();
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
@@ -634,7 +635,6 @@ $(document).ready(async () => {
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
     $('.members-container').fadeIn();
     stopText();
-    setMembers();
     await new Promise((resolve) => setTimeout(resolve, 300));
     $('#DATA').fadeIn();
     $('#fortnite').css('padding', '0px');
