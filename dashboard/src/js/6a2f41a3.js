@@ -15,6 +15,7 @@ console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
 
 let LoadingText = '';
 let account = null;
+let party = null;
 let stream;
 const settings = {
     "colorScheme": {
@@ -411,13 +412,17 @@ $(document).ready(async () => {
         case 529: {
             console.log('DEBUG To much accounts used has been set.');
             return setLoadingText('All accounts have been used.<br>Please try again later.', false);
-        } break;
+        };
     }
 
     const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
     source.onerror = (e) => {
         return setLoadingText('Error happend, cannot access the error.');
     }
+
+    window.onunload = async () => {
+        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    };
 
     await new Promise((resolve) => {
         source.onmessage = (data) => {
@@ -429,12 +434,25 @@ $(document).ready(async () => {
     source.onmessage = (data) => {
         const json = JSON.parse(data.data);
         if(json.exit) return $('.message-container').fadeIn();
-        console.log(json);
+        if(json.event) {
+            const data = json.data;
+            const event = json.event;
+            switch(event) {
+                case 'refresh:party': {
+                    party = data;
+                } break;
+
+                default: {
+                    console.log(`UNKNOWN EVENT ${event}`);
+                } break;
+            }
+            console.log(`[EVENT INFO] ${event} has been sent, see the data below.`);
+            console.log(data);
+            console.log(`[EVENT DATA] Data is above.`);
+        }
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    window.onunload = async () => {
-        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    };
+    party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     const timerSettings = {
         seconds: 60,
         minutes: 29
