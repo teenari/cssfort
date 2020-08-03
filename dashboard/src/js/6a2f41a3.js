@@ -11,6 +11,8 @@
  * limitations under the License.
  */
 
+console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
+
 let LoadingText = '';
 let account = null;
 let stream;
