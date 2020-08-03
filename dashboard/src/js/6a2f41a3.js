@@ -461,7 +461,7 @@ $(document).ready(async () => {
             const event = json.event;
             switch(event) {
                 case 'refresh:party': {
-                    party = data;
+                    party = json.party;
                     setMembers();
                 } break;
 
