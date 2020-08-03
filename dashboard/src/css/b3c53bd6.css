@@ -78,6 +78,7 @@ html {
     position: relative;
     cursor: pointer;
     text-align: center;
+    margin: 1px;
 }
 
 .member img:nth-of-type(1) {
