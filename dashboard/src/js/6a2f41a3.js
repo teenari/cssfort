@@ -422,6 +422,7 @@ $(document).ready(async () => {
     source.onmessage = (data) => {
         const json = JSON.parse(data.data);
         if(json.exit) return $('.message-container').fadeIn();
+        console.log(json);
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     window.onunload = async () => {
