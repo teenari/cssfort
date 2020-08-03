@@ -433,7 +433,6 @@ $(document).ready(async () => {
         minutes: 29
     }
     const timer = setInterval(() => {
-        console.log(timerSettings)
         if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
             timerSettings.seconds = 60;
             timerSettings.minutes --;
