@@ -74,6 +74,37 @@ html {
     align-items: center;
 }
 
+.member {
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+}
+
+.member img:nth-of-type(1) {
+    cursor: pointer;
+    position: relative;
+}
+
+.member img:nth-of-type(n+2) {
+    cursor: pointer;
+    position: absolute;
+    left: 0px;
+}
+
+.member div:nth-of-type(1) {
+    position: absolute;
+    font-family: t;
+    color: white;
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    overflow: auto;
+    margin-top: 23px;
+}
+
 #cosmeticID {
     margin: 0px;
     width: 300px;

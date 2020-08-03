@@ -387,6 +387,25 @@ async function setItems(items, itemss) {
     return {top, left, width, height};
 }
 
+function last(character, data) {
+    return data.substring(data.lastIndexOf(character) + 1, data.length);
+}
+
+function getImages(AthenaCosmeticLoadout) {
+    return {
+        character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`
+    };
+}
+
+function setMembers() {
+    const members = party.members;
+    $('#members').html(null);
+    for (const member of members) {
+        const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
+        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="100" height="100" draggable="false" src="${images.character}"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
+    }
+}
+
 $(document).ready(async () => {
     const requestUser = await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
@@ -414,7 +433,7 @@ $(document).ready(async () => {
     switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
         case 529: {
             console.log('DEBUG To much accounts used has been set.');
-            return setLoadingText('All accounts have been used.<br>Please try again later.', false);
+            return setLoadingText('All accounts have been used.<br>Please try again later.', true);
         };
     }
 
@@ -457,6 +476,7 @@ $(document).ready(async () => {
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    setMembers();
     const timerSettings = {
         seconds: 60,
         minutes: 29
