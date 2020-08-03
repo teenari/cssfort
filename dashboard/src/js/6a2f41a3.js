@@ -463,6 +463,11 @@ $(document).ready(async () => {
                 case 'refresh:party': {
                     party = json.party;
                     setMembers();
+                    if(data.role && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
+                        // "{"FrontendEmote":{"emoteItemDef":"None","emoteEKey":"","emoteSection":-1}}"
+                        const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
+                        console.log(emoteItemDef);
+                    }
                 } break;
 
                 default: {
