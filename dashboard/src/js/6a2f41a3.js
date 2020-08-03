@@ -419,15 +419,14 @@ $(document).ready(async () => {
             setLoadingText(json.message);
         }
     });
+    source.onmessage = (data) => {
+        const json = JSON.parse(data.data);
+        if(json.exit) return $('#message-container').fadeIn();
+    }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     window.onunload = async () => {
         await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
-    source.onmessage = (data) => {
-        const json = JSON.parse(data.data);
-        if(json.exit) return $('#message-container').fadeIn();
-        // setLoadingText(json.message);
-    }
     const timerSettings = {
         seconds: 60,
         minutes: 29
