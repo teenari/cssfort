@@ -7,6 +7,27 @@ html {
     overflow: hidden;
 }
 
+.message-container {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+.messageText {
+    background-color: black;
+    color: white;
+    font-family: t;
+    text-align: center;
+    height: 200%;
+    width: 100%;
+    font-size: 100px;
+    user-select: none;
+    position: absolute;
+    top: 43vh;
+}
+
 .gradient {
     background: -webkit-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
     background: -o-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);

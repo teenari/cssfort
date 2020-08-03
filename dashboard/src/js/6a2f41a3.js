@@ -430,7 +430,7 @@ $(document).ready(async () => {
     }
     const timerSettings = {
         seconds: 60,
-        minutes: 30
+        minutes: 29
     }
     const timer = setInterval(() => {
         console.log(timerSettings)
