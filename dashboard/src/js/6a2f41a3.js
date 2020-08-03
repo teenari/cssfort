@@ -463,6 +463,7 @@ $(document).ready(async () => {
             switch(event) {
                 case 'refresh:party': {
                     party = data;
+                    setMembers();
                 } break;
 
                 default: {
@@ -505,7 +506,6 @@ $(document).ready(async () => {
     sortItems();
     setLoadingText('Creating default images');
     const { top, left, width, height } = await setItems(items.default, items);
-    setMembers();
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
