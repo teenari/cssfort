@@ -469,7 +469,7 @@ $(document).ready(async () => {
                             $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
                         }
                         if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
-                            console.log(member.id);
+                            console.log(data.id);
                             const id = last('.', emoteItemDef).replace(/'/g, '');
                             const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
                             $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
