@@ -464,9 +464,15 @@ $(document).ready(async () => {
                     party = json.party;
                     setMembers();
                     if(data.role && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
-                        // "{"FrontendEmote":{"emoteItemDef":"None","emoteEKey":"","emoteSection":-1}}"
                         const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
-                        console.log(emoteItemDef);
+                        if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
+                            $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
+                        }
+                        if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
+                            const id = last('.', emoteItemDef).replace(/'/g, '');
+                            const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
+                            $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
+                        }
                     }
                 } break;
 
