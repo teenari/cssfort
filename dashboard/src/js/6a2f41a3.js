@@ -425,7 +425,7 @@ $(document).ready(async () => {
     };
     source.onmessage = (data) => {
         const json = JSON.parse(data.data);
-        // if(json.exit) return resolve();
+        if(json.exit) return $('#message-container').fadeIn();
         // setLoadingText(json.message);
     }
     const timerSettings = {
