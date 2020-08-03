@@ -476,7 +476,6 @@ $(document).ready(async () => {
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    setMembers();
     const timerSettings = {
         seconds: 60,
         minutes: 29
@@ -635,6 +634,7 @@ $(document).ready(async () => {
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
     $('.members-container').fadeIn();
     stopText();
+    setMembers();
     await new Promise((resolve) => setTimeout(resolve, 300));
     $('#DATA').fadeIn();
     $('#fortnite').css('padding', '0px');
