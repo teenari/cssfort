@@ -491,7 +491,7 @@ $(document).ready(async () => {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
         },
         id: 'Emote'
-    }, top + 10, left, 'absolute', width, height, 'Emote'], async (e) => {
+    }, top + 5, left, 'absolute', width, height, 'Emote'], async (e) => {
         const menu = $('#menu');
         $(document).unbind('click');
         menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
