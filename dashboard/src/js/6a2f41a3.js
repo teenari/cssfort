@@ -402,7 +402,7 @@ function setMembers() {
     $('#members').html(null);
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
-        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="200" height="200" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="200" height="200" draggable="false" src="${images.character}"><img width="200" height="200" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
+        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
     }
 }
 
