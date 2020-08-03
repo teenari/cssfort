@@ -446,9 +446,9 @@ $(document).ready(async () => {
                     console.log(`UNKNOWN EVENT ${event}`);
                 } break;
             }
-            console.log(`[EVENT INFO] ${event} has been sent, see the data below.`);
+            console.log(`\n\n[EVENT INFO] ${event} has been sent, see the data below.`);
             console.log(data);
-            console.log(`[EVENT DATA] Data is above.`);
+            console.log(`[EVENT DATA] Data is above.\n\n`);
         }
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
