@@ -56,22 +56,22 @@ html {
     position: absolute;
 }
 
-#members {
-    color: white;
-    display: inline-block;
-    position: relative;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    text-align: center;
+.members-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.member {
+#members {
+    height: 311px;
+    width: 756px;
     position: relative;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    margin: 1px;
 }
 
 #cosmeticID {

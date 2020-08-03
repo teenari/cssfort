@@ -613,6 +613,7 @@ $(document).ready(async () => {
     $('#fortnite').fadeOut(300);
     $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
+    $('.members-container').fadeIn();
     stopText();
     await new Promise((resolve) => setTimeout(resolve, 300));
     $('#DATA').fadeIn();
