@@ -468,8 +468,8 @@ $(document).ready(async () => {
                         if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
                             $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
                         }
+                        console.log(emoteItemDef);
                         if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
-                            console.log(data.id);
                             const id = last('.', emoteItemDef).replace(/'/g, '');
                             const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
                             $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
@@ -481,9 +481,6 @@ $(document).ready(async () => {
                     console.log(`UNKNOWN EVENT ${event}`);
                 } break;
             }
-            console.log(`\n\n----------\n\n[EVENT INFO] ${event} has been sent, see the data below.`);
-            console.log(data);
-            console.log(`[EVENT DATA] Data is above.\n\n----------\n\n`);
         }
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
