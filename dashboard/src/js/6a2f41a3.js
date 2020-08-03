@@ -268,15 +268,18 @@ async function showMenu(cosmeticType) {
     });
 }
 
-function setLoadingText(text) {
+function setLoadingText(text, doNot) {
     LoadingText = text;
     let dots = 0;
-    const inv = setInterval(() => {
-        if(LoadingText !== text) clearInterval(inv);
-        dots += 1;
-        if(dots === 4) dots = 0;
-        $('#status').html(text + '.'.repeat(dots));
-    }, 500);
+    $('#status').html(text);
+    if(!doNot) {
+        const inv = setInterval(() => {
+            if(LoadingText !== text) clearInterval(inv);
+            dots += 1;
+            if(dots === 4) dots = 0;
+            $('#status').html(text + '.'.repeat(dots));
+        }, 500);
+    }
 }
 
 function stopText() {
@@ -407,7 +410,7 @@ $(document).ready(async () => {
     switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
         case 529: {
             console.log('DEBUG To much accounts used has been set.');
-            return setLoadingText('To much accounts used.');
+            return setLoadingText('All accounts have been used.<br>Please try again later.', false);
         } break;
     }
 
