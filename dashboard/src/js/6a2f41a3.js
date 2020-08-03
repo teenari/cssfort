@@ -421,6 +421,7 @@ $(document).ready(async () => {
     });
     source.onmessage = (data) => {
         const json = JSON.parse(data.data);
+        console.log(json);
         if(json.exit) return $('#message-container').fadeIn();
     }
     account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
