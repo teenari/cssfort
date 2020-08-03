@@ -463,6 +463,8 @@ $(document).ready(async () => {
                 case 'refresh:party': {
                     party = json.party;
                     setMembers();
+                    console.log(data.role);
+                    console.log(data);
                     if(data.role && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
                         const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
                         if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
