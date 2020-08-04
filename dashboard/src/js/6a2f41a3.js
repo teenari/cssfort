@@ -86,6 +86,14 @@ async function hideMenu() {
     menu[0].hidden = true;
 }
 
+async function hideSubMenu() {
+    const menu = $('#sub-menu');
+    menu.fadeOut(250);
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    menu[0].innerHTML = '';
+    menu[0].hidden = true;
+}
+
 async function showMenu(cosmeticType) {
     const menu = $('#menu');
     const id = system.items[cosmeticType.toLowerCase()].id;
@@ -692,7 +700,10 @@ $(document).ready(async () => {
             if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
                 await hideMenu();
                 $(document).unbind('click');
-            }        
+            }
+            if($(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
+                await hideSubMenu();
+            }
         });
     });
     setLoadingText('Starting');
