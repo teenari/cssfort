@@ -647,11 +647,18 @@ $(document).ready(async () => {
         menu.draggable({
             "containment": "window"
         });
+        $('[id="ColorScheme#black"]').hover(() => {
+            $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
+        })
         $('#ColorSchemeButton').click(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
             for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
-                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;" id="ColorScheme#${colorScheme}">${colorScheme}</div>`;
+                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;display: inline-block;border-radius: 5px;" id="ColorScheme#${colorScheme}"><div style="margin: 17px;width: 75px;">${colorScheme}</div></div>`;
+                $(`[id="ColorScheme#${colorScheme}"]`).hover(
+                    () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'black', color: 'white'}, 100),
+                    () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100)
+                );
             }
             menu[0].innerHTML = `<div class="cosmetic"><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
             for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
