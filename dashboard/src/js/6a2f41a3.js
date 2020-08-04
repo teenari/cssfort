@@ -411,9 +411,9 @@ function setMembers() {
             let items = '';
             for (const key of Object.keys(images)) {
                 const value = images[key];
-                items += `<div class="member" style="width: 30px;"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="100" height="100" draggable="false" src="${value}"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"></div>`
+                items += `<div class="member" style="width: 100px;"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="100" height="100" draggable="false" src="${value}"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"></div>`
             }
-            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 55px;display: flex;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
+            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
             menu.fadeIn(250);
             $('#kickPlayer').click(() => {
                 if(member.id === account.id) return;
