@@ -56,6 +56,14 @@ html {
     position: absolute;
 }
 
+.friend {
+    font-size: 19px;
+    height: 49px;
+    width: 184px;
+    position: relative;
+    cursor: pointer;
+}
+
 .members-container {
     position: absolute;
     width: 100%;
