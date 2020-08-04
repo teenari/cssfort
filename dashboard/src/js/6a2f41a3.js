@@ -656,6 +656,10 @@ $(document).ready(async () => {
                 menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 4vh;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
             }
             menu[0].innerHTML = `<div class="cosmetic">FRIENDS<br><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`;
+            $('#friends').children().hover(
+                (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'white', color: 'black' }, 100),
+                (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'black', color: 'white' }, 100)
+            )
         });
         $('[id="ColorScheme#black"]').hover(() => {
             $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
