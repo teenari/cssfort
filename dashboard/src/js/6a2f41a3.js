@@ -393,7 +393,9 @@ function last(character, data) {
 
 function getImages(AthenaCosmeticLoadout) {
     return {
-        character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`
+        character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`,
+        backpack: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.backpackDef).replace(/'/g, '')}/icon.png`,
+        pickaxe: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.pickaxeDef).replace(/'/g, '')}/icon.png`
     };
 }
 
@@ -406,7 +408,12 @@ function setMembers() {
         $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
             const menu = $('#menu');
-            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div id="kickPlayer" class="clickHereButton"${member.id === account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div></div>`);
+            let items = '';
+            for (const key of Object.keys(images)) {
+                const value = images[key];
+                items += `<div class="member" style="width: 30px;"><img width="30" height="30" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="30" height="30" draggable="false" src="${value}"><img width="30" height="30" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"></div>`
+            }
+            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 55px;display: flex;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div></div>`);
             menu.fadeIn(250);
             $('#kickPlayer').click(() => {
                 if(member.id === account.id) return;
