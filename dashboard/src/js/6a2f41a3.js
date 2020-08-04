@@ -688,7 +688,8 @@ $(document).ready(async () => {
         });
         await new Promise((resolve) => setTimeout(resolve, 250));
         $(document).click(async (e) => { 
-            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !event.target.includes('sub-menu')) {
+            console.log(event.target);
+            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
                 await hideMenu();
                 $(document).unbind('click');
             }        
