@@ -539,6 +539,7 @@ $(document).ready(async () => {
     sortItems();
     setLoadingText('Creating default images');
     const { top, left, width, height } = await setItems(items.default, items);
+    setMembers();
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
