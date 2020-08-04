@@ -13,61 +13,67 @@
 
 console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
 
-let LoadingText = '';
-let account = null;
-let party = null;
-let stream;
-const settings = {
-    "colorScheme": {
-        "black": {
-            "back": './src/images/schemes/black/back.png',
-            "faceplate": './src/images/schemes/black/faceplate.png'
-        },
-        "partyroyale": {
-            "back": './src/images/schemes/partyroyale/back.png',
-            "faceplate": './src/images/schemes/partyroyale/faceplate.png'
-        },
-        "blue": {
-            "back": './src/images/schemes/black/back.png',
-            "faceplate": './src/images/schemes/black/faceplate.png'
-        },
-        "faceplate": './src/images/schemes/a77ecea5.png'
+const system = {
+    "account": null,
+    "party": null,
+    "source": null,
+    "messages": {
+        "party": [],
+        "friends": {}
     },
-    "currentScheme": 'partyroyale',
-    "boxSizing": 'same-size'
+    "settings": {
+        "colorScheme": {
+            "black": {
+                "back": './src/images/schemes/black/back.png',
+                "faceplate": './src/images/schemes/black/faceplate.png'
+            },
+            "partyroyale": {
+                "back": './src/images/schemes/partyroyale/back.png',
+                "faceplate": './src/images/schemes/partyroyale/faceplate.png'
+            },
+            "blue": {
+                "back": './src/images/schemes/black/back.png',
+                "faceplate": './src/images/schemes/black/faceplate.png'
+            },
+            "faceplate": './src/images/schemes/a77ecea5.png'
+        },
+        "currentScheme": 'partyroyale'
+    },
+    "items": {
+        "outfit": null,
+        "backpack": null,
+        "pickaxe": null,
+        "banner": null,
+        "conversions": {},
+        "default": {},
+        "variants": {},
+        "cosmetics": {},
+        "sort": {}
+    }
 }
-const items = {
-    "outfit": null,
-    "backpack": null,
-    "pickaxe": null,
-    "banner": null,
-    "conversions": {},
-    "default": {},
-    "variants": {},
-    "cosmetics": {},
-    "sort": {}
-}
+
+let LoadingText = '';
 
 function changeColorScheme(scheme) {
     Cookies.set('colorScheme', scheme);
-    settings.currentScheme = scheme;
-    if(settings.currentScheme === 'black') {
+    system.settings.currentScheme = scheme;
+    if(system.settings.currentScheme === 'black') {
         $('html').css('background', 'black');
         $('html').removeClass('backgroundImage gradient blueGradient');
     }
-    if(settings.currentScheme === 'partyroyale') {
+    if(system.settings.currentScheme === 'partyroyale') {
         $('html').css('background', '');
         $('html').removeClass('backgroundImage gradient blueGradient');
         $('html').addClass('backgroundImage gradient');
     }
-    if(settings.currentScheme === 'blue') {
+    if(system.settings.currentScheme === 'blue') {
         $('html').css('background', '');
         $('html').removeClass('backgroundImage gradient blueGradient');
         $('html').addClass('blueGradient gradient');
     }
     for (const item of $('img[src*="images/schemes"]')) {
-        if(item.src.includes('faceplate.png')) item.src = settings.colorScheme[settings.currentScheme].faceplate;
-        if(item.src.includes('back.png')) item.src = settings.colorScheme[settings.currentScheme].back;
+        if(item.src.includes('faceplate.png')) item.src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+        if(item.src.includes('back.png')) item.src = system.settings.colorScheme[system.settings.currentScheme].back;
     }
 }
 
@@ -81,16 +87,16 @@ async function hideMenu() {
 
 async function showMenu(cosmeticType) {
     const menu = $('#menu');
-    const id = items[cosmeticType.toLowerCase()].id;
+    const id = system.items[cosmeticType.toLowerCase()].id;
     $(document).unbind('click');
-    menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
+    menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
     menu.fadeIn(250);
     await new Promise((resolve) => setTimeout(resolve, 250));
     $('#selectVariant').click(async () => {
-        if(!items[cosmeticType.toLowerCase()].variants) return;
+        if(!system.items[cosmeticType.toLowerCase()].variants) return;
         let selectedVariants = [];
         await new Promise((resolve) => setTimeout(resolve, 1));
-        $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+        $('#menu').html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
         $('#search').keyup(() => {
             const searchQuery = $('#search').val();
             for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
@@ -100,18 +106,18 @@ async function showMenu(cosmeticType) {
                 element.hidden = false;
             }
         });
-        for (const item of items[cosmeticType.toLowerCase()].variants) {
+        for (const item of system.items[cosmeticType.toLowerCase()].variants) {
             for (const variant of item.options) {
                 const div = document.createElement("div");
                 div.id = `VARIANT/${variant.tag}#${variant.name}`;
                 for (const src of [{
-                    src: settings.colorScheme[settings.currentScheme].back
+                    src: system.settings.colorScheme[system.settings.currentScheme].back
                 }, {
                     src: variant.image,
                     position: 'relative',
                     right: '100px'
                 }, {
-                    src: settings.colorScheme[settings.currentScheme].faceplate,
+                    src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
                     position: 'relative',
                     right: '200px'
                 }]) {
@@ -134,32 +140,32 @@ async function showMenu(cosmeticType) {
                                 selectedVariants = selectedVariants.filter((e) => {
                                     return e.image !== variant.image;
                                 });
-                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = settings.colorScheme[settings.currentScheme].faceplate;
+                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
                             }
                             else {
                                 selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
-                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = settings.colorScheme.faceplate;
+                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme.faceplate;
                             }
                         }
                     }
                 }
             }
         }
-        if(items.variants[cosmeticType]) for (const variant of items.variants[cosmeticType]) {
-            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = settings.colorScheme.faceplate;
+        if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
+            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme.faceplate;
             selectedVariants.push(variant);
         }
         $('#SaveVariant').click(async () => {
             if(selectedVariants.length === 0) return;
-            if(!items.variants[cosmeticType]) items.variants[cosmeticType] = [];
-            items.variants[cosmeticType] = selectedVariants;
+            if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
+            system.items.variants[cosmeticType] = selectedVariants;
             const img = $(`#${id}`)[0].children[0];
             if($(`#${id}`)[0].children[2].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[2].remove();
             $(`#${id}`)[0].children[1].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
             const variants = [];
             for (const variant of selectedVariants) {
                 variants.push({
-                    "item": items[cosmeticType.toLowerCase()].type.backendValue,
+                    "item": system.items[cosmeticType.toLowerCase()].type.backendValue,
                     "channel": variant.channel,
                     "variant": variant.tag
                 })
@@ -171,7 +177,7 @@ async function showMenu(cosmeticType) {
     $('#selectItem').click(async () => {
         let selectedItem = null;
         await new Promise((resolve) => setTimeout(resolve, 1));
-        $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+        $('#menu').html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
         $('#search').keyup(() => {
             const searchQuery = $('#search').val();
             for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
@@ -181,17 +187,17 @@ async function showMenu(cosmeticType) {
                 element.hidden = false;
             }
         });
-        for (const item of items.cosmetics[cosmeticType.toLowerCase()]) {
+        for (const item of system.items.cosmetics[cosmeticType.toLowerCase()]) {
             const div = document.createElement("div");
             div.id = `ITEM/${item.id}`;
             for (const src of [{
-                src: settings.colorScheme[settings.currentScheme].back
+                src: system.settings.colorScheme[system.settings.currentScheme].back
             }, {
                 src: item.images.icon,
                 position: 'relative',
                 right: '100px'
             }, {
-                src: settings.colorScheme[settings.currentScheme].faceplate,
+                src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
                 position: 'relative',
                 right: '200px'
             }]) {
@@ -207,9 +213,9 @@ async function showMenu(cosmeticType) {
                 ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
                     if(selectedItem === item) return;
                     if(selectedItem && selectedItem !== item) {
-                        $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                        $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
                     }
-                    e.srcElement.src = settings.colorScheme.faceplate;
+                    e.srcElement.src = system.settings.colorScheme.faceplate;
                     selectedItem = item;
                 }
                 if(src.src.includes('faceplate.png')) {
@@ -217,9 +223,9 @@ async function showMenu(cosmeticType) {
                     element.onclick = async () => {
                         if(selectedItem === item) return;
                         if(selectedItem && selectedItem !== item) {
-                            $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                            $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
                         }
-                        $(`[id="ITEM/${item.id}"]`).children()[2].src = settings.colorScheme.faceplate;
+                        $(`[id="ITEM/${item.id}"]`).children()[2].src = system.settings.colorScheme.faceplate;
                         selectedItem = item;
                     }
                 }
@@ -227,7 +233,7 @@ async function showMenu(cosmeticType) {
         }
         $('#SaveAvatar').click(async () => {
            if(!selectedItem) return;
-            items[cosmeticType.toLowerCase()] = selectedItem;
+            system.items[cosmeticType.toLowerCase()] = selectedItem;
             const img = $(`#${id}`)[0].children[0];
             $(`#${id}`)[0].id = selectedItem.id;
             $(`#${selectedItem.id}`)[0].innerHTML = '';
@@ -238,14 +244,14 @@ async function showMenu(cosmeticType) {
                 }
             }
             changeItem(selectedItem.id, cosmeticType.toLowerCase());
-            items.variants[cosmeticType] = [];
+            system.items.variants[cosmeticType] = [];
             await hideMenu();
         });
     });
     $('#SaveID').click(async () => {
-        if($('[id="cosmeticID"]').val().trim() === "" || !items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val())) return;
-        const item = items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val());
-        items[cosmeticType.toLowerCase()] = item;
+        if($('[id="cosmeticID"]').val().trim() === "" || !system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val())) return;
+        const item = system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val());
+        system.items[cosmeticType.toLowerCase()] = item;
         const img = $(`#${id}`)[0].children[0];
         $(`#${id}`)[0].id = $('[id="cosmeticID"]').val();
         $(`#${$('[id="cosmeticID"]').val()}`)[0].innerHTML = '';
@@ -290,7 +296,7 @@ function stopText() {
 function createImage(item, top, left, position, width=100, height=100, right=null, id=null) {
     const IMAGES = [];
 
-    for (const src of [settings.colorScheme[settings.currentScheme].back, item.images.icon, settings.colorScheme[settings.currentScheme].faceplate]) {
+    for (const src of [system.settings.colorScheme[system.settings.currentScheme].back, item.images.icon, system.settings.colorScheme[system.settings.currentScheme].faceplate]) {
         const IMAGE = document.createElement("IMG");
         IMAGE.width = width;
         IMAGE.height = height;
@@ -329,7 +335,7 @@ function changeItem(id, cosmeticType) {
 }
 
 function addVariant(array, cosmeticType) {
-    fetch(`https://fortnitebtapi.herokuapp.com/api/account/party/item?array=["${items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+    fetch(`https://fortnitebtapi.herokuapp.com/api/account/party/item?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
         credentials: 'include',
         method: "PUT",
         headers: {
@@ -339,33 +345,33 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
-    items.default = {
-        "outfit": items.cosmetics.outfit[Math.floor(Math.random() * items.cosmetics.outfit.length - 1) + 0],
-        "backpack": items.cosmetics.backpack[Math.floor(Math.random() * items.cosmetics.backpack.length - 1) + 0],
-        "pickaxe": items.cosmetics.pickaxe[Math.floor(Math.random() * items.cosmetics.pickaxe.length - 1) + 0],
-        "banner": items.cosmetics.banner[Math.floor(Math.random() * items.cosmetics.banner.length - 1) + 0]
+    system.items.default = {
+        "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 0],
+        "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 0],
+        "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 0],
+        "banner": system.items.cosmetics.banner[Math.floor(Math.random() * system.items.cosmetics.banner.length - 1) + 0]
     }
-    return items.default;
+    return system.items.default;
 }
 
 function sortItems() {
-    for (const value of items.cosmetics) {
-        if(!items.sort[value.type.value]) items.sort[value.type.value] = [];
-        items.sort[value.type.value].push(value);
+    for (const value of system.items.cosmetics) {
+        if(!system.items.sort[value.type.value]) system.items.sort[value.type.value] = [];
+        system.items.sort[value.type.value].push(value);
     }
-    return items.cosmetics;
+    return system.items.cosmetics;
 }
 
 function categorizeItems(setDefaultItem) {
-    for (const item of items.cosmetics) {
-        items.conversions[item.type.value] = item.path.split('/Cosmetics/')[1] ? item.path.split('/Cosmetics/')[1].split('/')[0] : null;
-        if(items.cosmetics[item.type.value]) continue;
-        items.cosmetics[item.type.value] = items.cosmetics.filter(e => e.type.value === item.type.value);
+    for (const item of system.items.cosmetics) {
+        system.items.conversions[item.type.value] = item.path.split('/Cosmetics/')[1] ? item.path.split('/Cosmetics/')[1].split('/')[0] : null;
+        if(system.items.cosmetics[item.type.value]) continue;
+        system.items.cosmetics[item.type.value] = system.items.cosmetics.filter(e => e.type.value === item.type.value);
     }
     if(setDefaultItem) {
         setDefaultItems();
     }
-    return items.cosmetics;
+    return system.items.cosmetics;
 }
 
 async function setItems(items, itemss) {
@@ -400,23 +406,23 @@ function getImages(AthenaCosmeticLoadout) {
 }
 
 function setMembers() {
-    const members = party.members;
+    const members = system.party.members;
     $('#members').html(null);
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
-        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
+        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
         $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
             const menu = $('#menu');
             let items = '';
             for (const key of Object.keys(images)) {
                 const value = images[key];
-                items += `<div class="member" style="width: 100px;"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="100" height="100" draggable="false" src="${value}"><img width="100" height="100" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"></div>`
+                items += `<div class="member" style="width: 100px;"><img width="100" height="100" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].back}"><img width="100" height="100" draggable="false" src="${value}"><img width="100" height="100" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].faceplate}"></div>`
             }
-            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
+            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === system.account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
             menu.fadeIn(250);
             $('#kickPlayer').click(() => {
-                if(member.id === account.id) return;
+                if(member.id === system.account.id) return;
             });
             menu.draggable({
                 "containment": "window"
@@ -463,8 +469,8 @@ $(document).ready(async () => {
         };
     }
 
-    const source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    source.onerror = (e) => {
+    system.source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
+    system.source.onerror = (e) => {
         return setLoadingText('Error happend, cannot access the error.');
     }
 
@@ -473,13 +479,13 @@ $(document).ready(async () => {
     };
 
     await new Promise((resolve) => {
-        source.onmessage = (data) => {
+        system.source.onmessage = (data) => {
             const json = JSON.parse(data.data);
             if(json.done) return resolve();
             setLoadingText(json.message);
         }
     });
-    source.onmessage = (data) => {
+    system.source.onmessage = (data) => {
         const json = JSON.parse(data.data);
         if(json.exit) return $('.message-container').fadeIn();
         if(json.event) {
@@ -487,7 +493,7 @@ $(document).ready(async () => {
             const event = json.event;
             switch(event) {
                 case 'refresh:party': {
-                    party = json.party;
+                    system.party = json.party;
                     setMembers();
                     if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
                         const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
@@ -508,8 +514,8 @@ $(document).ready(async () => {
             }
         }
     }
-    account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     const timerSettings = {
         seconds: 60,
         minutes: 29
@@ -529,16 +535,16 @@ $(document).ready(async () => {
             document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
     }, 1000);
-    $('#username')[0].innerText = account.displayName;
+    $('#username')[0].innerText = system.account.displayName;
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
-    items.cosmetics = cos;
+    system.items.cosmetics = cos;
     setLoadingText('Categorizing cosmetics');
     categorizeItems(true);
     sortItems();
     setLoadingText('Creating default images');
-    const { top, left, width, height } = await setItems(items.default, items);
+    const { top, left, width, height } = await setItems(system.items.default, system.items);
     setMembers();
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
@@ -566,7 +572,7 @@ $(document).ready(async () => {
         $('#selectItem').click(async () => {
             let selectedItem = null;
             await new Promise((resolve) => setTimeout(resolve, 1));
-            $('#menu').html(`<div class="cosmetic">${settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
+            $('#menu').html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val();
                 for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
@@ -576,17 +582,17 @@ $(document).ready(async () => {
                     element.hidden = false;
                 }
             });
-            for (const item of items.sort.emote) {
+            for (const item of system.items.sort.emote) {
                 const div = document.createElement("div");
                 div.id = `ITEM/${item.id}`;
                 for (const src of [{
-                    src: settings.colorScheme[settings.currentScheme].back
+                    src: system.settings.colorScheme[system.settings.currentScheme].back
                 }, {
                     src: item.images.icon,
                     position: 'relative',
                     right: '100px'
                 }, {
-                    src: settings.colorScheme[settings.currentScheme].faceplate,
+                    src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
                     position: 'relative',
                     right: '200px'
                 }]) {
@@ -602,9 +608,9 @@ $(document).ready(async () => {
                     ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
                         if(selectedItem === item) return;
                         if(selectedItem && selectedItem !== item) {
-                            $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                            $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
                         }
-                        e.srcElement.src = settings.colorScheme.faceplate;
+                        e.srcElement.src = system.settings.colorScheme.faceplate;
                         selectedItem = item;
                     }
                     if(src.src.includes('faceplate.png')) {
@@ -612,9 +618,9 @@ $(document).ready(async () => {
                         element.onclick = async () => {
                             if(selectedItem === item) return;
                             if(selectedItem && selectedItem !== item) {
-                                $(`[src="${settings.colorScheme.faceplate}"]`)[0].src = settings.colorScheme[settings.currentScheme].faceplate;
+                                $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
                             }
-                            $(`[id="ITEM/${item.id}"]`).children()[2].src = settings.colorScheme.faceplate;
+                            $(`[id="ITEM/${item.id}"]`).children()[2].src = system.settings.colorScheme.faceplate;
                             selectedItem = item;
                         }
                     }
@@ -642,11 +648,11 @@ $(document).ready(async () => {
         $('#ColorSchemeButton').click(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
-            for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
+            for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
                 menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;" id="ColorScheme#${colorScheme}">${colorScheme}</div>`;
             }
             menu[0].innerHTML = `<div class="cosmetic"><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
-            for (const colorScheme of Object.keys(settings.colorScheme).filter(e => e !== 'faceplate')) {
+            for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
                 $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
                     changeColorScheme(colorScheme);
                     await hideMenu();
