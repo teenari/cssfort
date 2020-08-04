@@ -17,6 +17,7 @@ const system = {
     "account": null,
     "party": null,
     "source": null,
+    "friends": null,
     "messages": {
         "party": [],
         "friends": {}
@@ -522,6 +523,7 @@ $(document).ready(async () => {
     }
     system.account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     system.party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     const timerSettings = {
         seconds: 60,
         minutes: 29
@@ -642,14 +644,14 @@ $(document).ready(async () => {
     $('#InformationButton').children().click(async () => {
         const menu = $('#menu');
         $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">Information<div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
+        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
         });
         $('[id="ColorScheme#black"]').hover(() => {
             $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
-        })
+        });
         $('#ColorSchemeButton').click(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
