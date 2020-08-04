@@ -660,6 +660,10 @@ $(document).ready(async () => {
                 (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'white', color: 'black' }, 100),
                 (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'black', color: 'white' }, 100)
             )
+            $('#friends').children().click(async (e) => {
+                const submenu = $('#sub-menu');
+                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+            });
         });
         $('[id="ColorScheme#black"]').hover(() => {
             $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
@@ -684,7 +688,7 @@ $(document).ready(async () => {
         });
         await new Promise((resolve) => setTimeout(resolve, 250));
         $(document).click(async (e) => { 
-            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !event.target.includes('sub-menu')) {
                 await hideMenu();
                 $(document).unbind('click');
             }        
