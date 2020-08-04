@@ -509,6 +509,7 @@ $(document).ready(async () => {
                 } break;
 
                 default: {
+                    console.log(data);
                     console.log(`UNKNOWN EVENT ${event}`);
                 } break;
             }
