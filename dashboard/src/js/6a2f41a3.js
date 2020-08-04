@@ -408,6 +408,9 @@ function setMembers() {
             const menu = $('#menu');
             menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div id="kickPlayer" class="clickHereButton">Kick Player</div></div></div>`);
             menu.fadeIn(250);
+            $('#kickPlayer').click(() => {
+                if(member.id === account.id) return;
+            });
             menu.draggable({
                 "containment": "window"
             });
@@ -416,7 +419,7 @@ function setMembers() {
                 if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
                     await hideMenu();
                     $(document).unbind('click');
-                }        
+                }
             });
         });
     }
