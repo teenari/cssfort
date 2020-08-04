@@ -653,9 +653,9 @@ $(document).ready(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
             for (const friend of system.friends) {
-                menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 3vh;color: black;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
+                menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 4vh;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
             }
-            menu[0].innerHTML = `<div class="cosmetic">FRIENDS<br><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`
+            menu[0].innerHTML = `<div class="cosmetic">FRIENDS<br><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`;
         });
         $('[id="ColorScheme#black"]').hover(() => {
             $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);

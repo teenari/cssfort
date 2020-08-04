@@ -58,10 +58,13 @@ html {
 
 .friend {
     font-size: 19px;
-    height: 49px;
     width: 184px;
     position: relative;
     cursor: pointer;
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+    height: 27px;
 }
 
 .members-container {
