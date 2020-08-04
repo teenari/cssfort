@@ -43,7 +43,7 @@ const system = {
         "outfit": null,
         "backpack": null,
         "pickaxe": null,
-        "banner": null,
+        // "banner": null,
         "conversions": {},
         "default": {},
         "variants": {},
