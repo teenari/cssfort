@@ -65,6 +65,8 @@ html {
     border-radius: 5px;
     color: white;
     height: 27px;
+    padding: 10px;
+    margin: 1px;
 }
 
 .members-container {
