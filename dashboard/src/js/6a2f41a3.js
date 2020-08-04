@@ -403,7 +403,7 @@ function setMembers() {
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
         $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
-        $(`#${member.id}.member`).click(() => {
+        $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
             $('#menu').html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div id="kickPlayer" class="clickHereButton">Kick Player</div></div></div>`);
             menu.fadeIn(250);
