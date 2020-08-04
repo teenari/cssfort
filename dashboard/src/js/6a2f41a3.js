@@ -508,6 +508,11 @@ $(document).ready(async () => {
                     }
                 } break;
 
+                case 'friend:message': {
+                    if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
+                    system.messages.friends[data.author.id].push(data);
+                } break;
+
                 default: {
                     console.log(data);
                     console.log(`UNKNOWN EVENT ${event}`);
