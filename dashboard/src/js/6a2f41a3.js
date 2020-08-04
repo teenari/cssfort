@@ -642,14 +642,10 @@ $(document).ready(async () => {
     $('#InformationButton').children().click(async () => {
         const menu = $('#menu');
         $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">Information<div id="PartyButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="AccountSettings" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Account</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
+        menu[0].innerHTML = `<div class="cosmetic">Information<div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
-        });
-        $('#PartyButton').click(async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            menu[0].innerHTML = '<div class="cosmetic"><div class="textBackground gradient">Party</div><div id="MemberCount" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="PrivacyName" style="font-size: 20px; margin: 10px;">TEMPLATE</div><div id="LeaderName" style="font-size: 20px; margin: 10px;">TEMPLATE</div></div>';
         });
         $('#ColorSchemeButton').click(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
