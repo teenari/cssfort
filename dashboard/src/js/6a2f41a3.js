@@ -650,14 +650,8 @@ $(document).ready(async () => {
             "containment": "window"
         });
         $('#FriendsButton').click(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
-
-            /**
-             * <div class="cosmetic">FRIENDS<br><div id="friends" style="
-    display: inline-block;
-    padding: 15px;
-"></div></div>
-             */
             for (const friend of system.friends) {
                 menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 3vh;color: black;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
             }
