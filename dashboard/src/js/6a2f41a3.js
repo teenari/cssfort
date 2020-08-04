@@ -403,6 +403,9 @@ function setMembers() {
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
         $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${settings.colorScheme[settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
+        $(`#${data.id}.member`).click(() => {
+            $('#menu').html(`<div class="cosmetic">${data.displayName}<br><div style="font-size: 20px; margin: 10px;"><div id="kickPlayer" class="clickHereButton">Kick Player</div></div></div>`);
+        });
     }
 }
 
@@ -463,14 +466,11 @@ $(document).ready(async () => {
                 case 'refresh:party': {
                     party = json.party;
                     setMembers();
-                    console.log(data.role);
-                    console.log(data);
                     if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
                         const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
                         if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
                             $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
                         }
-                        console.log(emoteItemDef);
                         if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
                             const id = last('.', emoteItemDef).replace(/'/g, '');
                             const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
