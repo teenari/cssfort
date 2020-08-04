@@ -630,8 +630,6 @@ $(document).ready(async () => {
         const menu = $('#menu');
         $(document).unbind('click');
         menu[0].innerHTML = `<div class="cosmetic">Settings<div id="PartyButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="AccountSettings" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Account</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
-        menu[0].style.left = '1093px';
-        menu[0].style.top = '14px';
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
