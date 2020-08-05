@@ -701,12 +701,22 @@ $(document).ready(async () => {
                     "></textarea></div></div>`;
                     $('#closeSubMenu').click(hideSubMenu);
                     system.messages.handler = (data) => {
-                        console.log('adasd')
-                        $('#sendMessage').outerHTML = `<div>[${data.author.displayName}] ${data.content}</div>${$('#sendMessage').outerHTML}`;
+                        $('#sendMessage').before(`<div>[${data.author.displayName}] ${data.content}</div>`);
                     }
                     $('#sendMessage').keydown((event) => {
                         if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
                             sendMessage(e.currentTarget.id, $('#sendMessage').val());
+                            if(!system.messages[e.currentTarget.id]) system.messages[e.currentTarget.id] = [];
+                            system.messages[e.currentTarget.id].push({
+                                content: $('#sendMessage').val(),
+                                sentAt: new Date().toISOString(),
+                                author: {
+                                    displayName: system.account.displayName,
+                                    id: system.account.id
+                                }
+                            });
+                            $('#sendMessage').before(`<div>[${system.account.displayName}] ${$('#sendMessage').val()}</div>`);
+                            $('#sendMessage').val('');
                         }
                     });
                 });
