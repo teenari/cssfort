@@ -694,6 +694,7 @@ $(document).ready(async () => {
                 submenu.draggable();
                 $('#closeSubMenu').click(hideSubMenu);
                 $('#whisperButton').click(async () => {
+                    console.log(submenu);
                     submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
                     ">[System] Start of messages.</div><textarea id="sendMessage" style="
                         position: absolute;
