@@ -79,12 +79,10 @@ function changeColorScheme(scheme) {
     }
 }
 
-async function hideMenu() {
-    const menu = $('#menu');
+async function hideMenu(menu) {
     menu.fadeOut(250);
     await new Promise((resolve) => setTimeout(resolve, 250));
-    menu[0].innerHTML = '';
-    menu[0].hidden = true;
+    menu.remove();
 }
 
 async function hideSubMenu() {
@@ -192,7 +190,7 @@ async function showMenu(cosmeticType) {
                 })
             }
             addVariant(variants, cosmeticType.toLowerCase());
-            await hideMenu();
+            await hideMenu(menu);
         });
     });
     $('#selectItem').click(async () => {
@@ -266,7 +264,7 @@ async function showMenu(cosmeticType) {
             }
             changeItem(selectedItem.id, cosmeticType.toLowerCase());
             system.items.variants[cosmeticType] = [];
-            await hideMenu();
+            await hideMenu(menu);
         });
     });
     $('#SaveID').click(async () => {
@@ -282,15 +280,15 @@ async function showMenu(cosmeticType) {
                 await showMenu(item.type.value.toUpperCase());
             }
         }
-        await hideMenu();
+        await hideMenu(menu);
     });
     menu.draggable({
         "containment": "window"
     });
     await new Promise((resolve) => setTimeout(resolve, 300));
-    $(document).click(async (e) => { 
+    $(document).click(async (event) => { 
         if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-            await hideMenu();
+            await hideMenu(menu);
             $(document).unbind('click');
         }        
     });
@@ -434,7 +432,8 @@ function setMembers() {
         $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
         $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
-            const menu = $('#menu');
+            createMenu(`MEMBER${member.id}`);
+            const menu = $(`[id="MENU~MEMBER${member.id}"]`);
             let items = '';
             for (const key of Object.keys(images)) {
                 const value = images[key];
@@ -450,8 +449,8 @@ function setMembers() {
             });
             await new Promise((resolve) => setTimeout(resolve, 300));
             $(document).click(async (e) => { 
-                if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-                    await hideMenu();
+                if(!$(event.target).closest(`[id="MENU~MEMBER${member.id}"]`).length && $(`[id="MENU~MEMBER${member.id}"]`).is(":visible")) {
+                    await hideMenu(menu);
                     $(document).unbind('click');
                 }
             });
@@ -585,7 +584,8 @@ $(document).ready(async () => {
         },
         id: 'Emote'
     }, top + 1, left, 'absolute', width, height, 'Emote'], async (e) => {
-        const menu = $('#menu');
+        createMenu('cosmeticMenu');
+        const menu = $('[id="MENU~cosmeticMenu"]');
         $(document).unbind('click');
         menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
         menu.fadeIn(250);
@@ -594,18 +594,18 @@ $(document).ready(async () => {
         });
         await new Promise((resolve) => setTimeout(resolve, 300));
         $(document).click(async (e) => { 
-            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-                await hideMenu();
+            if(!$(event.target).closest('[id="MENU~cosmeticMenu"]').length && $('[id="MENU~cosmeticMenu"]').is(":visible")) {
+                await hideMenu(menu);
                 $(document).unbind('click');
             }        
         });
         $('#SaveID').click(async () => {
-            await hideMenu();
+            await hideMenu(menu);
         });
         $('#selectItem').click(async () => {
             let selectedItem = null;
             await new Promise((resolve) => setTimeout(resolve, 1));
-            $('#menu').html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
+            menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val();
                 for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
@@ -662,12 +662,13 @@ $(document).ready(async () => {
             $('#SaveAvatar').click(async () => {
                 if(!selectedItem) return;
                 changeItem(selectedItem.id, 'emote');
-                await hideMenu();
+                await hideMenu(menu);
             });
         });
     });
     $('#InformationButton').children().click(async () => {
-        const menu = $('#menu');
+        createMenu('information');
+        const menu = $('[id="MENU~information"]');
         $(document).unbind('click');
         menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
         menu.fadeIn(250);
@@ -686,13 +687,13 @@ $(document).ready(async () => {
                 (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'black', color: 'white' }, 100)
             )
             $('#friends').children().click(async (e) => {
-                e.currentTarget
-                const submenu = $('#sub-menu');
+                createMenu('SUBMENU-FRIENDS');
+                const submenu = $('[id="MENU~SUBMENU-FRIENDS"]');
                 submenu[0].innerHTML = `${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div>`;
                 submenu.fadeIn();
                 $('#closeSubMenu').click(hideSubMenu);
                 $('#whisperButton').click(async () => {
-                    menu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
+                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
                     ">[System] Start of messages.</div><textarea id="sendMessage" style="
                         position: absolute;
                         top: 36vh;
@@ -713,7 +714,6 @@ $(document).ready(async () => {
                     if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
                         $('#sendMessage').before(`<div>[${message.author.displayName}] ${message.content}</div>`);
                     }
-                    $('#closeSubMenu').click(hideSubMenu);
                     system.messages.handler = (data) => {
                         $('#sendMessage').before(`<div>[${data.author.displayName}] ${data.content}</div>`);
                     }
@@ -754,15 +754,8 @@ $(document).ready(async () => {
             for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
                 $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
                     changeColorScheme(colorScheme);
-                    await hideMenu();
+                    await hideMenu(submenu);
                 });
-            }
-        });
-        await new Promise((resolve) => setTimeout(resolve, 250));
-        $(document).click(async (event) => {
-            if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
-                await hideMenu();
-                $(document).unbind('click');
             }
         });
     });
