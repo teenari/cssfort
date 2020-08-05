@@ -20,7 +20,8 @@ const system = {
     "friends": null,
     "messages": {
         "party": [],
-        "friends": {}
+        "friends": {},
+        "handler": null
     },
     "settings": {
         "colorScheme": {
@@ -524,6 +525,7 @@ $(document).ready(async () => {
                 case 'friend:message': {
                     if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
                     system.messages.friends[data.author.id].push(data);
+                    if(system.messages.handler) system.messages.handler(data);
                 } break;
 
                 default: {
@@ -698,6 +700,9 @@ $(document).ready(async () => {
                         overflow: auto;
                     "></textarea></div></div>`;
                     $('#closeSubMenu').click(hideSubMenu);
+                    system.messages.handler = (data) => {
+                        $('#sendMessage').outerHTML = `<div>[${data.author.displayName}] ${data.content}</div>${$('#sendMessage').outerHTML}`;
+                    }
                     $('#sendMessage').keydown((event) => {
                         if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
                             sendMessage(e.currentTarget.id, $('#sendMessage').val());
