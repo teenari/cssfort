@@ -677,7 +677,7 @@ $(document).ready(async () => {
             $('#friends').children().click(async (e) => {
                 e.currentTarget
                 const submenu = $('#sub-menu');
-                submenu[0].innerHTML = `${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 29vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div style="position: relative;"><div id="whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div>`;
+                submenu[0].innerHTML = `${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div>`;
                 submenu.draggable();
                 submenu.fadeIn();
                 $('#closeSubMenu').click(hideSubMenu);
