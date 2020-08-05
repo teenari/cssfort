@@ -670,10 +670,32 @@ $(document).ready(async () => {
             )
             $('#friends').children().click(async (e) => {
                 const submenu = $('#sub-menu');
-                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 29vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div style="position: relative;"><div class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 29vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div style="position: relative;"><div id="whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
                 submenu.draggable();
                 submenu.fadeIn();
                 $('#closeSubMenu').click(hideSubMenu);
+                $('#whisperButton').click(async () => {
+                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
+                    ">[System] Start of messages.</div><textarea id="sendMessage" style="
+                        position: absolute;
+                        top: 36vh;
+                        left: 3vh;
+                        border: none;
+                        overflow: auto;
+                        outline: none;
+                        -webkit-box-shadow: none;
+                        -moz-box-shadow: none;
+                        box-shadow: none;
+                        resize: none;
+                        background-color: white;
+                        border-radius: 5px;
+                        font-family: t;
+                        font-size: 16px;
+                        overflow: auto;
+                    "></textarea></div></div>`;
+
+                    $('#sendMessage').keydown(console.log);
+                });
             });
         });
         $('[id="ColorScheme#black"]').hover(() => {
