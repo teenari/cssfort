@@ -699,7 +699,7 @@ $(document).ready(async () => {
                         font-size: 16px;
                         overflow: auto;
                     "></textarea></div></div>`;
-                    if(system.messages[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
+                    if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
                         $('#sendMessage').before(`<div>[${message.author.displayName}] ${message.content}</div>`);
                     }
                     $('#closeSubMenu').click(hideSubMenu);
