@@ -699,6 +699,7 @@ $(document).ready(async () => {
         $(document).click(async (event) => {
             if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
                 await hideMenu();
+                if($('#sub-menu').is(":visible")) await hideSubMenu();
                 $(document).unbind('click');
             }
         });
