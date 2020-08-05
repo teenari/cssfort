@@ -50,6 +50,15 @@ html {
     -moz-text-fill-color: transparent;
 }
 
+#sub-menu {
+    background-color: white;
+    position: absolute;
+    left: 258px;
+    top: 57px;
+    width: 208px;
+    display: none;
+}
+
 .submenuButton {
     font-size: 17px;
     background-color: black;
