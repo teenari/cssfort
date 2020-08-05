@@ -670,8 +670,9 @@ $(document).ready(async () => {
             )
             $('#friends').children().click(async (e) => {
                 const submenu = $('#sub-menu');
-                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 29vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div style="position: relative;"><div class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
                 submenu.draggable();
+                $('#closeSubMenu').click(hideSubMenu);
             });
         });
         $('[id="ColorScheme#black"]').hover(() => {
@@ -699,7 +700,6 @@ $(document).ready(async () => {
         $(document).click(async (event) => {
             if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
                 await hideMenu();
-                if($('#sub-menu').is(":visible")) await hideSubMenu();
                 $(document).unbind('click');
             }
         });
