@@ -671,6 +671,7 @@ $(document).ready(async () => {
             $('#friends').children().click(async (e) => {
                 const submenu = $('#sub-menu');
                 submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+                submenu.draggable();
             });
         });
         $('[id="ColorScheme#black"]').hover(() => {
@@ -696,9 +697,15 @@ $(document).ready(async () => {
         });
         await new Promise((resolve) => setTimeout(resolve, 250));
         $(document).click(async (event) => {
+            await new Promise((resolve) => setTimeout(resolve, 100));
             if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
                 await hideMenu();
                 $(document).unbind('click');
+            }
+            else {
+                if($(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
+                    await hideSubMenu();
+                }
             }
         });
     });
