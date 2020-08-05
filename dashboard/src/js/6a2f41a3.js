@@ -699,12 +699,16 @@ $(document).ready(async () => {
                         font-size: 16px;
                         overflow: auto;
                     "></textarea></div></div>`;
+                    if(system.messages[e.currentTarget.id]) for (const message of system.messages[e.currentTarget.id]) {
+                        $('#sendMessage').before(`<div>[${message.author.displayName}] ${message.content}</div>`);
+                    }
                     $('#closeSubMenu').click(hideSubMenu);
                     system.messages.handler = (data) => {
                         $('#sendMessage').before(`<div>[${data.author.displayName}] ${data.content}</div>`);
                     }
                     $('#sendMessage').keydown((event) => {
                         if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
+                            event.stopPropagation();
                             sendMessage(e.currentTarget.id, $('#sendMessage').val());
                             if(!system.messages[e.currentTarget.id]) system.messages[e.currentTarget.id] = [];
                             system.messages[e.currentTarget.id].push({
