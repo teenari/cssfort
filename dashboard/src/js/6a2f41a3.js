@@ -710,8 +710,8 @@ $(document).ready(async () => {
                         if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
                             event.stopPropagation();
                             sendMessage(e.currentTarget.id, $('#sendMessage').val());
-                            if(!system.messages[e.currentTarget.id]) system.messages[e.currentTarget.id] = [];
-                            system.messages[e.currentTarget.id].push({
+                            if(!system.messages.friends[e.currentTarget.id]) system.messages.friends[e.currentTarget.id] = [];
+                            system.messages.friends[e.currentTarget.id].push({
                                 content: $('#sendMessage').val(),
                                 sentAt: new Date().toISOString(),
                                 author: {
