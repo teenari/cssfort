@@ -688,15 +688,15 @@ $(document).ready(async () => {
             )
             $('#friends').children().click(async (e) => {
                 createMenu(`SUBMENU-FRIENDS-${e.currentTarget.id}`);
+                let customName = `MENU~SUBMENU-FRIENDS-${e.currentTarget.id}-`
                 const submenu = $(`[id="MENU~SUBMENU-FRIENDS-${e.currentTarget.id}"]`);
-                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="${customName}whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
                 submenu.fadeIn();
                 submenu.draggable();
-                $('#closeSubMenu').click(hideSubMenu);
-                $('#whisperButton').click(async () => {
-                    console.log(submenu);
-                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
-                    ">[System] Start of messages.</div><textarea id="sendMessage" style="
+                // $('#closeSubMenu').click(hideSubMenu);
+                $(`[id="${customName}whisperButton"]`).click(async () => {
+                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
+                    ">[System] Start of messages.</div><textarea id="${customName}sendMessage" style="
                         position: absolute;
                         top: 36vh;
                         left: 3vh;
@@ -714,26 +714,26 @@ $(document).ready(async () => {
                         overflow: auto;
                     "></textarea></div></div>`;
                     if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
-                        $('#sendMessage').before(`<div>[${message.author.displayName}] ${message.content}</div>`);
+                        $(`[id="${customName}sendMessage"]`).before(`<div>[${message.author.displayName}] ${message.content}</div>`);
                     }
                     system.messages.handler = (data) => {
-                        $('#sendMessage').before(`<div>[${data.author.displayName}] ${data.content}</div>`);
+                        $(`[id="${customName}sendMessage"]`).before(`<div>[${data.author.displayName}] ${data.content}</div>`);
                     }
-                    $('#sendMessage').keydown((event) => {
-                        if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
+                    $(`[id="${customName}sendMessage"]`).keydown((event) => {
+                        if(event.keyCode === 13 && !event.shiftKey && $(`[id="${customName}sendMessage"]`).val().trim() !== '') {
                             event.stopPropagation();
-                            sendMessage(e.currentTarget.id, $('#sendMessage').val());
+                            sendMessage(e.currentTarget.id, $(`[id="${customName}sendMessage"]`).val());
                             if(!system.messages.friends[e.currentTarget.id]) system.messages.friends[e.currentTarget.id] = [];
                             system.messages.friends[e.currentTarget.id].push({
-                                content: $('#sendMessage').val(),
+                                content: $(`[id="${customName}sendMessage"]`).val(),
                                 sentAt: new Date().toISOString(),
                                 author: {
                                     displayName: system.account.displayName,
                                     id: system.account.id
                                 }
                             });
-                            $('#sendMessage').before(`<div>[${system.account.displayName}] ${$('#sendMessage').val()}</div>`);
-                            $('#sendMessage').val('');
+                            $(`[id="${customName}sendMessage"]`).before(`<div>[${system.account.displayName}] ${$(`[id="${customName}sendMessage"]`).val()}</div>`);
+                            $(`[id="${customName}sendMessage"]`).val('');
                         }
                     });
                 });
