@@ -701,6 +701,7 @@ $(document).ready(async () => {
                     "></textarea></div></div>`;
                     $('#closeSubMenu').click(hideSubMenu);
                     system.messages.handler = (data) => {
+                        console.log('adasd')
                         $('#sendMessage').outerHTML = `<div>[${data.author.displayName}] ${data.content}</div>${$('#sendMessage').outerHTML}`;
                     }
                     $('#sendMessage').keydown((event) => {
