@@ -103,6 +103,12 @@ function createMenu(purpose) {
     return menu;
 }
 
+function addCloseButton(menu, id) {
+    [...menu.children].find(e => e.className === 'cosmetic').innerHTML += `<div id="${id}" style="left: 24vh;font-size: 18px;position: sticky;top: -5vh;background-color: black;border-radius: 5px;color: white;padding: 7px;cursor: pointer;text-align: center;">Close Menu</div>`;
+    $(`[id="${id}"]`).click(async () => await hideMenu(menu));
+    return $(`[id="${id}"]`);
+}
+
 async function showMenu(cosmeticType) {
     createMenu('cosmeticMenu');
     const menu = $('[id="MENU~cosmeticMenu"]');
@@ -115,7 +121,8 @@ async function showMenu(cosmeticType) {
         if(!system.items[cosmeticType.toLowerCase()].variants) return;
         let selectedVariants = [];
         await new Promise((resolve) => setTimeout(resolve, 1));
-        $('#menu').html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+        menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+        addCloseButton(menu, 'MENU~cosmeticMenu~close');
         $('#search').keyup(() => {
             const searchQuery = $('#search').val();
             for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
@@ -197,6 +204,7 @@ async function showMenu(cosmeticType) {
         let selectedItem = null;
         await new Promise((resolve) => setTimeout(resolve, 1));
         menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
+        addCloseButton(menu, 'MENU~cosmeticMenu~close');
         $('#search').keyup(() => {
             const searchQuery = $('#search').val();
             for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
@@ -285,6 +293,7 @@ async function showMenu(cosmeticType) {
     menu.draggable({
         "containment": "window"
     });
+    addCloseButton(menu, 'MENU~cosmeticMenu~close');
     await new Promise((resolve) => setTimeout(resolve, 300));
     $(document).click(async (event) => { 
         if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
@@ -447,6 +456,7 @@ function setMembers() {
             menu.draggable({
                 "containment": "window"
             });
+            addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
             await new Promise((resolve) => setTimeout(resolve, 300));
             $(document).click(async (e) => { 
                 if(!$(event.target).closest(`[id="MENU~MEMBER${member.id}"]`).length && $(`[id="MENU~MEMBER${member.id}"]`).is(":visible")) {
