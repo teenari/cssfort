@@ -700,7 +700,7 @@ $(document).ready(async () => {
                     $('#closeSubMenu').click(hideSubMenu);
                     $('#sendMessage').keydown((event) => {
                         if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
-                            sendMessage(e.currentTarget.id);
+                            sendMessage(e.currentTarget.id, $('#sendMessage').val());
                         }
                     });
                 });
