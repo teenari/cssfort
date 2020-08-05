@@ -696,15 +696,9 @@ $(document).ready(async () => {
         });
         await new Promise((resolve) => setTimeout(resolve, 250));
         $(document).click(async (event) => {
-            await new Promise((resolve) => setTimeout(resolve, 1));
             if(!$(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
                 await hideMenu();
                 $(document).unbind('click');
-            }
-            else {
-                if($(event.target).closest('#menu').length && $('#menu').is(":visible") && !$(event.target).closest('#sub-menu').length) {
-                    await hideSubMenu();
-                }
             }
         });
     });
