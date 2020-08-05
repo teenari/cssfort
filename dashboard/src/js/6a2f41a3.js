@@ -447,6 +447,10 @@ function setMembers() {
     }
 }
 
+function sendMessage(id, message) {
+    fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/send?id=${id}&message=${message}`, {credentials: 'include', method: "PUT", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+}
+
 $(document).ready(async () => {
     const requestUser = await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
@@ -693,8 +697,12 @@ $(document).ready(async () => {
                         font-size: 16px;
                         overflow: auto;
                     "></textarea></div></div>`;
-
-                    $('#sendMessage').keydown(console.log);
+                    $('#closeSubMenu').click(hideSubMenu);
+                    $('#sendMessage').keydown((event) => {
+                        if(event.keyCode === 13 && !event.shiftKey && $('#sendMessage').val().trim() !== '') {
+                            sendMessage(e.currentTarget.id);
+                        }
+                    });
                 });
             });
         });
