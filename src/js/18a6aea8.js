@@ -20,9 +20,6 @@ $(document).ready(async () => {
     })).json();
     $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
-        if(!user.inServer) {
-            return window.location = 'https://discord.gg/xkURTCz';
-        }
         $('.loginDiscord')[0].innerText = 'Continue';
         $('.loginDiscord').css('background', 'white').css('color', 'black').click(() => {
             window.location = 'https://teenari.github.io/fortnitebt/dashboard';
