@@ -116,7 +116,9 @@ async function showMenu(cosmeticType) {
     $(document).unbind('click');
     menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
     menu.fadeIn(250);
+    console.log('a')
     await new Promise((resolve) => setTimeout(resolve, 250));
+    console.log('c')
     $('#selectVariant').click(async () => {
         if(!system.items[cosmeticType.toLowerCase()].variants) return;
         let selectedVariants = [];
