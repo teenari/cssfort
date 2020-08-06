@@ -102,6 +102,10 @@ function addCloseButton(menu, id) {
     div.innerHTML = 'Close Menu';
     [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
     $(`[id="${id}"]`).click(async () => await hideMenu(menu));
+    $(`[id="${id}"]`).unbind('hover').hover(
+        () => $(`[id="${id}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100),
+        () => $(`[id="${id}"]`).stop().animate({backgroundColor:'black', color: 'white'}, 100)
+    );
     return $(`[id="${id}"]`);
 }
 
