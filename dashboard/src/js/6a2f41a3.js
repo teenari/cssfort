@@ -80,17 +80,10 @@ function changeColorScheme(scheme) {
 }
 
 async function hideMenu(menu) {
+    console.log('s');
     menu.fadeOut(250);
     await new Promise((resolve) => setTimeout(resolve, 250));
     menu.remove();
-}
-
-async function hideSubMenu() {
-    const menu = $('#sub-menu');
-    menu.fadeOut(250);
-    await new Promise((resolve) => setTimeout(resolve, 250));
-    menu[0].innerHTML = '';
-    menu[0].hidden = true;
 }
 
 function createMenu(purpose) {
@@ -297,7 +290,7 @@ async function showMenu(cosmeticType) {
     menu.draggable({
         "containment": "window"
     });
-    // addCloseButton(menu, 'MENU~cosmeticMenu~close');
+    addCloseButton(menu, 'MENU~cosmeticMenu~close');
     await new Promise((resolve) => setTimeout(resolve, 300));
     $(document).click(async (event) => { 
         if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
