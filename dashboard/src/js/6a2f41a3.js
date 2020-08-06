@@ -701,24 +701,7 @@ $(document).ready(async () => {
                 submenu.fadeIn();
                 submenu.draggable();
                 $(`[id="${customName}whisperButton"]`).click(async () => {
-                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
-                    ">[System] Start of messages.</div><textarea id="${customName}sendMessage" style="
-                        position: absolute;
-                        top: 36vh;
-                        left: 3vh;
-                        border: none;
-                        overflow: auto;
-                        outline: none;
-                        -webkit-box-shadow: none;
-                        -moz-box-shadow: none;
-                        box-shadow: none;
-                        resize: none;
-                        background-color: white;
-                        border-radius: 5px;
-                        font-family: t;
-                        font-size: 16px;
-                        overflow: auto;
-                    "></textarea></div></div>`;
+                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 43vh;left: 5vh;border: none;overflow: auto;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;padding: -18px;width: 170px;height: 16px;"></textarea>`;
                     if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
                         $(`[id="${customName}sendMessage"]`).before(`<div>[${message.author.displayName}] ${message.content}</div>`);
                     }
