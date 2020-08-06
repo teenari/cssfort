@@ -297,7 +297,7 @@ async function showMenu(cosmeticType) {
     menu.draggable({
         "containment": "window"
     });
-    addCloseButton(menu, 'MENU~cosmeticMenu~close');
+    // addCloseButton(menu, 'MENU~cosmeticMenu~close');
     await new Promise((resolve) => setTimeout(resolve, 300));
     $(document).click(async (event) => { 
         if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
