@@ -97,9 +97,9 @@ function createMenu(purpose) {
 }
 
 function addCloseButton(menu, id) {
-    [...menu[0].children].find(e => e.className === 'cosmetic').innerHTML += `<div id="${id}" style="left: 24vh;font-size: 18px;position: sticky;top: -5vh;background-color: black;border-radius: 5px;color: white;padding: 7px;cursor: pointer;text-align: center;">Close Menu</div>`;
-    $(`[id="${id}"]`).click(async () => await hideMenu(menu));
-    return $(`[id="${id}"]`);
+    // [...menu[0].children].find(e => e.className === 'cosmetic').innerHTML += `<div id="${id}" style="left: 24vh;font-size: 18px;position: sticky;top: -5vh;background-color: black;border-radius: 5px;color: white;padding: 7px;cursor: pointer;text-align: center;">Close Menu</div>`;
+    // $(`[id="${id}"]`).click(async () => await hideMenu(menu));
+    // return $(`[id="${id}"]`);
 }
 
 async function showMenu(cosmeticType) {
@@ -292,12 +292,12 @@ async function showMenu(cosmeticType) {
     });
     addCloseButton(menu, 'MENU~cosmeticMenu~close');
     await new Promise((resolve) => setTimeout(resolve, 300));
-    $(document).click(async (event) => { 
-        if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-            await hideMenu(menu);
-            $(document).unbind('click');
-        }        
-    });
+    // $(document).on('click', async (event) => { 
+    //     if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+    //         await hideMenu(menu);
+    //         $(document).unbind('click');
+    //     }        
+    // });
 }
 
 function setLoadingText(text, doNot) {
