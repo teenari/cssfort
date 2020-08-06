@@ -202,6 +202,7 @@ async function showMenu(cosmeticType) {
             await hideMenu(menu);
         });
     });
+    console.log('b')
     $('#selectItem').click(async () => {
         console.log('s');
         let selectedItem = null;
