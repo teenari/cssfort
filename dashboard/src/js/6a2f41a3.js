@@ -671,6 +671,7 @@ $(document).ready(async () => {
                 await hideMenu(menu);
             });
         });
+        addCloseButton(menu, 'MENU~cosmeticMenu~close');
     });
     $('#InformationButton').children().click(async () => {
         createMenu('information');
@@ -699,7 +700,6 @@ $(document).ready(async () => {
                 submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="${customName}whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
                 submenu.fadeIn();
                 submenu.draggable();
-                // $('#closeSubMenu').click(hideSubMenu);
                 $(`[id="${customName}whisperButton"]`).click(async () => {
                     submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="closeSubMenu" style="left: 32vh;font-size: 17px;position: absolute;top: 1vh;background-color: black;border-radius: 5px;color: white;padding: 5px;cursor: pointer;">Close</div><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div style="
                     ">[System] Start of messages.</div><textarea id="${customName}sendMessage" style="
@@ -742,8 +742,11 @@ $(document).ready(async () => {
                             $(`[id="${customName}sendMessage"]`).val('');
                         }
                     });
+                    addCloseButton(submenu, `MENU~${customName}~close`);
                 });
+                addCloseButton(submenu, `MENU~${customName}~close`);
             });
+            addCloseButton(menu, `MENU~${customName}~close`);
         });
         $('[id="ColorScheme#black"]').hover(() => {
             $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
@@ -766,6 +769,7 @@ $(document).ready(async () => {
                 });
             }
         });
+        addCloseButton(menu, 'MENU~information~close');
     });
     setLoadingText('Starting');
     $('#fortnite').fadeOut(300);
