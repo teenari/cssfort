@@ -96,7 +96,11 @@ function createMenu(purpose) {
 }
 
 function addCloseButton(menu, id) {
-    [...menu[0].children].find(e => e.className === 'cosmetic').append(`<div id="${id}" style="left: 24vh;font-size: 18px;position: sticky;top: -5vh;background-color: black;border-radius: 5px;color: white;padding: 7px;cursor: pointer;text-align: center;">Close Menu</div>`);
+    const div = document.createElement('div');
+    div.setAttribute("style", "font-size: 18px;background-color: black;border-radius: 4px;color: white;padding: 11px;cursor: pointer;text-align: center;margin: 6px;top: 1vh;position: relative;");
+    div.id = id;
+    div.innerHTML = 'Close Menu';
+    [...document.getElementById('MENU~cosmeticMenu').children].find(e => e.className === 'cosmetic').appendChild(div);
     $(`[id="${id}"]`).click(async () => await hideMenu(menu));
     return $(`[id="${id}"]`);
 }
