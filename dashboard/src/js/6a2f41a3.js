@@ -80,7 +80,6 @@ function changeColorScheme(scheme) {
 }
 
 async function hideMenu(menu) {
-    console.log('s');
     menu.fadeOut(250);
     await new Promise((resolve) => setTimeout(resolve, 250));
     menu.remove();
@@ -97,9 +96,9 @@ function createMenu(purpose) {
 }
 
 function addCloseButton(menu, id) {
-    // [...menu[0].children].find(e => e.className === 'cosmetic').innerHTML += `<div id="${id}" style="left: 24vh;font-size: 18px;position: sticky;top: -5vh;background-color: black;border-radius: 5px;color: white;padding: 7px;cursor: pointer;text-align: center;">Close Menu</div>`;
-    // $(`[id="${id}"]`).click(async () => await hideMenu(menu));
-    // return $(`[id="${id}"]`);
+    [...menu[0].children].find(e => e.className === 'cosmetic').append(`<div id="${id}" style="left: 24vh;font-size: 18px;position: sticky;top: -5vh;background-color: black;border-radius: 5px;color: white;padding: 7px;cursor: pointer;text-align: center;">Close Menu</div>`);
+    $(`[id="${id}"]`).click(async () => await hideMenu(menu));
+    return $(`[id="${id}"]`);
 }
 
 async function showMenu(cosmeticType) {
@@ -109,9 +108,7 @@ async function showMenu(cosmeticType) {
     $(document).unbind('click');
     menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
     menu.fadeIn(250);
-    console.log('a')
     await new Promise((resolve) => setTimeout(resolve, 250));
-    console.log('c')
     $('#selectVariant').click(async () => {
         if(!system.items[cosmeticType.toLowerCase()].variants) return;
         let selectedVariants = [];
@@ -195,9 +192,7 @@ async function showMenu(cosmeticType) {
             await hideMenu(menu);
         });
     });
-    console.log('b')
     $('#selectItem').click(async () => {
-        console.log('s');
         let selectedItem = null;
         await new Promise((resolve) => setTimeout(resolve, 1));
         menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
@@ -292,12 +287,12 @@ async function showMenu(cosmeticType) {
     });
     addCloseButton(menu, 'MENU~cosmeticMenu~close');
     await new Promise((resolve) => setTimeout(resolve, 300));
-    // $(document).on('click', async (event) => { 
-    //     if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-    //         await hideMenu(menu);
-    //         $(document).unbind('click');
-    //     }        
-    // });
+    $(document).click(async (event) => { 
+        if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
+            await hideMenu(menu);
+            $(document).unbind('click');
+        }        
+    });
 }
 
 function setLoadingText(text, doNot) {
