@@ -746,7 +746,7 @@ $(document).ready(async () => {
                 });
                 addCloseButton(submenu, `MENU~${customName}~close`);
             });
-            addCloseButton(menu, `MENU~${customName}~close`);
+            addCloseButton(menu, `MENU~information~close`);
         });
         $('[id="ColorScheme#black"]').hover(() => {
             $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
