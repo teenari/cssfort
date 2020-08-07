@@ -61,11 +61,11 @@ html {
 }
 
 #fnItems div img:nth-of-type(1) {
-    left: 6px;
+    left: 8px;
 }
 
 #fnItems div img:nth-of-type(2) {
-    left: -94px;
+    left: -91px;
 }
 
 #fnItems div img:nth-of-type(3) {
