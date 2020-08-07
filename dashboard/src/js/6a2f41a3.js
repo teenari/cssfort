@@ -96,7 +96,7 @@ function createMenu(purpose) {
 
 function addCloseButton(menu, id) {
     const div = document.createElement('div');
-    div.setAttribute("style", "font-size: 18px;background-color: black;border-radius: 4px;color: white;padding: 11px;cursor: pointer;text-align: center;margin: 6px;top: 1vh;position: relative;");
+    div.setAttribute("style", "font-size: 18px;background-color: black;border-radius: 4px;color: white;padding: 11px;cursor: pointer;text-align: center;margin: 12px;position: relative;");
     div.id = id;
     div.innerHTML = 'Close Menu';
     [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
