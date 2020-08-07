@@ -34,8 +34,11 @@ html {
 }
 
 .blueGradient {
-    background: rgb(50,152,234);
-    background: radial-gradient(circle, rgba(50,152,234,1) 0%, rgba(17,51,154,1) 96%);
+    background: -webkit-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
+    background: -o-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
+    background: -ms-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
+    background: -moz-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
+    background: linear-gradient(to bottom, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
 }
 
 .backgroundImage {

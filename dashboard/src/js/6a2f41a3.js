@@ -25,17 +25,13 @@ const system = {
     },
     "settings": {
         "colorScheme": {
-            "black": {
+            "Sky Blue": {
                 "back": './src/images/schemes/black/back.png',
                 "faceplate": './src/images/schemes/black/faceplate.png'
             },
-            "partyroyale": {
+            "Party Royale": {
                 "back": './src/images/schemes/partyroyale/back.png',
                 "faceplate": './src/images/schemes/partyroyale/faceplate.png'
-            },
-            "blue": {
-                "back": './src/images/schemes/black/back.png',
-                "faceplate": './src/images/schemes/black/faceplate.png'
             },
             "faceplate": './src/images/schemes/a77ecea5.png'
         },
@@ -58,19 +54,13 @@ let LoadingText = '';
 function changeColorScheme(scheme) {
     Cookies.set('colorScheme', scheme);
     system.settings.currentScheme = scheme;
-    if(system.settings.currentScheme === 'black') {
-        $('html').css('background', 'black');
-        $('html').removeClass('backgroundImage gradient blueGradient');
+    if(system.settings.currentScheme === 'Sky Blue') {
+        $('html').addClass('blueGradient');
+        $('html').removeClass('backgroundImage gradient');
     }
-    if(system.settings.currentScheme === 'partyroyale') {
-        $('html').css('background', '');
+    if(system.settings.currentScheme === 'Party Royale') {
         $('html').removeClass('backgroundImage gradient blueGradient');
         $('html').addClass('backgroundImage gradient');
-    }
-    if(system.settings.currentScheme === 'blue') {
-        $('html').css('background', '');
-        $('html').removeClass('backgroundImage gradient blueGradient');
-        $('html').addClass('blueGradient gradient');
     }
     for (const item of $('img[src*="images/schemes"]')) {
         if(item.src.includes('faceplate.png')) item.src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
@@ -710,9 +700,6 @@ $(document).ready(async () => {
                 addCloseButton(submenu, `MENU~${customName}~close`);
             });
             addCloseButton(menu, `MENU~information~close`);
-        });
-        $('[id="ColorScheme#black"]').hover(() => {
-            $(`#${this.id}`).stop().animate({backgroundColor:'black'}, 300);
         });
         $('#ColorSchemeButton').click(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
