@@ -657,11 +657,7 @@ $(document).ready(async () => {
         createMenu('information');
         const menu = $('[id="MENU~information"]');
         $(document).unbind('click');
-<<<<<<< HEAD
-        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;background-color: black;"><img width="50" height="50" src="./src/images/T-Icon-Friends-XXL.png"></div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
-=======
         menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
->>>>>>> parent of 73cd859... e
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
