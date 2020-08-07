@@ -328,13 +328,13 @@ function createImage(item, top, left, position, width=100, height=100, right=nul
         IMAGE.width = width;
         IMAGE.height = height;
         IMAGE.draggable = false;
-        IMAGE.style.cursor = 'pointer';
         IMAGE.src = src;
         if(!noExtra) {
             if(position) IMAGE.style.position = position;
             if(top) IMAGE.style.top = `${top}px`;
             if(left) IMAGE.style.left = `${left}px`;
             if(right) IMAGE.style.left = `${right}px`;
+            IMAGE.style.cursor = 'pointer';
         }
         if(id) IMAGE.id = item.id;
         IMAGES.push(IMAGE);
