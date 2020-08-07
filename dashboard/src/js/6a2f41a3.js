@@ -35,7 +35,7 @@ const system = {
             },
             "faceplate": './src/images/schemes/a77ecea5.png'
         },
-        "currentScheme": 'partyroyale'
+        "currentScheme": 'Sky Blue'
     },
     "items": {
         "outfit": null,
@@ -465,8 +465,7 @@ $(document).ready(async () => {
 
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
-        Cookies.set('colorScheme', 'black');
-        changeColorScheme('black');
+        changeColorScheme('Sky Blue');
     }
 
     switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
