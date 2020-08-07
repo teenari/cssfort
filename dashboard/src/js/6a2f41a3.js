@@ -159,7 +159,7 @@ async function showMenu(cosmeticType) {
                     $(`[id="VARIANT/${variant.tag}#${variant.name}"]`)[0].appendChild(IMAGE);
                     if(src.src.includes('faceplate.png')) {
                         IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${variant.name}</div>`;
-                        element.onclick = async (e) => {
+                        element.onclick = async () => {
                             if(selectedVariants.find((e) => {
                                 return e.image === variant.image;
                             })) {
@@ -321,7 +321,7 @@ function stopText() {
     LoadingText = ' '.repeat(1000);
 }
 
-function createImage(item, top, left, position, width=100, height=100, right=null, id=null) {
+function createImage(item, top, left, position, width=100, height=100, right=null, id=null, noExtra=false) {
     const IMAGES = [];
 
     for (const src of [system.settings.colorScheme[system.settings.currentScheme].back, item.images.icon, system.settings.colorScheme[system.settings.currentScheme].faceplate]) {
@@ -331,11 +331,13 @@ function createImage(item, top, left, position, width=100, height=100, right=nul
         IMAGE.draggable = false;
         IMAGE.style.cursor = 'pointer';
         IMAGE.src = src;
-        if(position) IMAGE.style.position = position;
+        if(!noExtra) {
+            if(position) IMAGE.style.position = position;
+            if(top) IMAGE.style.top = `${top}px`;
+            if(left) IMAGE.style.left = `${left}px`;
+            if(right) IMAGE.style.left = `${right}px`;
+        }
         if(id) IMAGE.id = item.id;
-        if(top) IMAGE.style.top = `${top}px`;
-        if(left) IMAGE.style.left = `${left}px`;
-        if(right) IMAGE.style.left = `${right}px`;
         IMAGES.push(IMAGE);
     }
 
@@ -403,22 +405,15 @@ function categorizeItems(setDefaultItem) {
 }
 
 async function setItems(items, itemss) {
-    let top = 6;
-    let left = 6;
-    let width = 100;
-    let height = 100;
     for (const key of Object.keys(items)) {
         const value = items[key];
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
         itemss.sort[value.type.value].push(value);
         changeItem(value.id, value.type.value);
         itemss[key] = value;
-        await createImageInElement(document.getElementById('fnItems'), false, [value, top, left, 'absolute', width, height, value.id]);
-        top += 105;
-        // width = width - 10;
-        // height = height - 10;
+        await createImageInElement(document.getElementById('fnItems'), false, [value, top, left, 'absolute', 100, 100, value.id, true]);
     }
-    return {top, left, width, height};
+    return true;
 }
 
 function last(character, data) {
@@ -457,13 +452,6 @@ function setMembers() {
                 "containment": "window"
             });
             addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
-            await new Promise((resolve) => setTimeout(resolve, 300));
-            $(document).click(async (e) => { 
-                if(!$(event.target).closest(`[id="MENU~MEMBER${member.id}"]`).length && $(`[id="MENU~MEMBER${member.id}"]`).is(":visible")) {
-                    await hideMenu(menu);
-                    $(document).unbind('click');
-                }
-            });
         });
     }
 }
@@ -485,7 +473,7 @@ $(document).ready(async () => {
     if(user.authorization === false) {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify%20guilds';
     }
-    
+
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
         Cookies.set('colorScheme', 'black');
@@ -582,14 +570,14 @@ $(document).ready(async () => {
     categorizeItems(true);
     sortItems();
     setLoadingText('Creating default images');
-    const { top, left, width, height } = await setItems(system.items.default, system.items);
+    await setItems(system.items.default, system.items);
     setMembers();
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
         },
         id: 'Emote'
-    }, top + 1, left, 'absolute', width, height, 'Emote'], async (e) => {
+    }, 100, 100, 'absolute', 100, 100, 'Emote', true], async () => {
         createMenu('cosmeticMenu');
         const menu = $('[id="MENU~cosmeticMenu"]');
         $(document).unbind('click');
@@ -597,13 +585,6 @@ $(document).ready(async () => {
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
-        });
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        $(document).click(async (e) => { 
-            if(!$(event.target).closest('[id="MENU~cosmeticMenu"]').length && $('[id="MENU~cosmeticMenu"]').is(":visible")) {
-                await hideMenu(menu);
-                $(document).unbind('click');
-            }        
         });
         $('#SaveID').click(async () => {
             await hideMenu(menu);
