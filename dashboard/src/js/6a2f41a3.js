@@ -45,7 +45,6 @@ const system = {
         "outfit": null,
         "backpack": null,
         "pickaxe": null,
-        // "banner": null,
         "conversions": {},
         "default": {},
         "variants": {},
@@ -379,7 +378,7 @@ function setDefaultItems() {
         "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 0],
         "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 0],
         "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 0],
-        "banner": system.items.cosmetics.banner[Math.floor(Math.random() * system.items.cosmetics.banner.length - 1) + 0]
+        // "banner": system.items.cosmetics.banner[Math.floor(Math.random() * system.items.cosmetics.banner.length - 1) + 0]
     }
     return system.items.default;
 }
@@ -577,7 +576,7 @@ $(document).ready(async () => {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
         },
         id: 'Emote'
-    }, 100, 100, 'absolute', 100, 100, 'Emote', true], async () => {
+    }, 100, 100, null, 100, 100, 'Emote', true], async () => {
         createMenu('cosmeticMenu');
         const menu = $('[id="MENU~cosmeticMenu"]');
         $(document).unbind('click');
