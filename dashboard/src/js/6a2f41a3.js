@@ -576,7 +576,7 @@ $(document).ready(async () => {
             icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
         },
         id: 'Emote'
-    }, 100, 100, null, 100, 100, 'Emote', true], async () => {
+    }, 0, 0, null, 100, 100, 'Emote', true], async () => {
         createMenu('cosmeticMenu');
         const menu = $('[id="MENU~cosmeticMenu"]');
         $(document).unbind('click');
