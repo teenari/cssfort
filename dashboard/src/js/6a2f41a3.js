@@ -43,8 +43,8 @@ const system = {
             "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
             "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
             "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
-            "XBOX": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
-            "PS4": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
+            "XBL": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
+            "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
             "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
         }
     },
@@ -81,7 +81,46 @@ function changeColorScheme(scheme) {
 
 function setPlatformIcon(type) {
     if($('#platformICON')[0]) $('#platformICON').remove();
-    $('#username').innerHTML += `<img id="platformICON" width="50" height="50" src="${system.platforms.benbot[type]}" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">`;
+    $('#username')[0].innerHTML += `<img id="platformICON" width="50" height="50" src="${system.platforms.benbot[type]}" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">`;
+}
+
+function convertPlatform(platform, url) {
+    let ENUMNAME;
+    switch(platform) {
+        case 'WIN': {
+            ENUMNAME = 'PC';
+        } break;
+
+        case 'MAC': {
+            ENUMNAME = 'PC';
+        } break;
+
+        case 'AND': {
+            ENUMNAME = 'MOBILE';
+        } break;
+
+        case 'IOS': {
+            ENUMNAME = 'MOBILE';
+        } break;
+
+        case 'AND': {
+            ENUMNAME = 'MOBILE';
+        } break;
+
+        case 'SWT': {
+            ENUMNAME = 'SWITCH';
+        } break;
+
+        default: {
+            if(system.platforms.benbot[platform]) {
+                ENUMNAME = platform;
+                break;
+            }
+            ENUMNAME = 'EARTH';
+        } break;
+    }
+
+    return url ? system.platforms.benbot[ENUMNAME] : ENUMNAME;
 }
 
 async function hideMenu(menu) {
@@ -438,6 +477,9 @@ function setMembers() {
     $('#members').html(null);
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
+        if(member.meta['Default:Platform_j'] && member.meta['Default:Platform_j'].Platform.platformStr) {
+            console.log(`DEBUG ${member.displayName} PLATFORM ${convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr)}`);
+        }
         $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
         $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
@@ -565,9 +607,6 @@ $(document).ready(async () => {
             document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
     }, 1000);
-/**
- * <img width="50" height="50" src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame%2FContent%2FUI%2FFriends_UI%2FSocial%2FxBox_PlatformIcon_64x.uasset&amp;lang=en&amp;noVariants=false&amp;rawIcon=false" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">
- */
     $('#username')[0].innerHTML = `${system.account.displayName}`;
     setPlatformIcon('PC');
     setLoadingText('Loading account');
