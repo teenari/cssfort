@@ -477,10 +477,7 @@ function setMembers() {
     $('#members').html(null);
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
-        if(member.meta['Default:Platform_j'] && member.meta['Default:Platform_j'].Platform.platformStr) {
-            console.log(`DEBUG ${member.displayName} PLATFORM ${convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr)}`);
-        }
-        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].faceplate}"><div>${member.displayName}</div></div>`;
+        $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].back}"><img width="120" height="120" draggable="false" src="${images.character}"><img width="120" height="120" draggable="false" src="${system.settings.colorScheme[system.settings.currentScheme].faceplate}"><img width="30" height="30" draggable="false" src="${convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr, true)}" style="left: 84px;top: 6px;"><div>${member.displayName}</div></div>`;
         $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
             createMenu(`MEMBER${member.id}`);
