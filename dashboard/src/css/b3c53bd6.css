@@ -266,6 +266,12 @@ html {
     left: 130px;
     color: white;
     white-space: nowrap;
+    display: flex;
+}
+
+#username img {
+    position: relative;
+    top: -2vh;
 }
 
 #copyright {

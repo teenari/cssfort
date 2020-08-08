@@ -37,6 +37,17 @@ const system = {
         },
         "currentScheme": 'Sky Blue'
     },
+    "platforms": {
+        "bennbot": {
+            "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
+            "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
+            "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
+            "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
+            "XBOX": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
+            "PS4": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
+            "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
+        }
+    },
     "items": {
         "outfit": null,
         "backpack": null,
@@ -549,7 +560,7 @@ $(document).ready(async () => {
             document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
     }, 1000);
-    $('#username')[0].innerText = system.account.displayName;
+    $('#username')[0].innerHTML = `${system.account.displayName}`;
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
