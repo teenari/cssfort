@@ -38,7 +38,7 @@ const system = {
         "currentScheme": 'Sky Blue'
     },
     "platforms": {
-        "bennbot": {
+        "benbot": {
             "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
             "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
             "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
@@ -560,7 +560,10 @@ $(document).ready(async () => {
             document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
         }
     }, 1000);
-    $('#username')[0].innerHTML = `${system.account.displayName}`;
+/**
+ * <img width="50" height="50" src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame%2FContent%2FUI%2FFriends_UI%2FSocial%2FxBox_PlatformIcon_64x.uasset&amp;lang=en&amp;noVariants=false&amp;rawIcon=false" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">
+ */
+    $('#username')[0].innerHTML = `${system.account.displayName}<img width="50" height="50" src="${system.platforms.benbot.PC}" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">`;
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
@@ -573,7 +576,7 @@ $(document).ready(async () => {
     setMembers();
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
-            icon: 'https://gamepedia.cursecdn.com/fortnite_gamepedia/f/f2/ScenarioEmoteIcon.png'
+            icon: 'https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/Locker/T_Ui_Dance_256.uasset'
         },
         id: 'Emote'
     }, 0, 0, null, 100, 100, 'Emote', true], async () => {
