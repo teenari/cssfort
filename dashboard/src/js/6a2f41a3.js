@@ -79,6 +79,11 @@ function changeColorScheme(scheme) {
     }
 }
 
+function setPlatformIcon(type) {
+    if($('#platformICON')[0]) $('#platformICON').remove();
+    $('#username').innerHTML += `<img id="platformICON" width="50" height="50" src="${system.platforms.benbot[type]}" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">`;
+}
+
 async function hideMenu(menu) {
     menu.fadeOut(250);
     await new Promise((resolve) => setTimeout(resolve, 250));
@@ -563,7 +568,8 @@ $(document).ready(async () => {
 /**
  * <img width="50" height="50" src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame%2FContent%2FUI%2FFriends_UI%2FSocial%2FxBox_PlatformIcon_64x.uasset&amp;lang=en&amp;noVariants=false&amp;rawIcon=false" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">
  */
-    $('#username')[0].innerHTML = `${system.account.displayName}<img width="50" height="50" src="${system.platforms.benbot.PC}" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">`;
+    $('#username')[0].innerHTML = `${system.account.displayName}`;
+    setPlatformIcon('PC');
     setLoadingText('Loading account');
     setLoadingText('Loading cosmetics');
     const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
