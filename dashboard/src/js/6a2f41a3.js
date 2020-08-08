@@ -81,7 +81,7 @@ function changeColorScheme(scheme) {
 
 function setPlatformIcon(type) {
     if($('#platformICON')[0]) $('#platformICON').remove();
-    $('#username')[0].innerHTML += `<img id="platformICON" width="50" height="50" src="${system.platforms.benbot[type]}" style="cursor: pointer;display: flex;align-content: flex-end;z-index: 2;">`;
+    $('#username')[0].innerHTML += `<img id="platformICON" width="50" height="50" src="${system.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
 }
 
 function convertPlatform(platform, url) {
