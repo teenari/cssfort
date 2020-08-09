@@ -590,10 +590,11 @@ $(document).ready(async () => {
         minutes: 29
     }
     const timer = setInterval(() => {
+        const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
         if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
             timerSettings.seconds = 60;
             timerSettings.minutes --;
-            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
+            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
         }
         if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
             document.getElementById('30MIN').innerText = `None minutes left`;
@@ -601,7 +602,7 @@ $(document).ready(async () => {
         }
         if(timerSettings.seconds !== 0) {
             timerSettings.seconds --;
-            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left`;
+            document.getElementById('30MIN').innerText = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
         }
     }, 1000);
     $('#username')[0].innerHTML = `${system.account.displayName}`;
