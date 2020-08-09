@@ -699,7 +699,7 @@ $(document).ready(async () => {
         });
         addCloseButton(menu, 'MENU~cosmeticMenu~close');
     });
-    $('#InformationButton').children().click(async () => {
+    $('#InformationButton').click(async () => {
         createMenu('information');
         const menu = $('[id="MENU~information"]');
         $(document).unbind('click');

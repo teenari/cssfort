@@ -101,6 +101,7 @@ html {
     right: 130px;
     top: 0px;
     position: absolute;
+    cursor: pointer;
 }
 
 .friend {
