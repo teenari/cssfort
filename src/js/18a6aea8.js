@@ -20,11 +20,11 @@ $(document).ready(async () => {
     })).json();
     $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
-        $('.loginDiscord')[0].innerText = 'Continue';
-        $('.loginDiscord').css('background', 'white').css('color', 'black').click(() => {
+        $('#loginwithDiscord')[0].innerText = 'Continue';
+        $('#loginwithDiscord').css('background', 'white').css('color', 'black').click(() => {
             window.location = 'https://teenari.github.io/fortnitebt/dashboard';
         });
-        $('#username')[0].innerText = `Welcome ${user.username}#${user.discriminator}`;
+        $('#username')[0].innerText = `${user.username}#${user.discriminator}`;
     }
 
     $('.loginDiscord').fadeIn();
