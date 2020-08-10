@@ -12,6 +12,10 @@
  */
 
 $(document).ready(async () => {
+    $('#loginwithDiscord').unbind('hover').hover(
+        () => $('#loginwithDiscord').stop().animate({backgroundColor:'white', color: 'black'}, 100),
+        () => $('#loginwithDiscord').stop().animate({backgroundColor:'black', color: 'white'}, 100)
+    );
     const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
