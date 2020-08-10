@@ -21,7 +21,7 @@ $(document).ready(async () => {
     $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
         $('#loginwithDiscord')[0].innerText = 'Continue';
-        $('#loginwithDiscord').css('background', 'white').css('color', 'black').click(() => {
+        $('#loginwithDiscord').click(() => {
             window.location = 'https://teenari.github.io/fortnitebt/dashboard';
         });
         $('#username')[0].innerText = `${user.username}#${user.discriminator}`;
