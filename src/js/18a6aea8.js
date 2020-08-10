@@ -24,14 +24,11 @@ $(document).ready(async () => {
         $('#loginwithDiscord').click(() => {
             window.location = 'https://teenari.github.io/fortnitebt/dashboard';
         });
+        $('#data').animate({
+            top: '-18px'
+        }, 300);
         $('#username')[0].innerText = `${user.username}#${user.discriminator}`;
     }
 
     $('.loginDiscord').fadeIn();
-    /**
-     * $('#logo').animate({
-    top: '-170px'
-}, 1000)
-$('#username').css('top', '-241px');
-     */
-})
+});
