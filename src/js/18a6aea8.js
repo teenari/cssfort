@@ -28,4 +28,10 @@ $(document).ready(async () => {
     }
 
     $('.loginDiscord').fadeIn();
+    /**
+     * $('#logo').animate({
+    top: '-170px'
+}, 1000)
+$('#username').css('top', '-241px');
+     */
 })
