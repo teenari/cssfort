@@ -543,7 +543,7 @@ $(document).ready(async () => {
     await new Promise((resolve) => {
         system.source.onmessage = (data) => {
             const json = JSON.parse(data.data);
-            if(json.done) return resolve();
+            if(json.completed) return resolve();
             setLoadingText(json.message);
         }
     });
