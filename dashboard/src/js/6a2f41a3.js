@@ -524,7 +524,7 @@ $(document).ready(async () => {
         changeColorScheme('Gray');
     }
 
-    switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
+    if(!((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
         case 529: {
             console.log('DEBUG To much accounts used has been set.');
             return setLoadingText('All accounts have been used.<br>Please try again later.', true);
