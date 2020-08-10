@@ -27,7 +27,7 @@ $(document).ready(async () => {
         $('#data').animate({
             top: '-18px'
         }, 300);
-        await new Promise((resolve) => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 350));
         $('#username')[0].innerText = `${user.username}#${user.discriminator}`;
     }
 
