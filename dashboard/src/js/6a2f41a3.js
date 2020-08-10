@@ -524,14 +524,14 @@ $(document).ready(async () => {
         changeColorScheme('Gray');
     }
 
-    switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
+    switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
         case 529: {
             console.log('DEBUG To much accounts used has been set.');
             return setLoadingText('All accounts have been used.<br>Please try again later.', true);
         };
     }
 
-    system.source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/session/start?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
+    system.source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/authorize?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
     system.source.onerror = (e) => {
         return setLoadingText('Error happend, cannot access the error.');
     }
