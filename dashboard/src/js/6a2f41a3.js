@@ -305,15 +305,7 @@ async function showMenu(cosmeticType) {
         $('#SaveAvatar').click(async () => {
            if(!selectedItem) return;
             system.items[cosmeticType.toLowerCase()] = selectedItem;
-            const img = $(`#${id}`)[0].children[0];
-            $(`#${id}`)[0].id = selectedItem.id;
-            $(`#${selectedItem.id}`)[0].innerHTML = '';
-            for (const image of createImage(selectedItem, img.style.top.split('px')[0], img.style.left.split('px')[0], 'absolute', img.width, img.height)) {
-                $(`#${selectedItem.id}`).append(image);
-                image.onclick = async () => {
-                    await showMenu(selectedItem.type.value.toUpperCase());
-                }
-            }
+            setItems(system.items, system.items);
             changeItem(selectedItem.id, cosmeticType.toLowerCase());
             system.items.variants[cosmeticType] = [];
             await hideMenu(menu);
