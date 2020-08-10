@@ -450,6 +450,7 @@ function categorizeItems(setDefaultItem) {
 }
 
 async function setItems(items, itemss) {
+    $('#fnItems').empty();
     for (const key of Object.keys(items)) {
         const value = items[key];
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
@@ -458,6 +459,88 @@ async function setItems(items, itemss) {
         itemss[key] = value;
         await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 100, 100, value.id, true]);
     }
+    await createImageInElement(document.getElementById('fnItems'), false, [{
+        images: {
+            icon: 'https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/Locker/T_Ui_Dance_256.uasset'
+        },
+        id: 'Emote'
+    }, 0, 0, null, 100, 100, 'Emote', true], async () => {
+        createMenu('cosmeticMenu');
+        const menu = $('[id="MENU~cosmeticMenu"]');
+        $(document).unbind('click');
+        menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
+        menu.fadeIn(250);
+        menu.draggable({
+            "containment": "window"
+        });
+        $('#SaveID').click(async () => {
+            await hideMenu(menu);
+        });
+        $('#selectItem').click(async () => {
+            let selectedItem = null;
+            await new Promise((resolve) => setTimeout(resolve, 1));
+            menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
+            $('#search').keyup(() => {
+                const searchQuery = $('#search').val();
+                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
+                    element.hidden = true;
+                }
+                for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
+                    element.hidden = false;
+                }
+            });
+            for (const item of system.items.sort.emote) {
+                const div = document.createElement("div");
+                div.id = `ITEM/${item.id}`;
+                for (const src of [{
+                    src: system.settings.colorScheme[system.settings.currentScheme].back
+                }, {
+                    src: item.images.icon,
+                    position: 'relative',
+                    right: '100px'
+                }, {
+                    src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
+                    position: 'relative',
+                    right: '200px'
+                }]) {
+                    const IMAGE = document.createElement("IMG");
+                    if(src.src || src.back) IMAGE.width = 100;
+                    if(src.src || src.back) IMAGE.height = 100;
+                    IMAGE.draggable = false;
+                    IMAGE.style.cursor = 'pointer';
+                    if(src.src) IMAGE.src = src.src;
+                    if(src.position) IMAGE.style.position = src.position;
+                    if(src.right) IMAGE.style.right = src.right;
+                    const element = $('#cosmetics')[0].appendChild(div);
+                    ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
+                        if(selectedItem === item) return;
+                        if(selectedItem && selectedItem !== item) {
+                            $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+                        }
+                        e.srcElement.src = system.settings.colorScheme.faceplate;
+                        selectedItem = item;
+                    }
+                    if(src.src.includes('faceplate.png')) {
+                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
+                        element.onclick = async () => {
+                            if(selectedItem === item) return;
+                            if(selectedItem && selectedItem !== item) {
+                                $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+                            }
+                            $(`[id="ITEM/${item.id}"]`).children()[2].src = system.settings.colorScheme.faceplate;
+                            selectedItem = item;
+                        }
+                    }
+                }
+            }
+            $('#SaveAvatar').click(async () => {
+                if(!selectedItem) return;
+                changeItem(selectedItem.id, 'emote');
+                await hideMenu(menu);
+            });
+        });
+        addCloseButton(menu, 'MENU~cosmeticMenu~close');
+    });
     return true;
 }
 
@@ -620,88 +703,6 @@ $(document).ready(async () => {
     setLoadingText('Creating default images');
     await setItems(system.items.default, system.items);
     setMembers();
-    await createImageInElement(document.getElementById('fnItems'), false, [{
-        images: {
-            icon: 'https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/Locker/T_Ui_Dance_256.uasset'
-        },
-        id: 'Emote'
-    }, 0, 0, null, 100, 100, 'Emote', true], async () => {
-        createMenu('cosmeticMenu');
-        const menu = $('[id="MENU~cosmeticMenu"]');
-        $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">EMOTE<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">Emote ID</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div></div>`;
-        menu.fadeIn(250);
-        menu.draggable({
-            "containment": "window"
-        });
-        $('#SaveID').click(async () => {
-            await hideMenu(menu);
-        });
-        $('#selectItem').click(async () => {
-            let selectedItem = null;
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
-            $('#search').keyup(() => {
-                const searchQuery = $('#search').val();
-                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
-                    element.hidden = true;
-                }
-                for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
-                    element.hidden = false;
-                }
-            });
-            for (const item of system.items.sort.emote) {
-                const div = document.createElement("div");
-                div.id = `ITEM/${item.id}`;
-                for (const src of [{
-                    src: system.settings.colorScheme[system.settings.currentScheme].back
-                }, {
-                    src: item.images.icon,
-                    position: 'relative',
-                    right: '100px'
-                }, {
-                    src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
-                    position: 'relative',
-                    right: '200px'
-                }]) {
-                    const IMAGE = document.createElement("IMG");
-                    if(src.src || src.back) IMAGE.width = 100;
-                    if(src.src || src.back) IMAGE.height = 100;
-                    IMAGE.draggable = false;
-                    IMAGE.style.cursor = 'pointer';
-                    if(src.src) IMAGE.src = src.src;
-                    if(src.position) IMAGE.style.position = src.position;
-                    if(src.right) IMAGE.style.right = src.right;
-                    const element = $('#cosmetics')[0].appendChild(div);
-                    ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
-                        if(selectedItem === item) return;
-                        if(selectedItem && selectedItem !== item) {
-                            $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                        }
-                        e.srcElement.src = system.settings.colorScheme.faceplate;
-                        selectedItem = item;
-                    }
-                    if(src.src.includes('faceplate.png')) {
-                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
-                        element.onclick = async () => {
-                            if(selectedItem === item) return;
-                            if(selectedItem && selectedItem !== item) {
-                                $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                            }
-                            $(`[id="ITEM/${item.id}"]`).children()[2].src = system.settings.colorScheme.faceplate;
-                            selectedItem = item;
-                        }
-                    }
-                }
-            }
-            $('#SaveAvatar').click(async () => {
-                if(!selectedItem) return;
-                changeItem(selectedItem.id, 'emote');
-                await hideMenu(menu);
-            });
-        });
-        addCloseButton(menu, 'MENU~cosmeticMenu~close');
-    });
     $('#InformationButton').click(async () => {
         createMenu('information');
         const menu = $('[id="MENU~information"]');
