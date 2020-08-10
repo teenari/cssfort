@@ -524,7 +524,7 @@ $(document).ready(async () => {
         changeColorScheme('Gray');
     }
 
-    if(!((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
+    if(!(await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
         console.log(((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName)
         switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
             case 529: {
