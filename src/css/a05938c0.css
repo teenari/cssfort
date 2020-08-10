@@ -58,6 +58,7 @@ html {
 
 #logo {
     position: relative;
+    left: -7px;
 }
 
 .loader-container {
