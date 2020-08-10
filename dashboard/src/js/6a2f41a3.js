@@ -524,11 +524,14 @@ $(document).ready(async () => {
         changeColorScheme('Gray');
     }
 
-    if(!((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
-        case 529: {
-            console.log('DEBUG To much accounts used has been set.');
-            return setLoadingText('All accounts have been used.<br>Please try again later.', true);
-        };
+    if(!((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
+        console.log(((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName)
+        switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
+            case 529: {
+                console.log('DEBUG To much accounts used has been set.');
+                return setLoadingText('All accounts have been used.<br>Please try again later.', true);
+            };
+        }
     }
 
     system.source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/authorize?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
