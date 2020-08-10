@@ -521,7 +521,7 @@ $(document).ready(async () => {
 
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
-        changeColorScheme('Sky Blue');
+        changeColorScheme('Gray');
     }
 
     switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).status) {
