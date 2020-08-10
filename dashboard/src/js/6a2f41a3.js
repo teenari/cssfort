@@ -539,7 +539,7 @@ $(document).ready(async () => {
     }
 
     window.onbeforeunload = async () => {
-        await fetch('https://fortnitebtapi.herokuapp.com/api/account/session/end', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+        await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: "DELETE", credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
 
     await new Promise((resolve) => {
