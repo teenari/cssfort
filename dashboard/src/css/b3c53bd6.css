@@ -33,14 +33,6 @@ html {
     background: linear-gradient(135deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
 }
 
-.blueGradient {
-    background: -webkit-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
-    background: -o-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
-    background: -ms-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
-    background: -moz-linear-gradient(top, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
-    background: linear-gradient(to bottom, rgb(0, 57, 128) 0%, rgb(35, 101, 175) 81%, rgb(37, 105, 178) 100%);
-}
-
 .backgroundImage {
     background-repeat: no-repeat;
     background-attachment: fixed;

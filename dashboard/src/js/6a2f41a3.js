@@ -25,7 +25,7 @@ const system = {
     },
     "settings": {
         "colorScheme": {
-            "Sky Blue": {
+            "Gray": {
                 "back": './src/images/schemes/black/back.png',
                 "faceplate": './src/images/schemes/black/faceplate.png'
             },
@@ -35,7 +35,7 @@ const system = {
             },
             "faceplate": './src/images/schemes/a77ecea5.png'
         },
-        "currentScheme": 'Sky Blue'
+        "currentScheme": 'Gray'
     },
     "platforms": {
         "benbot": {
@@ -65,12 +65,13 @@ let LoadingText = '';
 function changeColorScheme(scheme) {
     Cookies.set('colorScheme', scheme);
     system.settings.currentScheme = scheme;
-    if(system.settings.currentScheme === 'Sky Blue') {
-        $('html').addClass('blueGradient');
+    if(system.settings.currentScheme === 'Gray') {
+        $('html').css('background-color', '#2C2F33');
         $('html').removeClass('backgroundImage gradient');
     }
     if(system.settings.currentScheme === 'Party Royale') {
-        $('html').removeClass('backgroundImage gradient blueGradient');
+        $('html').css('background-color', '');
+        $('html').removeClass('backgroundImage gradient');
         $('html').addClass('backgroundImage gradient');
     }
     for (const item of $('img[src*="images/schemes"]')) {
