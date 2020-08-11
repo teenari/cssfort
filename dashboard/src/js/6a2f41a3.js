@@ -18,6 +18,7 @@ const system = {
     "party": null,
     "source": null,
     "friends": null,
+    "fn": null,
     "messages": {
         "party": [],
         "friends": {},
@@ -663,6 +664,7 @@ $(document).ready(async () => {
     system.account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     system.party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.fn = await (await fetch('http://fortnitebtapi.herokuapp.com/api/account/fn/content', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
 
     const timerSettings = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/time', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     const timer = setInterval(() => {
