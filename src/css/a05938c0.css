@@ -26,6 +26,7 @@ html {
     left: 41px;
     position: relative;
     cursor: pointer;
+    margin: 1px;
 }
 
 .colors {
