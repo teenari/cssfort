@@ -731,7 +731,6 @@ $(document).ready(async () => {
     sortItems();
     setLoadingText('Creating default images');
     await setItems(system.items.default, system.items);
-    setMembers();
     $('#InformationButton').click(async () => {
         createMenu('information');
         const menu = $('[id="MENU~information"]');
@@ -814,6 +813,7 @@ $(document).ready(async () => {
     $('#fortnite').fadeOut(300);
     $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
+    setMembers();
     $('#managePartyButton').css('bottom', '-539px').show().animate({
         bottom: '12px'
     }, 1000);
