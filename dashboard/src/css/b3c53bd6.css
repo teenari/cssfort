@@ -4,6 +4,10 @@ html {
     overflow: hidden;
 }
 
+.defaultBackground {
+    background: white;
+}
+
 .message-container {
     background-color: black;
     width: 100%;

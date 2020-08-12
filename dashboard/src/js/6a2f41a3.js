@@ -26,7 +26,7 @@ const system = {
     },
     "settings": {
         "colorScheme": {
-            "Gray": {
+            "Default": {
                 "back": './src/images/schemes/black/back.png',
                 "faceplate": './src/images/schemes/black/faceplate.png'
             },
@@ -36,7 +36,7 @@ const system = {
             },
             "faceplate": './src/images/schemes/a77ecea5.png'
         },
-        "currentScheme": 'Gray'
+        "currentScheme": 'Default'
     },
     "platforms": {
         "benbot": {
@@ -64,15 +64,17 @@ const system = {
 let LoadingText = '';
 
 function changeColorScheme(scheme) {
+    if(!system.settings.colorScheme[scheme]) scheme = 'Default';
     Cookies.set('colorScheme', scheme);
     system.settings.currentScheme = scheme;
-    if(system.settings.currentScheme === 'Gray') {
-        $('html').css('background-color', '#2C2F33');
+    if(system.settings.currentScheme === 'Default') {
         $('html').removeClass('backgroundImage gradient');
+        $('html').addClass('defaultBackground');
+        $('#colorsA').show();
     }
     if(system.settings.currentScheme === 'Party Royale') {
-        $('html').css('background-color', '');
-        $('html').removeClass('backgroundImage gradient');
+        $('#colorsA').hide();
+        $('html').removeClass('backgroundImage gradient defaultBackground');
         $('html').addClass('backgroundImage gradient');
     }
     for (const item of $('img[src*="images/schemes"]')) {
@@ -153,6 +155,53 @@ function addCloseButton(menu, id) {
         () => $(`[id="${id}"]`).stop().animate({backgroundColor:'black', color: 'white'}, 100)
     );
     return $(`[id="${id}"]`);
+}
+
+async function showPartyMenu() {
+    createMenu('PARTY');
+    const menu = $('[id="MENU~PARTY"]');
+    $(document).unbind('click');
+    menu[0].innerHTML = `<div class="cosmetic">PARTY<br><div style="font-size: 20px; margin: 10px;"><div id="changeLTM" class="clickHereButton" style="">Change Playlist</div></div><div style="margin: 10px;font-size: 20px;">CREATED AT: ${system.party.createdAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${system.party.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: CAPTAIN</div></div>`;
+    menu.fadeIn(250);
+    menu.draggable({
+        "containment": "window"
+    });
+    addCloseButton(menu, 'MENU~PARTY~close');
+    $('#changeLTM').unbind('click').click(async () => {
+        return;
+        const ltms = system.fn.playlistinformation.playlist_info.playlists;
+        for (const ltm of ltms) {
+            const div = document.createElement("div");
+            div.id = `LTM/${ltm.playlist_name}#${ltm._type}`;
+            for (const image of [{
+                src: system.settings.colorScheme[system.settings.currentScheme].back
+            }, {
+                src: ltm.image,
+                position: 'relative',
+                top: '0px',
+                left: '-150px'
+            }, {
+                src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
+                position: 'relative',
+                right: '-1px',
+                top: '-98px'
+            }]) {
+                const IMAGE = document.createElement("IMG");
+                if(src.src) {
+                    IMAGE.width = 150;
+                    IMAGE.height = 80;
+                    IMAGE.src = src.src;
+                }
+                IMAGE.draggable = false;
+                IMAGE.style.cursor = 'pointer';
+                if(src.position) IMAGE.style.position = src.position;
+                if(src.right) IMAGE.style.right = src.right;
+                if(src.left) IMAGE.style.left = top.left;
+                if(src.top) IMAGE.style.top = src.left;
+                div.appendChild(IMAGE);
+            }
+        }
+    });
 }
 
 async function showMenu(cosmeticType) {
@@ -332,13 +381,6 @@ async function showMenu(cosmeticType) {
         "containment": "window"
     });
     addCloseButton(menu, 'MENU~cosmeticMenu~close');
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    $(document).click(async (event) => { 
-        if(!$(event.target).closest('#menu').length && $('#menu').is(":visible")) {
-            await hideMenu(menu);
-            $(document).unbind('click');
-        }        
-    });
 }
 
 function setLoadingText(text, doNot) {
@@ -582,6 +624,10 @@ function sendMessage(id, message) {
 }
 
 $(document).ready(async () => {
+    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
+    else {
+        changeColorScheme('Default');
+    }
     const requestUser = await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
@@ -593,11 +639,6 @@ $(document).ready(async () => {
     const user = await requestUser.json();
     if(user.authorization === false) {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
-    }
-
-    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
-    else {
-        changeColorScheme('Gray');
     }
 
     if(!(await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
