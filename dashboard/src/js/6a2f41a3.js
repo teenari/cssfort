@@ -624,10 +624,6 @@ function sendMessage(id, message) {
 }
 
 $(document).ready(async () => {
-    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
-    else {
-        changeColorScheme('Default');
-    }
     const requestUser = await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
@@ -822,6 +818,10 @@ $(document).ready(async () => {
         bottom: '12px'
     }, 1000);
     $('.members-container').fadeIn();
+    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
+    else {
+        changeColorScheme('Default');
+    }
     stopText();
     await new Promise((resolve) => setTimeout(resolve, 300));
     $('#DATA').fadeIn();
