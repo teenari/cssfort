@@ -630,7 +630,7 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     }).catch((e) => {
-        console.log(e);
+        throw e;
     });
     const user = await requestUser.json();
     if(user.authorization === false) {
