@@ -2,10 +2,11 @@ html {
     height: 100%;
     margin: 0;
     overflow: hidden;
+    background-color: black;
 }
 
 .defaultBackground {
-    background: white;
+    background-color: white;
 }
 
 .message-container {
