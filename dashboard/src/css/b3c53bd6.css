@@ -35,7 +35,7 @@ html {
 #managePartyButton {
     padding: 10px;
     position: absolute;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     background-color: white;
