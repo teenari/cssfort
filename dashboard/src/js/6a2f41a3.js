@@ -817,6 +817,7 @@ $(document).ready(async () => {
     $('#managePartyButton').css('bottom', '-539px').show().animate({
         bottom: '12px'
     }, 1000);
+    $('#managePartyButton').click(showPartyMenu);
     $('.members-container').fadeIn();
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
