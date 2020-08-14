@@ -242,7 +242,8 @@ html {
     background-color: white;
     display: inline-block;
     position: absolute;
-    z-index: 1;
+    z-index: 50;
+    border: 1px solid;
 }
 
 .cosmetic {
