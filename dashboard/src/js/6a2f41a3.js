@@ -591,6 +591,10 @@ function getImages(AthenaCosmeticLoadout) {
     };
 }
 
+function kickPlayer(id) {
+    fetch(`http://fortnitebtapi.herokuapp.com/api/account/party/kick?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+}
+
 function setMembers() {
     const members = system.party.members;
     $('#members').html(null);
@@ -608,8 +612,10 @@ function setMembers() {
             }
             menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === system.account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
             menu.fadeIn(250);
-            $('#kickPlayer').click(() => {
+            $('#kickPlayer').click(async () => {
                 if(member.id === system.account.id) return;
+                kickPlayer(member.id);
+                await hideMenu(menu);
             });
             menu.draggable({
                 "containment": "window"
