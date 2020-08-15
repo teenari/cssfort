@@ -156,23 +156,11 @@ html {
     margin: 1px;
     align-items: center;
     display: flex;
-}
-
-.member-hover:before {
-    -ms-transform: rotate(20deg);
-    transform: rotate(-33deg);
-}
-
-.member:before {
-    content: "";
-    color: black;
-    position: absolute;
     background-color: white;
     border: 1px solid;
     border-radius: 18px;
-    padding: 10px;
-    height: 100px;
-    width: 83%;
+    height: 121px;
+    width: 120px;
 }
 
 .member img:nth-of-type(1) {
