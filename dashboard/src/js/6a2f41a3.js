@@ -517,7 +517,7 @@ async function setItems(items, itemss) {
             value: 'Emote'
         },
         images: {
-            icon: 'https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/Locker/T_Ui_Dance_256.uasset'
+            icon: './src/images/fortnite/dance.png'
         },
         id: 'Emote'
     }, 0, 0, null, 100, 100, 'Emote', true], async () => {
