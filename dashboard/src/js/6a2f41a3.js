@@ -433,6 +433,17 @@ async function createImageInElement(element, hidden, argumen, callback) {
     div.innerHTML = '';
     div.classList.add('icon');
     element.appendChild(div);
+    $(`#${argumen[0].id}.icon`).hover(
+        () => {
+            $(`#${argumen[0].id}.icon`).animate({
+                borderRadius: 3
+            }, 100);
+        },
+        () => {
+            $(`#${argumen[0].id}.icon`).animate({
+                borderRadius: 8
+        }
+    )
     for (const IMAGE of html) {
         div.appendChild(IMAGE);
         IMAGE.onclick = callback || async function() {
@@ -494,7 +505,7 @@ async function setItems(items, itemss) {
         itemss.sort[value.type.value].push(value);
         changeItem(value.id, value.type.value);
         itemss[key] = value;
-        await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true, false, true]);
+        await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true, true]);
     }
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
@@ -614,7 +625,7 @@ function setMembers() {
                     borderRadius: 18
                 }, 100);
             }
-        )
+        );
         $(`#${member.id}.icon`).click(async () => {
             $(document).unbind('click');
             createMenu(`MEMBER${member.id}`);
