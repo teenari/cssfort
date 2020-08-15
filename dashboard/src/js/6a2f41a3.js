@@ -11,6 +11,19 @@
  * limitations under the License.
  */
 
+ /**
+  * some default items that fit with the style
+  * 
+  * CID_438_Athena_Commando_M_WinterGhoulEclipse
+  * CID_439_Athena_Commando_F_SkullBriteEclipse
+   * BID_287_AztecFemaleEclipse
+  * CID_437_Athena_Commando_F_AztecEclipse
+    * BID_286_WinterGhoulMaleEclipse
+  * CID_159_Athena_Commando_M_GumshoeDark
+    * Pickaxe_ID_064_Gumshoe
+    * BID_062_Gumshoe
+  */
+
 console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
 
 const system = {
@@ -48,6 +61,21 @@ const system = {
             "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
             "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
         }
+    },
+    "matching": {
+        "skins": [
+            "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+            "CID_439_Athena_Commando_F_SkullBriteEclipse",
+            "CID_437_Athena_Commando_F_AztecEclipse",
+            "CID_159_Athena_Commando_M_GumshoeDark"
+        ],
+        "backpacks": [
+            "BID_287_AztecFemaleEclipse",
+            "BID_286_WinterGhoulMaleEclipse"
+        ],
+        "pickaxes": [
+            "Pickaxe_ID_164_DragonNinja"
+        ]
     },
     "items": {
         "outfit": null,
@@ -472,11 +500,16 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
-    system.items.default = {
+    if(system.settings.colorScheme !== 'Default') system.items.default = {
         "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 0],
         "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 0],
         "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 0],
         // "banner": system.items.cosmetics.banner[Math.floor(Math.random() * system.items.cosmetics.banner.length - 1) + 0]
+    }
+    if(system.settings.colorScheme === 'Default') system.items.default = {
+        "outfit": system.matching.skins[Math.floor(Math.random() * system.matching.skins.length - 1) + 0],
+        "backpack": system.matching.backpacks[Math.floor(Math.random() * system.matching.backpacks.length - 1) + 0],
+        "pickaxe": system.matching.pickaxes[Math.floor(Math.random() * system.matching.pickaxes.length - 1) + 0]
     }
     return system.items.default;
 }
