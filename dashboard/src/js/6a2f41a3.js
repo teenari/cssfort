@@ -430,6 +430,7 @@ async function createImageInElement(element, hidden, argumen, callback) {
     div.id = argumen[0].id;
     div.hidden = hidden;
     div.innerHTML = '';
+    div.classList.add('icon');
     element.appendChild(div);
     for (const IMAGE of html) {
         div.appendChild(IMAGE);
