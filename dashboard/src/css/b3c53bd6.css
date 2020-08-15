@@ -154,6 +154,20 @@ html {
     cursor: pointer;
     text-align: center;
     margin: 1px;
+    align-items: center;
+    display: flex;
+}
+
+.member:before {
+    content: "";
+    color: black;
+    position: absolute;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 18px;
+    padding: 10px;
+    height: 100px;
+    width: 76%;
 }
 
 .member img:nth-of-type(1) {
