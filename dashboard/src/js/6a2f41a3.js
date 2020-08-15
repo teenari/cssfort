@@ -401,10 +401,11 @@ function stopText() {
     LoadingText = ' '.repeat(1000);
 }
 
-function createImage(item, top, left, position, width=100, height=100, right=null, id=null, noExtra=false) {
+function createImage(item, top, left, position, width=100, height=100, right=null, id=null, noExtra=false, noExtras) {
     const IMAGES = [];
 
-    for (const src of [system.settings.colorScheme[system.settings.currentScheme].back, item.images.icon, system.settings.colorScheme[system.settings.currentScheme].faceplate]) {
+    for (const src of [
+        ...noExtras ? [system.settings.colorScheme[system.settings.currentScheme].back] : [], item.images.icon, ...noExtras ? [system.settings.colorScheme[system.settings.currentScheme].faceplate] : []]) {
         const IMAGE = document.createElement("IMG");
         IMAGE.width = width;
         IMAGE.height = height;
@@ -493,7 +494,7 @@ async function setItems(items, itemss) {
         itemss.sort[value.type.value].push(value);
         changeItem(value.id, value.type.value);
         itemss[key] = value;
-        await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true]);
+        await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true, false, true]);
     }
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
