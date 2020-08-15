@@ -862,4 +862,16 @@ $(document).ready(async () => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     $('#DATA').fadeIn();
     $('#fortnite').css('padding', '0px');
+    $(`#InformationButton`).hover(
+        () => {
+            $(`#InformationButton`).animate({
+                borderRadius: 8
+            }, 100);
+        },
+        () => {
+            $(`#InformationButton`).animate({
+                borderRadius: 18
+            }, 100);
+        }
+    );
 });
