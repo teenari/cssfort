@@ -103,10 +103,14 @@ html {
 }
 
 #InformationButton {
-    right: 130px;
+    right: 18px;
     top: 0px;
+    height: 64px;
+    border: 1px solid black;
     position: absolute;
     cursor: pointer;
+    background-color: white;
+    border-radius: 15px;
 }
 
 .friend {
