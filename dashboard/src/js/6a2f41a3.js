@@ -493,7 +493,7 @@ async function setItems(items, itemss) {
         itemss.sort[value.type.value].push(value);
         changeItem(value.id, value.type.value);
         itemss[key] = value;
-        await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 100, 100, value.id, true]);
+        await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true]);
     }
     await createImageInElement(document.getElementById('fnItems'), false, [{
         images: {
