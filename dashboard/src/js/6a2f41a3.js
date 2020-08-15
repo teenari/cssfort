@@ -846,10 +846,6 @@ $(document).ready(async () => {
     $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
     setMembers();
-    $('#managePartyButton').css('bottom', '-539px').show().animate({
-        bottom: '12px'
-    }, 1000);
-    $('#managePartyButton').click(showPartyMenu);
     $('.members-container').fadeIn();
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
@@ -857,6 +853,5 @@ $(document).ready(async () => {
     }
     stopText();
     await new Promise((resolve) => setTimeout(resolve, 300));
-    $('#DATA').fadeIn();
     $('#fortnite').css('padding', '0px');
 });
