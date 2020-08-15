@@ -451,6 +451,9 @@ async function createImageInElement(element, hidden, argumen, callback) {
             await showMenu(argumen[0].type.value.toUpperCase());
         }
     }
+    const text = document.createElement('div');
+    text.innerText = argumen[0].type.value.toUpperCase();
+    div.appendChild(text);
 }
 
 function changeItem(id, cosmeticType) {
