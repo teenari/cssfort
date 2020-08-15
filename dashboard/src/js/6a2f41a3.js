@@ -505,6 +505,7 @@ async function setItems(items, itemss) {
     $('#fnItems').empty();
     for (const key of Object.keys(items)) {
         const value = items[key];
+        if(!value.type) continue;
         if(!itemss.sort[value.type.value]) itemss.sort[value.type.value] = [];
         itemss.sort[value.type.value].push(value);
         changeItem(value.id, value.type.value);
