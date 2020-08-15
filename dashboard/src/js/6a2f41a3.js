@@ -442,6 +442,7 @@ async function createImageInElement(element, hidden, argumen, callback) {
         () => {
             $(`#${argumen[0].id}.icon`).animate({
                 borderRadius: 8
+            }, 100);
         }
     )
     for (const IMAGE of html) {
