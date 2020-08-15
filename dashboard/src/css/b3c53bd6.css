@@ -68,7 +68,7 @@ html {
 }
 
 #fnItems div {
-    position: relative;
+    border-radius: 8px;
 }
 
 #fnItems div img:nth-of-type(n+1) {
@@ -77,7 +77,8 @@ html {
 }
 
 #fnItems div img:nth-of-type(1) {
-    left: 8px;
+    left: 0px;
+    top: -1px;
 }
 
 #fnItems div img:nth-of-type(2) {
@@ -149,7 +150,7 @@ html {
     align-items: center;
 }
 
-.member {
+.icon {
     position: relative;
     cursor: pointer;
     text-align: center;
@@ -163,18 +164,18 @@ html {
     width: 120px;
 }
 
-.member img:nth-of-type(1) {
+.icon img:nth-of-type(1) {
     cursor: pointer;
     position: relative;
 }
 
-.member img:nth-of-type(n+2) {
+.icon img:nth-of-type(n+2) {
     cursor: pointer;
     position: absolute;
     left: 0px;
 }
 
-.member div:nth-of-type(1) {
+.icon div:nth-of-type(1) {
     position: absolute;
     font-family: t;
     color: white;
