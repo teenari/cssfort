@@ -170,6 +170,7 @@ html {
     position: absolute;
     font-family: t;
     color: black;
+    text-shadow: 1px 0px white;
     display: inline-block;
     width: 100px;
     height: 50px;
