@@ -52,6 +52,11 @@ html {
     -moz-text-fill-color: transparent;
 }
 
+#fnItems {
+    position: relative;
+    top: 7px;
+}
+
 #fnItems div {
     border-radius: 8px;
 }
