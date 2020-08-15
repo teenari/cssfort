@@ -853,5 +853,6 @@ $(document).ready(async () => {
     }
     stopText();
     await new Promise((resolve) => setTimeout(resolve, 300));
+    $('#DATA').fadeIn();
     $('#fortnite').css('padding', '0px');
 });

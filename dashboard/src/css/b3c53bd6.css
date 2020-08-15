@@ -32,21 +32,6 @@ html {
     top: 43vh;
 }
 
-#managePartyButton {
-    padding: 10px;
-    position: absolute;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    font-family: t;
-    font-size: 27px;
-    bottom: 12px;
-    cursor: pointer;
-    user-select: none;
-    border-radius: 10px;
-}
-
 .gradient {
     background: -webkit-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
     background: -o-linear-gradient(315deg, rgb(27, 130, 237) 0%, rgb(18, 89, 201) 14%, rgb(96, 10, 107) 32%, rgb(231, 25, 83) 52%, rgb(250, 102, 62) 74%, rgb(250, 219, 56) 94%, rgb(250, 228, 56) 100%);
