@@ -601,6 +601,18 @@ function setMembers() {
     for (const member of members) {
         const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
         $('#members')[0].innerHTML += `<div id="${member.id}" class="member"><img width="120" height="120" draggable="false" src="${images.character}"><img width="30" height="30" draggable="false" src="${convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr, true)}" style="left: 84px;top: 6px;"><div>${member.displayName}</div></div>`;
+        $(`#${member.id}.member`).hover(
+            () => {
+                $(`#${member.id}.member`).animate({
+                    borderRadius: 10
+                }, 100);
+            },
+            () => {
+                $(`#${member.id}.member`).animate({
+                    borderRadius: 18
+                }, 100);
+            }
+        )
         $(`#${member.id}.member`).click(async () => {
             $(document).unbind('click');
             createMenu(`MEMBER${member.id}`);
