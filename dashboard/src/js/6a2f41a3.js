@@ -513,6 +513,9 @@ async function setItems(items, itemss) {
         await createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true, true]);
     }
     await createImageInElement(document.getElementById('fnItems'), false, [{
+        type: {
+            value: 'Emote'
+        },
         images: {
             icon: 'https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/Locker/T_Ui_Dance_256.uasset'
         },
