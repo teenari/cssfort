@@ -520,7 +520,7 @@ async function setItems(items, itemss) {
             icon: './src/images/fortnite/dance.png'
         },
         id: 'Emote'
-    }, 0, 0, null, 100, 100, 'Emote', true], async () => {
+    }, 0, 0, null, 120, 123, 'Emote', true], async () => {
         createMenu('cosmeticMenu');
         const menu = $('[id="MENU~cosmeticMenu"]');
         $(document).unbind('click');
