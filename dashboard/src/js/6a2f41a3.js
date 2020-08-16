@@ -183,14 +183,14 @@ function createMenu(purpose) {
 
 function addCloseButton(menu, id) {
     const div = document.createElement('div');
-    div.setAttribute("style", "font-size: 18px;background-color: white;border-radius: 4px;color: black;padding: 11px;cursor: pointer;text-align: center;margin: 12px;position: relative;");
+    div.setAttribute("style", "font-size: 18px; background-color: rgb(0, 0, 0); border-radius: 4px; color: rgb(255, 255, 255); padding: 11px; cursor: pointer; text-align: center; margin: 12px; position: relative; border: 1px solid;");
     div.id = id;
     div.innerHTML = 'Close Menu';
     [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
     $(`[id="${id}"]`).click(async () => await hideMenu(menu));
     $(`[id="${id}"]`).unbind('hover').hover(
-        () => $(`[id="${id}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100),
-        () => $(`[id="${id}"]`).stop().animate({backgroundColor:'black', color: 'white'}, 100)
+        () => $(`[id="${id}"]`).stop().animate({borderRadius: 10}, 100),
+        () => $(`[id="${id}"]`).stop().animate({borderRadius: 0}, 100)
     );
     return $(`[id="${id}"]`);
 }
