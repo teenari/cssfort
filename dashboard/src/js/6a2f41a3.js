@@ -186,7 +186,7 @@ function addCloseButton(menu, id) {
     $(`[id="${id}"]`).click(async () => await hideMenu(menu));
     $(`[id="${id}"]`).unbind('hover').hover(
         () => $(`[id="${id}"]`).stop().animate({borderRadius: 10}, 100),
-        () => $(`[id="${id}"]`).stop().animate({borderRadius: 0}, 100)
+        () => $(`[id="${id}"]`).stop().animate({borderRadius: 4}, 100)
     );
     return $(`[id="${id}"]`);
 }
