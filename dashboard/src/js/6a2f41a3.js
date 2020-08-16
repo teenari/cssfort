@@ -501,7 +501,7 @@ function addVariant(array, cosmeticType) {
 
 function setDefaultItems() {
     const check = (data, main) => {
-        const t = main.find(e => e.id === data.length !== 1 ? data[(Math.floor(Math.random() * data.length - 1) + 1) === -1 ? 0 : Math.floor(Math.random() * data.length - 1) + 1] : data[0]);
+        const t = main.find(e => e.id === data[(Math.floor(Math.random() * data.length - 1) + 1)]);
         if(!t) return check(data, main);
         return t;
     }
