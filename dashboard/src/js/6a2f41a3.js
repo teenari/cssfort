@@ -500,13 +500,13 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
-    if(system.settings.colorScheme !== 'Default') system.items.default = {
+    if(system.settings.currentScheme !== 'Default') system.items.default = {
         "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 0],
         "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 0],
         "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 0],
         // "banner": system.items.cosmetics.banner[Math.floor(Math.random() * system.items.cosmetics.banner.length - 1) + 0]
     }
-    if(system.settings.colorScheme === 'Default') system.items.default = {
+    if(system.settings.currentScheme === 'Default') system.items.default = {
         "outfit": system.matching.skins[Math.floor(Math.random() * system.matching.skins.length - 1) + 0],
         "backpack": system.matching.backpacks[Math.floor(Math.random() * system.matching.backpacks.length - 1) + 0],
         "pickaxe": system.matching.pickaxes[Math.floor(Math.random() * system.matching.pickaxes.length - 1) + 0]
