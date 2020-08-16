@@ -31,6 +31,7 @@ const system = {
     "party": null,
     "source": null,
     "friends": null,
+    "mainURL": "https://fortnitebtapi.herokuapp.com",
     "fn": null,
     "messages": {
         "party": [],
@@ -486,11 +487,11 @@ async function createImageInElement(element, hidden, argumen, callback) {
 
 function changeItem(id, cosmeticType) {
     if(cosmeticType.toLowerCase() === 'banner') return;
-    fetch(`https://fortnitebtapi.herokuapp.com/api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {credentials: 'include', method: "PUT", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    fetch(`${system.mainURL}/api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {credentials: 'include', method: "PUT", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 function addVariant(array, cosmeticType) {
-    fetch(`https://fortnitebtapi.herokuapp.com/api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+    fetch(`${system.mainURL}/api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
         credentials: 'include',
         method: "PUT",
         headers: {
@@ -539,11 +540,11 @@ function categorizeItems(setDefaultItem) {
 }
 
 async function removeFriend(id) {
-    return await fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/remove?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    return await fetch(`${system.mainURL}/api/account/friends/remove?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 async function inviteFriend(id) {
-    return await fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/invite?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    return await fetch(`${system.mainURL}/api/account/friends/invite?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 async function setItems(items, itemss) {
@@ -658,7 +659,7 @@ function getImages(AthenaCosmeticLoadout) {
 }
 
 function kickPlayer(id) {
-    fetch(`http://fortnitebtapi.herokuapp.com/api/account/party/kick?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    fetch(`${system.mainURL}/api/account/party/kick?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 function setMembers() {
@@ -704,7 +705,7 @@ function setMembers() {
 }
 
 function sendMessage(id, message) {
-    fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/send?id=${id}&message=${message}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    fetch(`${system.mainURL}/api/account/friends/send?id=${id}&message=${message}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 async function friendsMenu(menu) {
@@ -731,7 +732,7 @@ async function friendsMenu(menu) {
         });
         $(`[id="${customName}removeFriend"]`).click(async () => {
             await removeFriend(e.currentTarget.id);
-            system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+            system.friends = await (await fetch(`${system.mainURL}/api/account/friends`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
             await hideMenu(submenu);
             return await friendsMenu(menu);
         });
@@ -768,7 +769,7 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
-    const requestUser = await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
+    const requestUser = await fetch(`${system.mainURL}/api/user`, {
         credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'
@@ -781,8 +782,8 @@ $(document).ready(async () => {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
     }
 
-    if(!(await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
-        switch((await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
+    if(!(await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
+        switch((await fetch('${system.mainURL}/api/account/', {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
             case 529: {
                 console.log('DEBUG To much accounts used has been set.');
                 return setLoadingText('All accounts have been used.<br>Please try again later.', true);
@@ -790,13 +791,13 @@ $(document).ready(async () => {
         }
     }
 
-    system.source = new EventSource(`https://fortnitebtapi.herokuapp.com/api/account/authorize?auth=${(await (await fetch('https://fortnitebtapi.herokuapp.com/api/auth', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
+    system.source = new EventSource(`${system.mainURL}/api/account/authorize?auth=${(await (await fetch(`${system.mainURL}/api/auth`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
     system.source.onerror = (e) => {
         return setLoadingText('Error happend, cannot access the error.');
     }
 
     window.onbeforeunload = async () => {
-        await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {method: "DELETE", credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+        await fetch(`${system.mainURL}/api/account`, {method: "DELETE", credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     };
 
     await new Promise((resolve) => {
@@ -842,12 +843,12 @@ $(document).ready(async () => {
             }
         }
     }
-    system.account = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    system.party = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/party', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    system.fn = await (await fetch('http://fortnitebtapi.herokuapp.com/api/account/fn/content', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.account = await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.party = await (await fetch(`${system.mainURL}/api/account/party`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.friends = await (await fetch(`${system.mainURL}/api/account/friends`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    system.fn = await (await fetch(`${system.mainURL}/api/account/fn/content`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
 
-    const timerSettings = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/time', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    const timerSettings = await (await fetch(`${system.mainURL}/api/account/time`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     const timer = setInterval(() => {
         const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
         if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
