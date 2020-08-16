@@ -183,6 +183,7 @@ html {
     font-family: t;
     position: relative;
     background: none;
+    color: white;
 }
 
 ::-webkit-input-placeholder {
