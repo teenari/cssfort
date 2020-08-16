@@ -736,12 +736,12 @@ async function friendsMenu(menu) {
             return await friendsMenu(menu);
         });
         $(`[id="${customName}whisperButton"]`).click(async () => {
-            submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 43vh;left: 5vh;border: none;overflow: auto;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;padding: -18px;width: 170px;height: 16px;"></textarea>`;
+            submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 283px;left: 33px;border: none;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;width: 170px;height: 16px;"></textarea>`;
             if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
-                $(`[id="${customName}sendMessage"]`).before(`<div>[${message.author.displayName}] ${message.content}</div>`);
+                $(`[id="${customName}friendMessages"]`).children().last().after(`<div>[${message.author.displayName}] ${message.content}</div>`);
             }
             system.messages.handler = (data) => {
-                $(`[id="${customName}sendMessage"]`).before(`<div>[${data.author.displayName}] ${data.content}</div>`);
+                $(`[id="${customName}friendMessages"]`).children().last().after(`<div>[${data.author.displayName}] ${data.content}</div>`);
             }
             $(`[id="${customName}sendMessage"]`).keydown((event) => {
                 if(event.keyCode === 13 && !event.shiftKey && $(`[id="${customName}sendMessage"]`).val().trim() !== '') {
@@ -756,7 +756,7 @@ async function friendsMenu(menu) {
                             id: system.account.id
                         }
                     });
-                    $(`[id="${customName}sendMessage"]`).before(`<div>[${system.account.displayName}] ${$(`[id="${customName}sendMessage"]`).val()}</div>`);
+                    $(`[id="${customName}friendMessages"]`).children().last().after(`<div>[${system.account.displayName}] ${$(`[id="${customName}sendMessage"]`).val()}</div>`);
                     $(`[id="${customName}sendMessage"]`).val('');
                 }
             });
