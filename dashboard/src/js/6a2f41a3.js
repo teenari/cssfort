@@ -897,7 +897,6 @@ $(document).ready(async () => {
     $('#fortnite').fadeOut(300);
     $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
     $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
-    setMembers();
     $('.members-container').fadeIn();
     if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
     else {
@@ -919,4 +918,5 @@ $(document).ready(async () => {
             }, 100);
         }
     );
+    setMembers();
 });
