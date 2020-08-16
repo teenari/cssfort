@@ -92,6 +92,15 @@ const system = {
 
 let LoadingText = '';
 
+function getParm(name) { // from https://community.esri.com/thread/33634
+    const url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(url);
+    return results == null ? null : results[1];
+}
+
 function changeColorScheme(scheme) {
     if(!system.settings.colorScheme[scheme]) scheme = 'Default';
     Cookies.set('colorScheme', scheme);
@@ -769,6 +778,7 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
+    if(getParm('mainURL')) system.mainURL = getParm('mainURL');
     const requestUser = await fetch(`${system.mainURL}/api/user`, {
         credentials: 'include',
         headers: {
