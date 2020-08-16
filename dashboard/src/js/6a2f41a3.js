@@ -887,13 +887,14 @@ $(document).ready(async () => {
                     () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100)
                 );
             }
-            menu[0].innerHTML = `<div class="cosmetic"><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
+            menu[0].innerHTML = `<div class="cosmetic"><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
             for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
                 $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
                     changeColorScheme(colorScheme);
                     await hideMenu(submenu);
                 });
             }
+            addCloseButton(menu, 'MENU~information~colorScheme~close');
         });
         addCloseButton(menu, 'MENU~information~close');
     });
