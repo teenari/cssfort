@@ -500,16 +500,20 @@ function addVariant(array, cosmeticType) {
 }
 
 function setDefaultItems() {
+    const check = (data, main) => {
+        const t = main.find(e => e.id === data.length !== 1 ? data[(Math.floor(Math.random() * data.length - 1) + 1) === -1 ? 0 : Math.floor(Math.random() * data.length - 1) + 1] : data[0]);
+        if(!t) return check(data, main);
+        return t;
+    }
     if(system.settings.currentScheme !== 'Default') system.items.default = {
-        "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 0],
-        "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 0],
-        "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 0],
-        // "banner": system.items.cosmetics.banner[Math.floor(Math.random() * system.items.cosmetics.banner.length - 1) + 0]
+        "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 1],
+        "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 1],
+        "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 1],
     }
     if(system.settings.currentScheme === 'Default') system.items.default = {
-        "outfit": system.matching.skins[Math.floor(Math.random() * system.matching.skins.length - 1) + 0],
-        "backpack": system.matching.backpacks[Math.floor(Math.random() * system.matching.backpacks.length - 1) + 0],
-        "pickaxe": system.matching.pickaxes[Math.floor(Math.random() * system.matching.pickaxes.length - 1) + 0]
+        "outfit": check(system.matching.skins, system.items.cosmetics.outfit),
+        "backpack": check(system.matching.backpacks, system.items.cosmetics.backpack),
+        "pickaxe": check(system.matching.pickaxes, system.items.cosmetics.pickaxe)
     }
     return system.items.default;
 }
