@@ -44,10 +44,6 @@ const system = {
                 "back": './src/images/schemes/black/back.png',
                 "faceplate": './src/images/schemes/black/faceplate.png'
             },
-            "Party Royale": {
-                "back": './src/images/schemes/partyroyale/back.png',
-                "faceplate": './src/images/schemes/partyroyale/faceplate.png'
-            },
             "faceplate": './src/images/schemes/a77ecea5.png'
         },
         "currentScheme": 'Default'
@@ -890,31 +886,12 @@ $(document).ready(async () => {
         createMenu('information');
         const menu = $('[id="MENU~information"]');
         $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div><div id="ColorSchemeButton" class="clickHereButton textBackground gradient" style="padding: 3px;font-size: 20px;margin: 10px;">Color Scheme</div></div>`;
+        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div></div>`;
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
         });
         $('#FriendsButton').click(async () => await friendsMenu(menu));
-        $('#ColorSchemeButton').click(async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            menu[0].innerHTML = '';
-            for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
-                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;display: inline-block;border-radius: 5px;color: white;background: black;padding: 10px;" id="ColorScheme#${colorScheme}"><div>${colorScheme}</div></div>`;
-                $(`[id="ColorScheme#${colorScheme}"]`).hover(
-                    () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'black', color: 'white'}, 100),
-                    () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100)
-                );
-            }
-            menu[0].innerHTML = `<div class="cosmetic"><div>Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
-            for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
-                $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
-                    changeColorScheme(colorScheme);
-                    await hideMenu(submenu);
-                });
-            }
-            addCloseButton(menu, 'MENU~information~colorScheme~close');
-        });
         addCloseButton(menu, 'MENU~information~close');
     });
     setLoadingText('Starting');
