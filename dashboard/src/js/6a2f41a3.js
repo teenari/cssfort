@@ -475,13 +475,13 @@ async function createImageInElement(element, hidden, argumen, callback) {
     )
     for (const IMAGE of html) {
         div.appendChild(IMAGE);
-        IMAGE.onclick = callback || async function() {
-            await showMenu(argumen[0].type.value.toUpperCase());
-        }
     }
     const text = document.createElement('div');
     text.innerText = argumen[0].type.value.toUpperCase();
     div.appendChild(text);
+    div.onclick = callback || async function() {
+        await showMenu(argumen[0].type.value.toUpperCase());
+    }
 }
 
 function changeItem(id, cosmeticType) {
