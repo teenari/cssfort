@@ -721,7 +721,7 @@ async function friendsMenu(menu) {
             await removeFriend(e.currentTarget.id);
             system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
             await hideMenu(submenu);
-            return await friendsMenu(submenu);
+            return await friendsMenu(menu);
         });
         $(`[id="${customName}whisperButton"]`).click(async () => {
             submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 43vh;left: 5vh;border: none;overflow: auto;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;padding: -18px;width: 170px;height: 16px;"></textarea>`;
