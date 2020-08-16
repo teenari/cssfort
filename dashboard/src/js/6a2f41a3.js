@@ -309,8 +309,8 @@ async function showMenu(cosmeticType) {
             if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
             system.items.variants[cosmeticType] = selectedVariants;
             const img = $(`#${id}`)[0].children[0];
-            if($(`#${id}`)[0].children[2].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[2].remove();
-            $(`#${id}`)[0].children[1].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
+            // if($(`#${id}`)[0].children[2].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[2].remove();
+            $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
             const variants = [];
             for (const variant of selectedVariants) {
                 variants.push({

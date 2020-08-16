@@ -64,19 +64,8 @@ html {
 #fnItems div img:nth-of-type(n+1) {
     position: relative;
     cursor: pointer;
-}
-
-#fnItems div img:nth-of-type(1) {
     left: 0px;
     top: -1px;
-}
-
-#fnItems div img:nth-of-type(2) {
-    left: -91px;
-}
-
-#fnItems div img:nth-of-type(3) {
-    left: -192px;
 }
 
 #sub-menu {
