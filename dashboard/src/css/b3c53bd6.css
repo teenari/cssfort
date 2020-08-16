@@ -229,18 +229,18 @@ html {
 }
 
 .menu {
-    background-color: white;
+    background-color: black;
     display: inline-block;
     position: absolute;
     z-index: 50;
-    border: 1px solid;
+    border: 1px solid white;
 }
 
 .cosmetic {
     font-size: 35px;
     font-family: t;
     padding: 10px;
-    color: black;
+    color: white;
 }
 
 .clickHereButton {
