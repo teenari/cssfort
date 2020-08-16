@@ -704,7 +704,7 @@ function setMembers() {
 }
 
 function sendMessage(id, message) {
-    fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/send?id=${id}&message=${message}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/send?id=${id}&message=${message}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 async function friendsMenu(menu) {
