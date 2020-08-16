@@ -881,7 +881,7 @@ $(document).ready(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
             for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
-                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;display: inline-block;border-radius: 5px;" id="ColorScheme#${colorScheme}"><div style="margin: 17px;width: 75px;">${colorScheme}</div></div>`;
+                menu[0].innerHTML += `<div style="margin: 10px; cursor: pointer;display: inline-block;border-radius: 5px;color: white;background: black;padding: 10px;" id="ColorScheme#${colorScheme}"><div>${colorScheme}</div></div>`;
                 $(`[id="ColorScheme#${colorScheme}"]`).hover(
                     () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'black', color: 'white'}, 100),
                     () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100)
