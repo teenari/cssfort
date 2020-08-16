@@ -534,6 +534,10 @@ function categorizeItems(setDefaultItem) {
     return system.items.cosmetics;
 }
 
+async function removeFriend(id) {
+    fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/remove?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+}
+
 async function setItems(items, itemss) {
     $('#fnItems').empty();
     for (const key of Object.keys(items)) {
@@ -695,6 +699,62 @@ function sendMessage(id, message) {
     fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/send?id=${id}&message=${message}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
+async function friendsMenu(menu) {
+    await new Promise((resolve) => setTimeout(resolve, 1));
+    menu[0].innerHTML = '';
+    for (const friend of system.friends) {
+        menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 4vh;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
+    }
+    menu[0].innerHTML = `<div class="cosmetic">FRIENDS<br><div id="sub-menu" class="cosmetic"></div><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`;
+    $('#friends').children().hover(
+        (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'white', color: 'black' }, 100),
+        (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'black', color: 'white' }, 100)
+    )
+    $('#friends').children().click(async (e) => {
+        createMenu(`SUBMENU-FRIENDS-${e.currentTarget.id}`);
+        let customName = `MENU~SUBMENU-FRIENDS-${e.currentTarget.id}-`
+        const submenu = $(`[id="MENU~SUBMENU-FRIENDS-${e.currentTarget.id}"]`);
+        submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="${customName}whisperButton" class="submenuButton">Whisper</div><br><div id="${customName}removeFriend" class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+        submenu.fadeIn();
+        submenu.draggable();
+        $(`[id="${customName}removeFriend"]`).click(async () => {
+            await removeFriend(e.currentTarget.id);
+            system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+            await hideMenu(submenu);
+            return await friendsMenu(menu);
+        });
+        $(`[id="${customName}whisperButton"]`).click(async () => {
+            submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 43vh;left: 5vh;border: none;overflow: auto;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;padding: -18px;width: 170px;height: 16px;"></textarea>`;
+            if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
+                $(`[id="${customName}sendMessage"]`).before(`<div>[${message.author.displayName}] ${message.content}</div>`);
+            }
+            system.messages.handler = (data) => {
+                $(`[id="${customName}sendMessage"]`).before(`<div>[${data.author.displayName}] ${data.content}</div>`);
+            }
+            $(`[id="${customName}sendMessage"]`).keydown((event) => {
+                if(event.keyCode === 13 && !event.shiftKey && $(`[id="${customName}sendMessage"]`).val().trim() !== '') {
+                    event.stopPropagation();
+                    sendMessage(e.currentTarget.id, $(`[id="${customName}sendMessage"]`).val());
+                    if(!system.messages.friends[e.currentTarget.id]) system.messages.friends[e.currentTarget.id] = [];
+                    system.messages.friends[e.currentTarget.id].push({
+                        content: $(`[id="${customName}sendMessage"]`).val(),
+                        sentAt: new Date().toISOString(),
+                        author: {
+                            displayName: system.account.displayName,
+                            id: system.account.id
+                        }
+                    });
+                    $(`[id="${customName}sendMessage"]`).before(`<div>[${system.account.displayName}] ${$(`[id="${customName}sendMessage"]`).val()}</div>`);
+                    $(`[id="${customName}sendMessage"]`).val('');
+                }
+            });
+            addCloseButton(submenu, `MENU~${customName}~close`);
+        });
+        addCloseButton(submenu, `MENU~${customName}~close`);
+    });
+    addCloseButton(menu, `MENU~information~close`);
+}
+
 $(document).ready(async () => {
     const requestUser = await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
         credentials: 'include',
@@ -812,55 +872,7 @@ $(document).ready(async () => {
         menu.draggable({
             "containment": "window"
         });
-        $('#FriendsButton').click(async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1));
-            menu[0].innerHTML = '';
-            for (const friend of system.friends) {
-                menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 4vh;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
-            }
-            menu[0].innerHTML = `<div class="cosmetic">FRIENDS<br><div id="sub-menu" class="cosmetic"></div><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`;
-            $('#friends').children().hover(
-                (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'white', color: 'black' }, 100),
-                (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'black', color: 'white' }, 100)
-            )
-            $('#friends').children().click(async (e) => {
-                createMenu(`SUBMENU-FRIENDS-${e.currentTarget.id}`);
-                let customName = `MENU~SUBMENU-FRIENDS-${e.currentTarget.id}-`
-                const submenu = $(`[id="MENU~SUBMENU-FRIENDS-${e.currentTarget.id}"]`);
-                submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="${customName}whisperButton" class="submenuButton">Whisper</div><br><div class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
-                submenu.fadeIn();
-                submenu.draggable();
-                $(`[id="${customName}whisperButton"]`).click(async () => {
-                    submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 43vh;left: 5vh;border: none;overflow: auto;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;padding: -18px;width: 170px;height: 16px;"></textarea>`;
-                    if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
-                        $(`[id="${customName}sendMessage"]`).before(`<div>[${message.author.displayName}] ${message.content}</div>`);
-                    }
-                    system.messages.handler = (data) => {
-                        $(`[id="${customName}sendMessage"]`).before(`<div>[${data.author.displayName}] ${data.content}</div>`);
-                    }
-                    $(`[id="${customName}sendMessage"]`).keydown((event) => {
-                        if(event.keyCode === 13 && !event.shiftKey && $(`[id="${customName}sendMessage"]`).val().trim() !== '') {
-                            event.stopPropagation();
-                            sendMessage(e.currentTarget.id, $(`[id="${customName}sendMessage"]`).val());
-                            if(!system.messages.friends[e.currentTarget.id]) system.messages.friends[e.currentTarget.id] = [];
-                            system.messages.friends[e.currentTarget.id].push({
-                                content: $(`[id="${customName}sendMessage"]`).val(),
-                                sentAt: new Date().toISOString(),
-                                author: {
-                                    displayName: system.account.displayName,
-                                    id: system.account.id
-                                }
-                            });
-                            $(`[id="${customName}sendMessage"]`).before(`<div>[${system.account.displayName}] ${$(`[id="${customName}sendMessage"]`).val()}</div>`);
-                            $(`[id="${customName}sendMessage"]`).val('');
-                        }
-                    });
-                    addCloseButton(submenu, `MENU~${customName}~close`);
-                });
-                addCloseButton(submenu, `MENU~${customName}~close`);
-            });
-            addCloseButton(menu, `MENU~information~close`);
-        });
+        $('#FriendsButton').click(async () => await friendsMenu(menu));
         $('#ColorSchemeButton').click(async () => {
             await new Promise((resolve) => setTimeout(resolve, 1));
             menu[0].innerHTML = '';
