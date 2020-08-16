@@ -539,7 +539,11 @@ function categorizeItems(setDefaultItem) {
 }
 
 async function removeFriend(id) {
-    fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/remove?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    return await fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/remove?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+}
+
+async function inviteFriend(id) {
+    return await fetch(`http://fortnitebtapi.herokuapp.com/api/account/friends/invite?id=${id}`, {credentials: 'include', method: "POST", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
 async function setItems(items, itemss) {
@@ -718,9 +722,13 @@ async function friendsMenu(menu) {
         createMenu(`SUBMENU-FRIENDS-${e.currentTarget.id}`);
         let customName = `MENU~SUBMENU-FRIENDS-${e.currentTarget.id}-`
         const submenu = $(`[id="MENU~SUBMENU-FRIENDS-${e.currentTarget.id}"]`);
-        submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="${customName}whisperButton" class="submenuButton">Whisper</div><br><div id="${customName}removeFriend" class="submenuButton">Remove Friend</div><br><div class="submenuButton">Invite To Party</div></div></div>`;
+        submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div style="position: relative;"><div id="${customName}whisperButton" class="submenuButton">Whisper</div><br><div id="${customName}removeFriend" class="submenuButton">Remove Friend</div><br><div id="${customName}inviteToParty" class="submenuButton">Invite To Party</div></div></div>`;
         submenu.fadeIn();
         submenu.draggable();
+        $(`[id="${customName}inviteToParty"]`).click(async () => {
+            await inviteFriend(e.currentTarget.id);
+            return await hideMenu(submenu);
+        });
         $(`[id="${customName}removeFriend"]`).click(async () => {
             await removeFriend(e.currentTarget.id);
             system.friends = await (await fetch('https://fortnitebtapi.herokuapp.com/api/account/friends', {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
