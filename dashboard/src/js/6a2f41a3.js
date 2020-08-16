@@ -887,7 +887,7 @@ $(document).ready(async () => {
                     () => $(`[id="ColorScheme#${colorScheme}"]`).stop().animate({backgroundColor:'white', color: 'black'}, 100)
                 );
             }
-            menu[0].innerHTML = `<div class="cosmetic"><div class="textBackground gradient">Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
+            menu[0].innerHTML = `<div class="cosmetic"><div>Pick your Color Scheme</div><div>${menu[0].innerHTML}</div></div>`;
             for (const colorScheme of Object.keys(system.settings.colorScheme).filter(e => e !== 'faceplate')) {
                 $(`[id="ColorScheme#${colorScheme}"]`).click(async () => {
                     changeColorScheme(colorScheme);
