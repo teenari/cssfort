@@ -219,6 +219,15 @@ html {
     background: none;
 }
 
+#cosmetics {
+    overflow-y: scroll;
+    width: 340px;
+    height: 300px;
+    border: 1px solid;
+    position: relative;
+    top: -15px;
+}
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 4px;
