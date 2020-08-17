@@ -308,7 +308,7 @@ async function showMenu(cosmeticType) {
             }
         }
         if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
-            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme.faceplate;
+            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
             selectedVariants.push(variant);
         }
         $('#SaveVariant').click(async () => {
