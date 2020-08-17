@@ -351,6 +351,9 @@ async function showMenu(cosmeticType) {
                 images.appendChild(IMAGE);
             }
             div.appendChild(images);
+            const name = document.createElement("div");
+            name.innerHTML = item.name;
+            div.appendChild(name);
             $('#cosmetics')[0].appendChild(div);
             $(`[id="ITEM/${item.id}"]`).click(async (e) => {
                 if(selectedItem === item) return;
