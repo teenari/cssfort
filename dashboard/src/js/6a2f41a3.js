@@ -635,6 +635,7 @@ async function setItems(items, itemss) {
                 changeItem(selectedItem.id, 'emote');
                 await hideMenu(menu);
             });
+            addCloseButton(menu, 'MENU~cosmeticMenu~close');
         });
         addCloseButton(menu, 'MENU~cosmeticMenu~close');
     });
