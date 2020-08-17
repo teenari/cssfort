@@ -355,14 +355,14 @@ async function showMenu(cosmeticType) {
             name.innerHTML = item.name;
             div.appendChild(name);
             $('#cosmetics')[0].appendChild(div);
-            $(`[id="ITEM/${item.id}"]`).click(async (e) => {
+            $(`[id="ITEM/${item.id}"]`)[0].onclick = async (e) => {
                 if(selectedItem === item) return;
                 if(selectedItem && selectedItem !== item) {
                     $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
                 }
                 e.srcElement.src = system.settings.colorScheme.faceplate;
                 selectedItem = item;
-            });
+            };
         }
         $('#SaveAvatar').click(async () => {
            if(!selectedItem) return;
