@@ -283,6 +283,9 @@ async function showMenu(cosmeticType) {
                     images.appendChild(IMAGE);
                 }
                 div.appendChild(images);
+                const name = document.createElement("div");
+                name.innerHTML = variant.name;
+                div.appendChild(name);
                 div.onclick = async () => {
                     if(selectedVariants.find((e) => {
                         return e.image === variant.image;
