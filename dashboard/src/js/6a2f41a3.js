@@ -358,9 +358,13 @@ async function showMenu(cosmeticType) {
             $(`[id="ITEM/${item.id}"]`)[0].onclick = async (e) => {
                 if(selectedItem === item) return;
                 if(selectedItem && selectedItem !== item) {
-                    $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+                    $('#cosmetics').children().filter(function() {
+                        return this.innerHTML.includes('border-radius: 3px');
+                    }).children().filter(function() {
+                        return this.outerHTML.includes('border-radius: 3px');
+                    }).animate({borderRadius: 32}, 200);
                 }
-                e.srcElement.src = system.settings.colorScheme.faceplate;
+                $(`[id="ITEM/${item.id}"]`).children().eq(0).animate({borderRadius: 3}, 200);
                 selectedItem = item;
             };
         }
