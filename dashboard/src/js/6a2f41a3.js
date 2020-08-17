@@ -293,11 +293,15 @@ async function showMenu(cosmeticType) {
                         selectedVariants = selectedVariants.filter((e) => {
                             return e.image !== variant.image;
                         });
-                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().filter(function() {
+                            return this.innerHTML.includes('border-radius: 3px');
+                        }).children().filter(function() {
+                            return this.outerHTML.includes('border-radius: 3px');
+                        }).animate({borderRadius: 32}, 200);
                     }
                     else {
                         selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
-                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme.faceplate;
+                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200);
                     }
                 }
                 $('#cosmetics')[0].appendChild(div);
