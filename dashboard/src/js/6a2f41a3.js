@@ -293,7 +293,7 @@ async function showMenu(cosmeticType) {
                         selectedVariants = selectedVariants.filter((e) => {
                             return e.image !== variant.image;
                         });
-                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).eq(0).animate({borderRadius: 32}, 200);
+                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 32}, 200);
                     }
                     else {
                         selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
