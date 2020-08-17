@@ -186,7 +186,6 @@ html {
     color: white;
 }
 
-
 ::-webkit-scrollbar {
     width: 6px;
     height: 4px;
@@ -196,6 +195,7 @@ html {
 ::-webkit-scrollbar-thumb {
     background-color: black;
     -webkit-border-radius: 1ex;
+    border: 1px solid white;
 }
 
 ::-webkit-input-placeholder {
