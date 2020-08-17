@@ -201,23 +201,14 @@ async function showPartyMenu(menu) {
     await changeMenuHtml(menu, `<div class="cosmetic">PARTY<br><div style="font-size: 20px; margin: 10px;"><div id="changeLTM" class="clickHereButton" style="">Change Playlist</div></div><div style="margin: 10px;font-size: 20px;">CREATED AT: ${system.party.createdAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${system.party.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: CAPTAIN</div></div>`);
     addCloseButton(menu, 'MENU~PARTY~close');
     $('#changeLTM').unbind('click').click(async () => {
-        return;
+        await changeMenuHtml(menu, `<div class="cosmetic">PICK YOUR PLAYLIST<br><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="changeLTM" style="padding: 1px;font-size: 21px;">CHANGE</div></div>`);
         const ltms = system.fn.playlistinformation.playlist_info.playlists;
         for (const ltm of ltms) {
             const div = document.createElement("div");
             div.id = `LTM/${ltm.playlist_name}#${ltm._type}`;
-            for (const image of [{
-                src: system.settings.colorScheme[system.settings.currentScheme].back
-            }, {
-                src: ltm.image,
-                position: 'relative',
-                top: '0px',
-                left: '-150px'
-            }, {
-                src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
-                position: 'relative',
-                right: '-1px',
-                top: '-98px'
+            const images = document.createElement('div');
+            for (const src of [{
+                src: ltm.image
             }]) {
                 const IMAGE = document.createElement("IMG");
                 if(src.src) {
@@ -226,13 +217,13 @@ async function showPartyMenu(menu) {
                     IMAGE.src = src.src;
                 }
                 IMAGE.draggable = false;
-                IMAGE.style.cursor = 'pointer';
-                if(src.position) IMAGE.style.position = src.position;
-                if(src.right) IMAGE.style.right = src.right;
-                if(src.left) IMAGE.style.left = top.left;
-                if(src.top) IMAGE.style.top = src.left;
-                div.appendChild(IMAGE);
+                images.appendChild(IMAGE);
             }
+            const name = document.createElement("div");
+            name.innerHTML = ltm.playlist_name;
+            div.appendChild(image);
+            div.appendChild(name);
+            $('#cosmetics')[0].appendChild(div);
         }
     });
 }
