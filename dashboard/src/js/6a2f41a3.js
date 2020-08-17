@@ -221,7 +221,7 @@ async function showPartyMenu(menu) {
             }
             const name = document.createElement("div");
             name.innerHTML = ltm.playlist_name;
-            div.appendChild(image);
+            div.appendChild(images);
             div.appendChild(name);
             $('#cosmetics')[0].appendChild(div);
         }
