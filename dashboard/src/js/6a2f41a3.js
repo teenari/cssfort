@@ -126,11 +126,11 @@ async function changeMenuHtml(menu, html) {
     const cosmetics = menu.children('div:eq(0)');
     cosmetics.animate({
         "left": '391px'
-    }, 400);
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    }, 1000);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     menu[0].innerHTML = '<div class="cosmetic"><div style="width: 200px;height: 250px;align-items: center;display: inline-flex;position: relative;text-align: center;align-content: center;left: 50px;">LOADING</div></div>';
     cosmetics.children('div:eq(0)').css('left', '');
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     menu[0].innerHTML = html;
 }
 
