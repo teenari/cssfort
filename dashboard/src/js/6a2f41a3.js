@@ -197,15 +197,8 @@ function addCloseButton(menu, id) {
     return $(`[id="${id}"]`);
 }
 
-async function showPartyMenu() {
-    createMenu('PARTY');
-    const menu = $('[id="MENU~PARTY"]');
-    $(document).unbind('click');
-    menu[0].innerHTML = `<div class="cosmetic">PARTY<br><div style="font-size: 20px; margin: 10px;"><div id="changeLTM" class="clickHereButton" style="">Change Playlist</div></div><div style="margin: 10px;font-size: 20px;">CREATED AT: ${system.party.createdAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${system.party.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: CAPTAIN</div></div>`;
-    menu.fadeIn(250);
-    menu.draggable({
-        "containment": "window"
-    });
+async function showPartyMenu(menu) {
+    await changeMenuHtml(menu, `<div class="cosmetic">PARTY<br><div style="font-size: 20px; margin: 10px;"><div id="changeLTM" class="clickHereButton" style="">Change Playlist</div></div><div style="margin: 10px;font-size: 20px;">CREATED AT: ${system.party.createdAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${system.party.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: CAPTAIN</div></div>`);
     addCloseButton(menu, 'MENU~PARTY~close');
     $('#changeLTM').unbind('click').click(async () => {
         return;
@@ -877,12 +870,13 @@ $(document).ready(async () => {
         createMenu('information');
         const menu = $('[id="MENU~information"]');
         $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div></div>`;
+        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="partyButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div></div>`;
         menu.fadeIn(250);
         menu.draggable({
             "containment": "window"
         });
         $('#FriendsButton').click(async () => await friendsMenu(menu));
+        $('#partyButton').click(async () => await showPartyMenu(menu));
         addCloseButton(menu, 'MENU~information~close');
     });
     setLoadingText('Starting');
