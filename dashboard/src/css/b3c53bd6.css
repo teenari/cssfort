@@ -309,6 +309,7 @@ html {
     color: white;
     white-space: nowrap;
     display: flex;
+    text-shadow: 2px 1px black;
 }
 
 #username img {
