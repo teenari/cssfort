@@ -593,6 +593,7 @@ async function setItems(items, itemss) {
                 const div = document.createElement("div");
                 div.id = `ITEM/${item.id}`;
                 const images = document.createElement("div");
+                images.style.background = 'black';
                 for (const src of [{
                     src: item.images.icon
                 }]) {
