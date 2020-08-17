@@ -579,59 +579,55 @@ async function setItems(items, itemss) {
         $('#selectItem').click(async () => {
             let selectedItem;
             await new Promise((resolve) => setTimeout(resolve, 1));
-            menu.html(`<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
+            await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR EMOTE${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div><div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 20px;">EMOTE</div></div></div>`);
             $('#search').keyup(() => {
-                const searchQuery = $('#search').val();
-                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[3].innerText.startsWith(searchQuery))) {
+                const searchQuery = $('#search').val().toUpperCase();
+                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
                     element.hidden = true;
                 }
-                for (const element of [...$('#cosmetics').children()].filter(e => e.children[3].innerText.startsWith(searchQuery))) {
+                for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
                     element.hidden = false;
                 }
             });
             for (const item of system.items.sort.emote) {
                 const div = document.createElement("div");
                 div.id = `ITEM/${item.id}`;
+                const images = document.createElement("div");
                 for (const src of [{
-                    src: system.settings.colorScheme[system.settings.currentScheme].back
-                }, {
-                    src: item.images.icon,
-                    position: 'relative',
-                    right: '100px'
-                }, {
-                    src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
-                    position: 'relative',
-                    right: '200px'
+                    src: item.images.icon
                 }]) {
                     const IMAGE = document.createElement("IMG");
-                    if(src.src || src.back) IMAGE.width = 100;
-                    if(src.src || src.back) IMAGE.height = 100;
+                    if(src.src) IMAGE.width = 100;
+                    if(src.src) IMAGE.height = 100;
                     IMAGE.draggable = false;
-                    IMAGE.style.cursor = 'pointer';
                     if(src.src) IMAGE.src = src.src;
-                    if(src.position) IMAGE.style.position = src.position;
-                    if(src.right) IMAGE.style.right = src.right;
-                    const element = $('#cosmetics')[0].appendChild(div);
-                    ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
-                        if(selectedItem === item) return;
-                        if(selectedItem && selectedItem !== item) {
-                            $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                        }
-                        e.srcElement.src = system.settings.colorScheme.faceplate;
-                        selectedItem = item;
-                    }
-                    if(src.src.includes('faceplate.png')) {
-                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
-                        element.onclick = async () => {
-                            if(selectedItem === item) return;
-                            if(selectedItem && selectedItem !== item) {
-                                $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                            }
-                            $(`[id="ITEM/${item.id}"]`).children()[2].src = system.settings.colorScheme.faceplate;
-                            selectedItem = item;
-                        }
-                    }
+                    images.appendChild(IMAGE);
                 }
+                div.appendChild(images);
+                const name = document.createElement("div");
+                name.innerHTML = item.name;
+                div.appendChild(name);
+                $('#cosmetics')[0].appendChild(div);
+                $(`[id="ITEM/${item.id}"]`).hover(
+                    () => {
+                        $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 3}, 200);
+                    },
+                    () => {
+                        $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 17}, 200);
+                    }
+                )
+                $(`[id="ITEM/${item.id}"]`)[0].onclick = async (e) => {
+                    if(selectedItem === item) return;
+                    if(selectedItem && selectedItem !== item) {
+                        $('#cosmetics').children().filter(function() {
+                            return this.innerHTML.includes('border-radius: 3px');
+                        }).children().filter(function() {
+                            return this.outerHTML.includes('border-radius: 3px');
+                        }).animate({borderRadius: 32}, 200);
+                    }
+                    $(`[id="ITEM/${item.id}"]`).children().eq(0).animate({borderRadius: 3}, 200);
+                    selectedItem = item;
+                };
             }
             $('#SaveAvatar').click(async () => {
                 if(!selectedItem) return;
