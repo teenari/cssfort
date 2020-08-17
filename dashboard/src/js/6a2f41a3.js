@@ -266,15 +266,9 @@ async function showMenu(cosmeticType) {
                 const div = document.createElement("div");
                 div.id = `VARIANT/${variant.tag}#${variant.name}`;
                 for (const src of [{
-                    src: system.settings.colorScheme[system.settings.currentScheme].back
-                }, {
                     src: variant.image,
                     position: 'relative',
                     right: '100px'
-                }, {
-                    src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
-                    position: 'relative',
-                    right: '200px'
                 }]) {
                     const IMAGE = document.createElement("IMG");
                     if(src.src) IMAGE.width = 100;
@@ -345,46 +339,27 @@ async function showMenu(cosmeticType) {
         for (const item of system.items.cosmetics[cosmeticType.toLowerCase()]) {
             const div = document.createElement("div");
             div.id = `ITEM/${item.id}`;
+            const images = document.createElement("div");
             for (const src of [{
-                src: system.settings.colorScheme[system.settings.currentScheme].back
-            }, {
-                src: item.images.icon,
-                position: 'relative',
-                right: '100px'
-            }, {
-                src: system.settings.colorScheme[system.settings.currentScheme].faceplate,
-                position: 'relative',
-                right: '200px'
+                src: item.images.icon
             }]) {
                 const IMAGE = document.createElement("IMG");
                 if(src.src) IMAGE.width = 100;
                 if(src.src) IMAGE.height = 100;
                 IMAGE.draggable = false;
-                IMAGE.style.cursor = 'pointer';
                 if(src.src) IMAGE.src = src.src;
-                if(src.position) IMAGE.style.position = src.position;
-                if(src.right) IMAGE.style.right = src.right;
-                const element = $('#cosmetics')[0].appendChild(div);
-                ($(`[id="ITEM/${item.id}"]`)[0].appendChild(IMAGE)).onclick = async (e) => {
-                    if(selectedItem === item) return;
-                    if(selectedItem && selectedItem !== item) {
-                        $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                    }
-                    e.srcElement.src = system.settings.colorScheme.faceplate;
-                    selectedItem = item;
-                }
-                if(src.src.includes('faceplate.png')) {
-                    IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${item.name}</div>`;
-                    element.onclick = async () => {
-                        if(selectedItem === item) return;
-                        if(selectedItem && selectedItem !== item) {
-                            $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                        }
-                        $(`[id="ITEM/${item.id}"]`).children()[2].src = system.settings.colorScheme.faceplate;
-                        selectedItem = item;
-                    }
-                }
+                images.appendChild(IMAGE);
             }
+            div.appendChild(images);
+            $('#cosmetics')[0].appendChild(div);
+            $(`[id="ITEM/${item.id}"]`).click(async (e) => {
+                if(selectedItem === item) return;
+                if(selectedItem && selectedItem !== item) {
+                    $(`[src="${system.settings.colorScheme.faceplate}"]`)[0].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+                }
+                e.srcElement.src = system.settings.colorScheme.faceplate;
+                selectedItem = item;
+            });
         }
         $('#SaveAvatar').click(async () => {
            if(!selectedItem) return;
