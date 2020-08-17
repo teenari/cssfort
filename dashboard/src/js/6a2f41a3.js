@@ -212,8 +212,8 @@ async function showPartyMenu(menu) {
             }]) {
                 const IMAGE = document.createElement("IMG");
                 if(src.src) {
-                    IMAGE.width = 150;
-                    IMAGE.height = 80;
+                    IMAGE.width = 100;
+                    IMAGE.height = 100;
                     IMAGE.src = src.src;
                 }
                 IMAGE.draggable = false;
