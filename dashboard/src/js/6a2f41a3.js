@@ -271,39 +271,33 @@ async function showMenu(cosmeticType) {
             for (const variant of item.options) {
                 const div = document.createElement("div");
                 div.id = `VARIANT/${variant.tag}#${variant.name}`;
+                const images = document.createElement("div");
                 for (const src of [{
-                    src: variant.image,
-                    position: 'relative',
-                    right: '100px'
+                    src: variant.image
                 }]) {
                     const IMAGE = document.createElement("IMG");
                     if(src.src) IMAGE.width = 100;
                     if(src.src) IMAGE.height = 100;
                     IMAGE.draggable = false;
-                    IMAGE.style.cursor = 'pointer';
                     if(src.src) IMAGE.src = src.src;
-                    if(src.position) IMAGE.style.position = src.position;
-                    if(src.right) IMAGE.style.right = src.right;
-                    const element = $('#cosmetics')[0].appendChild(div);
-                    $(`[id="VARIANT/${variant.tag}#${variant.name}"]`)[0].appendChild(IMAGE);
-                    if(src.src.includes('faceplate.png')) {
-                        IMAGE.outerHTML += `<div style="left: 120px;bottom: 80px;position: relative;">${variant.name}</div>`;
-                        element.onclick = async () => {
-                            if(selectedVariants.find((e) => {
-                                return e.image === variant.image;
-                            })) {
-                                selectedVariants = selectedVariants.filter((e) => {
-                                    return e.image !== variant.image;
-                                });
-                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-                            }
-                            else {
-                                selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
-                                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme.faceplate;
-                            }
-                        }
+                    images.appendChild(IMAGE);
+                }
+                div.appendChild(images);
+                div.onclick = async () => {
+                    if(selectedVariants.find((e) => {
+                        return e.image === variant.image;
+                    })) {
+                        selectedVariants = selectedVariants.filter((e) => {
+                            return e.image !== variant.image;
+                        });
+                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
+                    }
+                    else {
+                        selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
+                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children()[2].src = system.settings.colorScheme.faceplate;
                     }
                 }
+                $('#cosmetics')[0].appendChild(div);
             }
         }
         if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
@@ -715,7 +709,7 @@ async function friendsMenu(menu) {
     for (const friend of system.friends) {
         menu[0].innerHTML += `<div id="${friend.id}" class="friend">${friend.displayName}<div style="font-size: 13px;position: absolute;left: 2vh;top: 4vh;">${friend.presence.status ? friend.presence.status : 'None'}</div></div>`;
     }
-    menu[0].innerHTML = `<div class="cosmetic">FRIENDS<br><div id="sub-menu" class="cosmetic"></div><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`;
+    await changeMenuHtml(menu, `<div class="cosmetic">FRIENDS<br><div id="sub-menu" class="cosmetic"></div><div id="friends" style="display: inline-block;padding: 15px;">${menu[0].innerHTML}</div></div>`);
     $('#friends').children().hover(
         (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'white', color: 'black' }, 100),
         (e) => $(`#${e.currentTarget.id}`).stop().animate({ backgroundColor: 'black', color: 'white' }, 100)
@@ -738,7 +732,7 @@ async function friendsMenu(menu) {
             return await friendsMenu(menu);
         });
         $(`[id="${customName}whisperButton"]`).click(async () => {
-            submenu[0].innerHTML = `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 283px;left: 33px;border: none;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;width: 170px;height: 16px;"></textarea>`;
+            await changeMenuHtml(submenu, `<div class="cosmetic">${(system.friends.find(friend => friend.id === e.currentTarget.id)).displayName}<br><div id="${customName}friendMessages" style="position: relative;margin: 10px;overflow: auto;height: 235px;width: 184px;background-color: black;border-radius: 5px;color: white;font-size: 17px;padding: 10px;"><div>[System] Start of messages.</div></div></div><textarea id="${customName}sendMessage" style="position: absolute;top: 283px;left: 33px;border: none;outline: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;resize: none;background-color: white;border-radius: 5px;font-family: t;font-size: 16px;overflow: auto;width: 170px;height: 16px;"></textarea>`);
             if(system.messages.friends[e.currentTarget.id]) for (const message of system.messages.friends[e.currentTarget.id]) {
                 $(`[id="${customName}friendMessages"]`).children().last().after(`<div>[${message.author.displayName}] ${message.content}</div>`);
             }
