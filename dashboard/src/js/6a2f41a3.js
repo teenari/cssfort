@@ -301,7 +301,7 @@ async function showMenu(cosmeticType) {
                     }
                     else {
                         selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
-                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 32}, 200);
+                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200);
                     }
                 }
                 $('#cosmetics')[0].appendChild(div);
