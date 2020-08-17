@@ -355,6 +355,14 @@ async function showMenu(cosmeticType) {
             name.innerHTML = item.name;
             div.appendChild(name);
             $('#cosmetics')[0].appendChild(div);
+            $(`[id="ITEM/${item.id}"]`).hover(
+                () => {
+                    $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 3}, 200);
+                },
+                () => {
+                    $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 17}, 200);
+                }
+            )
             $(`[id="ITEM/${item.id}"]`)[0].onclick = async (e) => {
                 if(selectedItem === item) return;
                 if(selectedItem && selectedItem !== item) {
