@@ -642,6 +642,16 @@ function kickPlayer(id) {
     fetch(`${system.mainURL}/api/account/party/kick?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
 
+function hidePlayer(id) {
+    $(`#${id}`).animate({opacity: 0.5}, 300);
+    fetch(`${system.mainURL}/api/account/party/member/hide?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+}
+
+function showPlayer(id) {
+    $(`#${id}`).animate({opacity: 1}, 300);
+    fetch(`${system.mainURL}/api/account/party/member/show?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+}
+
 function setMembers() {
     const members = system.party.members;
     $('#members').html(null);
@@ -669,7 +679,7 @@ function setMembers() {
                 const value = images[key];
                 items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`
             }
-            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div id="kickPlayer" class="clickHereButton"${member.id === system.account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
+            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div style="display: flex;"><div id="kickPlayer" style="padding: 4px;width: 97px;" class="clickHereButton"${member.id === system.account.id ? ' style="border: 1px solid gray;color: gray;"' : ''}>Kick Player</div><div id="hidePlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">Hide Player</div></div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
             menu.fadeIn(250);
             $('#kickPlayer').click(async () => {
                 if(member.id === system.account.id) return;
