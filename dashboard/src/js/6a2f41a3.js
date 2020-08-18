@@ -670,6 +670,7 @@ function setMembers() {
                 }, 100);
             }
         );
+        if(member.hidden) console.log('s')
         $(`#${member.id}.icon`).click(async () => {
             $(document).unbind('click');
             createMenu(`MEMBER${member.id}`);
