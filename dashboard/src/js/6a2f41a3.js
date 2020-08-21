@@ -11,80 +11,354 @@
  * limitations under the License.
  */
 
- /**
-  * some default items that fit with the style
-  * 
-  * CID_438_Athena_Commando_M_WinterGhoulEclipse
-  * CID_439_Athena_Commando_F_SkullBriteEclipse
-   * BID_287_AztecFemaleEclipse
-  * CID_437_Athena_Commando_F_AztecEclipse
-    * BID_286_WinterGhoulMaleEclipse
-  * CID_159_Athena_Commando_M_GumshoeDark
-    * Pickaxe_ID_064_Gumshoe
-    * BID_062_Gumshoe
-  */
+class FNBT {
+    constructor ({
+        url,
+        messageHandler,
+        eventHandler
+    }) {
+        this.url = url;
+        this.account = null;
+        this.party = null;
+        this.friends = null;
+        this.hiddenMembers = null;
+        this.source = null;
+        this.messages = {
+            party: null,
+            friends: null,
+            handler: null
+        };
+        this.sourceHandler = messageHandler;
+        this.eventHandler = eventHandler;
+    }
+
+    async authorize() {
+        this.source = await this.makeSource();
+        await new Promise((resolve) => {
+            this.source.onmessage = (data) => {
+                const json = JSON.parse(data.data);
+                if(json.completed) return resolve();
+                messageHandler(json.message);
+            }
+        });
+
+        this.setSourceEvent(this.source);
+        await this.setProperties();
+
+        return this;
+    }
+
+    async changeCosmeticItem(cosmeticType, id) {
+        await fetch(`${this.url}/api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+            credentials: 'include',
+            method: "PUT",
+            headers: {
+                'Access-Control-Allow-Origin': "https://teenari.github.io"
+            }
+        });
+        return this;
+    }
+
+    async changeVariants(array, cosmeticType) {
+        await this.sendRequest(`api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+            method: "PUT"
+        });
+        return this;
+    }
+
+    async makeSource() {
+        return new EventSource(`${this.url}/api/account/authorize?auth=${await this.getAuthorizeCode()}`);
+    }
+
+    async getAuthorizeCode() {
+        return (await (await this.sendRequest('api/auth')).json()).auth;
+    }
+
+    async setProperties() {
+        this.account = await this.getAccount();
+        this.party = await this.getParty();
+        this.friends = await this.getFriends();
+        this.hiddenMembers = [];
+        return this;
+    }
+
+    async getAccount() {
+        const response = await (await this.sendRequest('api/account')).json();
+        if(response.authorization === false) return null;
+        return response;
+    }
+
+    async getParty() {
+        return await (await this.sendRequest('api/account/party')).json();
+    }
+
+    async getFriends() {
+        return await (await this.sendRequest('api/account/friends')).json();
+    }
+
+    async getTimeLeft() {
+        return await (await this.sendRequest('api/account/time')).json();
+    }
+
+    async sendRequest(path, extraOptions) {
+        return await fetch(`${this.url}/${path}`, {
+            credentials: 'include',
+            headers: {
+                'Access-Control-Allow-Origin': "https://teenari.github.io"
+            },
+            ...extraOptions
+        });
+    }
+
+    setSourceEvent(source) {
+        source.onmessage = eventHandler;
+        return this;
+    }
+
+    get members() {
+        if(!this.party) return null;
+        return this.party.members;
+    }
+}
+
+/**
+ *     system = {
+        "account": null,
+        "party": null,
+        "source": null,
+        "friends": null,
+        "mainURL": "https://fortnitebtapi.herokuapp.com",
+        "fn": null,
+        "hiddenMembers": [],
+        "messages": {
+            "party": [],
+            "friends": {},
+            "handler": null
+        },
+        "settings": {
+            "colorScheme": {
+                "Default": {
+                    "back": './src/images/schemes/black/back.png',
+                    "faceplate": './src/images/schemes/black/faceplate.png'
+                },
+                "faceplate": './src/images/schemes/a77ecea5.png'
+            },
+            "currentScheme": 'Default'
+        },
+        "platforms": {
+            "benbot": {
+                "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
+                "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
+                "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
+                "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
+                "XBL": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
+                "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
+                "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
+            }
+        },
+        "matching": {
+            "skins": [
+                "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+                "CID_439_Athena_Commando_F_SkullBriteEclipse",
+                "CID_437_Athena_Commando_F_AztecEclipse",
+                "CID_159_Athena_Commando_M_GumshoeDark"
+            ],
+            "backpacks": [
+                "BID_287_AztecFemaleEclipse",
+                "BID_286_WinterGhoulMaleEclipse"
+            ],
+            "pickaxes": [
+                "Pickaxe_ID_164_DragonNinja"
+            ]
+        },
+        "items": {
+            "outfit": null,
+            "backpack": null,
+            "pickaxe": null,
+            "conversions": {},
+            "default": {},
+            "variants": {},
+            "cosmetics": {},
+            "sort": {}
+        }
+    }
+ */
+
+class FNBTMenu {
+    constructor({
+        theme,
+        url
+    }) {
+        this.system = new FNBT({
+            url: url || 'http://fortnitebtapi.herokuapp.com',
+            messageHandler: this.setLoadingText,
+            eventHandler: (data) => {
+                const json = JSON.parse(data.data);
+                if(json.exit) return $('.message-container').fadeIn();
+                if(json.event) {
+                    const data = json.data;
+                    const event = json.event;
+                    switch(event) {
+                        case 'refresh:party': {
+                            system.party = json.party;
+                            setMembers();
+                            if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
+                                const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
+                                if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
+                                    $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
+                                }
+                                if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
+                                    const id = last('.', emoteItemDef).replace(/'/g, '');
+                                    const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
+                                    $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
+                                }
+                            }
+                        } break;
+        
+                        case 'friend:message': {
+                            if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
+                            system.messages.friends[data.author.id].push(data);
+                            if(system.messages.handler) system.messages.handler(data);
+                        } break;
+        
+                        default: {
+                            console.log(data);
+                            console.log(`UNKNOWN EVENT ${event}`);
+                        } break;
+                    }
+                }
+            }
+        });
+        this.cosmetics = {
+            sorted: null,
+            variants: null,
+            all: null
+        };
+
+        this.items = null;
+        this.icons = {
+            platforms: {
+                benbot: {
+                    PC: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
+                    CONSOLE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
+                    EARTH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
+                    MOBILE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
+                    XBL: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
+                    PSN: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
+                    SWITCH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
+                }
+            }
+        };
+        this.themes = {
+            Default: {
+                background: 'black&white',
+                matchingCosmetics: {
+                    skins: [
+                        "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+                        "CID_439_Athena_Commando_F_SkullBriteEclipse",
+                        "CID_437_Athena_Commando_F_AztecEclipse",
+                        "CID_159_Athena_Commando_M_GumshoeDark"
+                    ],
+                    backpacks: [
+                        "BID_287_AztecFemaleEclipse",
+                        "BID_286_WinterGhoulMaleEclipse"
+                    ],
+                    pickaxes: [
+                        "Pickaxe_ID_164_DragonNinja"
+                    ]
+                }
+            }
+        }
+        this.theme = this.themes[theme || 'Default'];
+        this.loadingText = null;
+    }
+
+    async start() {
+        await this.system.authorize();
+    }
+
+    async changeMenu(menu, html) {
+        menu[0].innerHTML = '<div class="cosmetic"><div style="width: 200px;height: 250px;align-items: center;display: inline-flex;position: relative;text-align: center;align-content: center;left: 50px;">LOADING</div></div>';
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        menu[0].innerHTML = html;
+        return menu;
+    }
+
+    async hideMenu(menu) {
+        menu.fadeOut(250);
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        menu.remove();
+    }
+
+    convertPlatform(platform, url) {
+        let ENUMNAME;
+        switch(platform) {
+            case 'WIN': {
+                ENUMNAME = 'PC';
+            } break;
+    
+            case 'MAC': {
+                ENUMNAME = 'PC';
+            } break;
+    
+            case 'AND': {
+                ENUMNAME = 'MOBILE';
+            } break;
+    
+            case 'IOS': {
+                ENUMNAME = 'MOBILE';
+            } break;
+    
+            case 'AND': {
+                ENUMNAME = 'MOBILE';
+            } break;
+    
+            case 'SWT': {
+                ENUMNAME = 'SWITCH';
+            } break;
+    
+            default: {
+                if(this.icons.platforms.benbot[platform]) {
+                    ENUMNAME = platform;
+                    break;
+                }
+                ENUMNAME = 'EARTH';
+            } break;
+        }
+    
+        return url ? this.icons.platforms.benbot[ENUMNAME] : ENUMNAME;
+    }
+
+    changePlatform() {
+        if($('#platformICON')[0]) $('#platformICON').remove();
+        $('#username')[0].innerHTML += `<img id="platformICON" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
+        return this;
+    }
+
+    setLoadingText(text, doNot) {
+        this.loadingText = text;
+        let dots = 0;
+        $('#status').html(text);
+        if(!doNot) {
+            const inv = setInterval(() => {
+                if(this.loadingText !== text) clearInterval(inv);
+                dots += 1;
+                if(dots === 4) dots = 0;
+                $('#status').html(text + '.'.repeat(dots));
+            }, 500);
+        }
+        return this;
+    }
+
+    stopLoadingText() {
+        this.loadingText = null;
+        return this.loadingText;
+    }
+}
 
 console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
 
-const system = {
-    "account": null,
-    "party": null,
-    "source": null,
-    "friends": null,
-    "mainURL": "https://fortnitebtapi.herokuapp.com",
-    "fn": null,
-    "messages": {
-        "party": [],
-        "friends": {},
-        "handler": null
-    },
-    "settings": {
-        "colorScheme": {
-            "Default": {
-                "back": './src/images/schemes/black/back.png',
-                "faceplate": './src/images/schemes/black/faceplate.png'
-            },
-            "faceplate": './src/images/schemes/a77ecea5.png'
-        },
-        "currentScheme": 'Default'
-    },
-    "platforms": {
-        "benbot": {
-            "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
-            "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
-            "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
-            "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
-            "XBL": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
-            "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
-            "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
-        }
-    },
-    "matching": {
-        "skins": [
-            "CID_438_Athena_Commando_M_WinterGhoulEclipse",
-            "CID_439_Athena_Commando_F_SkullBriteEclipse",
-            "CID_437_Athena_Commando_F_AztecEclipse",
-            "CID_159_Athena_Commando_M_GumshoeDark"
-        ],
-        "backpacks": [
-            "BID_287_AztecFemaleEclipse",
-            "BID_286_WinterGhoulMaleEclipse"
-        ],
-        "pickaxes": [
-            "Pickaxe_ID_164_DragonNinja"
-        ]
-    },
-    "items": {
-        "outfit": null,
-        "backpack": null,
-        "pickaxe": null,
-        "conversions": {},
-        "default": {},
-        "variants": {},
-        "cosmetics": {},
-        "sort": {}
-    }
-}
+let system = null;
 
 let LoadingText = '';
 
@@ -645,11 +919,13 @@ function kickPlayer(id) {
 function hidePlayer(id) {
     $(`#${id}`).animate({opacity: 0.5}, 300);
     fetch(`${system.mainURL}/api/account/party/member/hide?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    system.hiddenMembers.push(id);
 }
 
 function showPlayer(id) {
     $(`#${id}`).animate({opacity: 1}, 300);
     fetch(`${system.mainURL}/api/account/party/member/show?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    system.hiddenMembers = system.hiddenMembers.filter(m => m !== id);
 }
 
 function setMembers() {
@@ -670,7 +946,6 @@ function setMembers() {
                 }, 100);
             }
         );
-        if(member.hidden) console.log('s')
         $(`#${member.id}.icon`).click(async () => {
             $(document).unbind('click');
             createMenu(`MEMBER${member.id}`);
@@ -760,6 +1035,66 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
+    // system = {
+    //     "account": null,
+    //     "party": null,
+    //     "source": null,
+    //     "friends": null,
+    //     "mainURL": "https://fortnitebtapi.herokuapp.com",
+    //     "fn": null,
+    //     "hiddenMembers": [],
+    //     "messages": {
+    //         "party": [],
+    //         "friends": {},
+    //         "handler": null
+    //     },
+    //     "settings": {
+    //         "colorScheme": {
+    //             "Default": {
+    //                 "back": './src/images/schemes/black/back.png',
+    //                 "faceplate": './src/images/schemes/black/faceplate.png'
+    //             },
+    //             "faceplate": './src/images/schemes/a77ecea5.png'
+    //         },
+    //         "currentScheme": 'Default'
+    //     },
+    //     "platforms": {
+    //         "benbot": {
+    //             "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
+    //             "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
+    //             "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
+    //             "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
+    //             "XBL": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
+    //             "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
+    //             "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
+    //         }
+    //     },
+    //     "matching": {
+    //         "skins": [
+    //             "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+    //             "CID_439_Athena_Commando_F_SkullBriteEclipse",
+    //             "CID_437_Athena_Commando_F_AztecEclipse",
+    //             "CID_159_Athena_Commando_M_GumshoeDark"
+    //         ],
+    //         "backpacks": [
+    //             "BID_287_AztecFemaleEclipse",
+    //             "BID_286_WinterGhoulMaleEclipse"
+    //         ],
+    //         "pickaxes": [
+    //             "Pickaxe_ID_164_DragonNinja"
+    //         ]
+    //     },
+    //     "items": {
+    //         "outfit": null,
+    //         "backpack": null,
+    //         "pickaxe": null,
+    //         "conversions": {},
+    //         "default": {},
+    //         "variants": {},
+    //         "cosmetics": {},
+    //         "sort": {}
+    //     }
+    // }
     if(getParm('mainURL')) system.mainURL = getParm('mainURL');
     const requestUser = await fetch(`${system.mainURL}/api/user`, {
         credentials: 'include',
@@ -774,137 +1109,141 @@ $(document).ready(async () => {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
     }
 
-    if(!(await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
-        switch((await fetch(`${system.mainURL}/api/account/`, {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
-            case 529: {
-                console.log('DEBUG To much accounts used has been set.');
-                return setLoadingText('All accounts have been used.<br>Please try again later.', true);
-            };
-        }
-    }
+    system = new FNBTMenu({});
 
-    system.source = new EventSource(`${system.mainURL}/api/account/authorize?auth=${(await (await fetch(`${system.mainURL}/api/auth`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    system.source.onerror = (e) => {
-        return setLoadingText('Error happend, cannot access the error.');
-    }
+    await system.start();
 
-    window.onbeforeunload = async () => {
-        await fetch(`${system.mainURL}/api/account`, {method: "DELETE", credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    };
+    // if(!(await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
+    //     switch((await fetch(`${system.mainURL}/api/account/`, {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
+    //         case 529: {
+    //             console.log('DEBUG To much accounts used has been set.');
+    //             return setLoadingText('All accounts have been used.<br>Please try again later.', true);
+    //         };
+    //     }
+    // }
 
-    await new Promise((resolve) => {
-        system.source.onmessage = (data) => {
-            const json = JSON.parse(data.data);
-            if(json.completed) return resolve();
-            setLoadingText(json.message);
-        }
-    });
-    system.source.onmessage = (data) => {
-        const json = JSON.parse(data.data);
-        if(json.exit) return $('.message-container').fadeIn();
-        if(json.event) {
-            const data = json.data;
-            const event = json.event;
-            switch(event) {
-                case 'refresh:party': {
-                    system.party = json.party;
-                    setMembers();
-                    if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
-                        const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
-                        if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
-                            $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
-                        }
-                        if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
-                            const id = last('.', emoteItemDef).replace(/'/g, '');
-                            const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
-                            $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
-                        }
-                    }
-                } break;
+    // system.source = new EventSource(`${system.mainURL}/api/account/authorize?auth=${(await (await fetch(`${system.mainURL}/api/auth`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
+    // system.source.onerror = (e) => {
+    //     return setLoadingText('Error happend, cannot access the error.');
+    // }
 
-                case 'friend:message': {
-                    if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
-                    system.messages.friends[data.author.id].push(data);
-                    if(system.messages.handler) system.messages.handler(data);
-                } break;
+    // window.onbeforeunload = async () => {
+    //     await fetch(`${system.mainURL}/api/account`, {method: "DELETE", credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
+    // };
 
-                default: {
-                    console.log(data);
-                    console.log(`UNKNOWN EVENT ${event}`);
-                } break;
-            }
-        }
-    }
-    system.account = await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    system.party = await (await fetch(`${system.mainURL}/api/account/party`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    system.friends = await (await fetch(`${system.mainURL}/api/account/friends`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    system.fn = await (await fetch(`${system.mainURL}/api/account/fn/content`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    // await new Promise((resolve) => {
+    //     system.source.onmessage = (data) => {
+    //         const json = JSON.parse(data.data);
+    //         if(json.completed) return resolve();
+    //         setLoadingText(json.message);
+    //     }
+    // });
+    // system.source.onmessage = (data) => {
+    //     const json = JSON.parse(data.data);
+    //     if(json.exit) return $('.message-container').fadeIn();
+    //     if(json.event) {
+    //         const data = json.data;
+    //         const event = json.event;
+    //         switch(event) {
+    //             case 'refresh:party': {
+    //                 system.party = json.party;
+    //                 setMembers();
+    //                 if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
+    //                     const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
+    //                     if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
+    //                         $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
+    //                     }
+    //                     if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
+    //                         const id = last('.', emoteItemDef).replace(/'/g, '');
+    //                         const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
+    //                         $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
+    //                     }
+    //                 }
+    //             } break;
 
-    const timerSettings = await (await fetch(`${system.mainURL}/api/account/time`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    const timer = setInterval(() => {
-        const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
-        if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
-            timerSettings.seconds = 60;
-            timerSettings.minutes --;
-            document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-        }
-        if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
-            document.getElementById('30MIN').innerHTML = `None minutes left`;
-            clearInterval(timer);
-        }
-        if(timerSettings.seconds !== 0) {
-            timerSettings.seconds --;
-            document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-        }
-    }, 1000);
-    $('#username')[0].innerHTML = `${system.account.displayName}`;
-    setPlatformIcon('PC');
-    setLoadingText('Loading account');
-    setLoadingText('Loading cosmetics');
-    const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
-    system.items.cosmetics = cos;
-    setLoadingText('Categorizing cosmetics');
-    categorizeItems(true);
-    sortItems();
-    setLoadingText('Creating default images');
-    await setItems(system.items.default, system.items);
-    $('#InformationButton').click(async () => {
-        createMenu('information');
-        const menu = $('[id="MENU~information"]');
-        $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="partyButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div></div>`;
-        menu.fadeIn(250);
-        menu.draggable({
-            "containment": "window"
-        });
-        $('#FriendsButton').click(async () => await friendsMenu(menu));
-        $('#partyButton').click(async () => await showPartyMenu(menu));
-        addCloseButton(menu, 'MENU~information~close');
-    });
-    setLoadingText('Starting');
-    $('#fortnite').fadeOut(300);
-    $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
-    $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
-    $('.members-container').fadeIn();
-    if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
-    else {
-        changeColorScheme('Default');
-    }
-    stopText();
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    $('#DATA').fadeIn();
-    $('#fortnite').css('padding', '0px');
-    $(`#InformationButton`).hover(
-        () => {
-            $(`#InformationButton`).animate({
-                borderRadius: 8
-            }, 100);
-        },
-        () => {
-            $(`#InformationButton`).animate({
-                borderRadius: 18
-            }, 100);
-        }
-    );
-    setMembers();
+    //             case 'friend:message': {
+    //                 if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
+    //                 system.messages.friends[data.author.id].push(data);
+    //                 if(system.messages.handler) system.messages.handler(data);
+    //             } break;
+
+    //             default: {
+    //                 console.log(data);
+    //                 console.log(`UNKNOWN EVENT ${event}`);
+    //             } break;
+    //         }
+    //     }
+    // }
+    // system.account = await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    // system.party = await (await fetch(`${system.mainURL}/api/account/party`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    // system.friends = await (await fetch(`${system.mainURL}/api/account/friends`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    // system.fn = await (await fetch(`${system.mainURL}/api/account/fn/content`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+
+    // const timerSettings = await (await fetch(`${system.mainURL}/api/account/time`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
+    // const timer = setInterval(() => {
+    //     const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
+    //     if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
+    //         timerSettings.seconds = 60;
+    //         timerSettings.minutes --;
+    //         document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+    //     }
+    //     if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
+    //         document.getElementById('30MIN').innerHTML = `None minutes left`;
+    //         clearInterval(timer);
+    //     }
+    //     if(timerSettings.seconds !== 0) {
+    //         timerSettings.seconds --;
+    //         document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+    //     }
+    // }, 1000);
+    // $('#username')[0].innerHTML = `${system.account.displayName}`;
+    // setPlatformIcon('PC');
+    // setLoadingText('Loading account');
+    // setLoadingText('Loading cosmetics');
+    // const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
+    // system.items.cosmetics = cos;
+    // setLoadingText('Categorizing cosmetics');
+    // categorizeItems(true);
+    // sortItems();
+    // setLoadingText('Creating default images');
+    // await setItems(system.items.default, system.items);
+    // $('#InformationButton').click(async () => {
+    //     createMenu('information');
+    //     const menu = $('[id="MENU~information"]');
+    //     $(document).unbind('click');
+    //     menu[0].innerHTML = `<div class="cosmetic">Information<br><div id="partyButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Party</div><div id="FriendsButton" class="clickHereButton" style="padding: 3px;font-size: 20px;margin: 10px;">Friends</div></div>`;
+    //     menu.fadeIn(250);
+    //     menu.draggable({
+    //         "containment": "window"
+    //     });
+    //     $('#FriendsButton').click(async () => await friendsMenu(menu));
+    //     $('#partyButton').click(async () => await showPartyMenu(menu));
+    //     addCloseButton(menu, 'MENU~information~close');
+    // });
+    // setLoadingText('Starting');
+    // $('#fortnite').fadeOut(300);
+    // $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
+    // $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
+    // $('.members-container').fadeIn();
+    // if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
+    // else {
+    //     changeColorScheme('Default');
+    // }
+    // stopText();
+    // await new Promise((resolve) => setTimeout(resolve, 300));
+    // $('#DATA').fadeIn();
+    // $('#fortnite').css('padding', '0px');
+    // $(`#InformationButton`).hover(
+    //     () => {
+    //         $(`#InformationButton`).animate({
+    //             borderRadius: 8
+    //         }, 100);
+    //     },
+    //     () => {
+    //         $(`#InformationButton`).animate({
+    //             borderRadius: 18
+    //         }, 100);
+    //     }
+    // );
+    // setMembers();
 });
