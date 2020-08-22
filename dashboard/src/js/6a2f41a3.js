@@ -71,6 +71,47 @@ class Menu {
         menu.remove();
     }
 
+    reloadMembers() {
+        const members = this.system.party.members;
+        $('#members').html(null);
+        for (const member of members) {
+            const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
+            $('#members')[0].innerHTML += `<div id="${member.id}" class="icon"><img width="120" height="120" draggable="false" src="${images.character}"><img width="30" height="30" draggable="false" src="${convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr, true)}" style="left: 84px;top: 6px;background: black;border-radius: 9px;padding: 2px;border-color: white;"><div>${member.displayName}</div></div>`;
+            $(`#${member.id}.icon`).hover(
+                () => {
+                    $(`#${member.id}.icon`).animate({
+                        borderRadius: 10
+                    }, 100);
+                },
+                () => {
+                    $(`#${member.id}.icon`).animate({
+                        borderRadius: 18
+                    }, 100);
+                }
+            );
+            $(`#${member.id}.icon`).click(async () => {
+                createMenu(`MEMBER${member.id}`);
+                const menu = $(`[id="MENU~MEMBER${member.id}"]`);
+                let items = '';
+                for (const key of Object.keys(images)) {
+                    const value = images[key];
+                    items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`
+                }
+                menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div style="display: flex;"><div id="kickPlayer" class="clickHereButton" style="${member.id === system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="hidePlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">Hide Player</div></div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
+                menu.fadeIn(250);
+                $('#kickPlayer').click(async () => {
+                    if(member.id === system.account.id) return;
+                    kickPlayer(member.id);
+                    await hideMenu(menu);
+                });
+                menu.draggable({
+                    "containment": "window"
+                });
+                addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
+            });
+        }
+    }
+
     changePlatform(type) {
         if($('#platform')[0]) $('#platform').remove();
         $('#username')[0].innerHTML += `<img id="platform" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
