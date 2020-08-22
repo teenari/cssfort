@@ -103,14 +103,22 @@ class Menu {
                 let items = '';
                 for (const key of Object.keys(images)) {
                     const value = images[key];
-                    items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`
+                    items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`;
                 }
-                menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div style="display: flex;"><div id="kickPlayer" class="clickHereButton" style="${member.id === system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="hidePlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">Hide Player</div></div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
+                const menuPrefix = `MENU~MEMBER${member.id}~`;
+                menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div style="display: flex;"><div id="${menuPrefix}kickPlayer" class="clickHereButton" style="${member.id === system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="${menuPrefix}hiddenPlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">${this.system.hiddenMembers.find(m => m.id === member.id) ? 'Show Player' : 'Hide Player'}</div></div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
                 menu.fadeIn(250);
-                $('#kickPlayer').click(async () => {
+                $(`[id="${menuPrefix}kickPlayer"]`).click(async () => {
                     if(member.id === system.account.id) return;
-                    await this.system.kickPlayer(member.id);
                     await hideMenu(menu);
+                    await this.system.kickPlayer(member.id);
+                });
+
+                $(`[id="${menuPrefix}hiddenPlayer"]`).click(async () => {
+                    if(member.id === system.account.id) return;
+                    await hideMenu(menu);
+                    const f = this.system.hiddenMembers.find(m => m.id === member.id) ? 'showPlayer' : 'hidePlayer';
+                    await this.system[f](member.id);
                 });
                 menu.draggable({
                     "containment": "window"
@@ -401,6 +409,18 @@ class System {
 
     async kickPlayer(id) {
         return await this.sendRequest(`api/account/party/kick?id=${id}`);
+    }
+
+    async hidePlayer(id) {
+        $(`#${id}.icon`).animate({opacity: 0.5}, 300);
+        this.hiddenMembers.push({id});
+        return await this.sendRequest(`api/account/party/member/hide?id=${id}`);
+    }
+    
+    async showPlayer(id) {
+        $(`#${id}.icon`).animate({opacity: 1}, 300);
+        this.hiddenMembers = this.hiddenMembers.filter(m => m.id !== id);
+        return await this.sendRequest(`api/account/party/member/show?id=${id}`);
     }
 
     setSourceEvent(source) {
