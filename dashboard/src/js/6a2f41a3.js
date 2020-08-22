@@ -71,6 +71,20 @@ class Menu {
         menu.remove();
     }
 
+    addCloseButton(menu, id) {
+        const div = document.createElement('div');
+        div.setAttribute("style", "font-size: 18px; background-color: rgb(0, 0, 0); border-radius: 4px; color: rgb(255, 255, 255); padding: 11px; cursor: pointer; text-align: center; margin: 12px; position: relative; border: 1px solid;");
+        div.id = id;
+        div.innerHTML = 'Close Menu';
+        [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
+        $(`[id="${id}"]`).click(async () => await hideMenu(menu));
+        $(`[id="${id}"]`).unbind('hover').hover(
+            () => $(`[id="${id}"]`).stop().animate({borderRadius: 10}, 100),
+            () => $(`[id="${id}"]`).stop().animate({borderRadius: 4}, 100)
+        );
+        return $(`[id="${id}"]`);
+    }
+
     reloadMembers() {
         const members = this.system.party.members;
         $('#members').html(null);
@@ -101,13 +115,13 @@ class Menu {
                 menu.fadeIn(250);
                 $('#kickPlayer').click(async () => {
                     if(member.id === system.account.id) return;
-                    kickPlayer(member.id);
+                    await this.system.kickPlayer(member.id);
                     await hideMenu(menu);
                 });
                 menu.draggable({
                     "containment": "window"
                 });
-                addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
+                this.addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
             });
         }
     }
@@ -181,7 +195,6 @@ class Menu {
 class System {
     constructor ({
         url,
-        eventHandler,
         theme
     }) {
         this.url = url || 'http://fortnitebtapi.herokuapp.com';
@@ -195,7 +208,42 @@ class System {
             friends: null,
             handler: null
         };
-        this.eventHandler = eventHandler;
+        this.eventHandler = async () => {
+            const json = JSON.parse(data.data);
+            if(json.exit) return $('.message-container').fadeIn();
+            if(json.event) {
+                const data = json.data;
+                const event = json.event;
+                switch(event) {
+                    case 'refresh:party': {
+                        system.party = json.party;
+                        this.menu.reloadMembers();
+                        if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
+                            const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
+                            if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
+                                $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
+                            }
+                            if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
+                                const id = last('.', emoteItemDef).replace(/'/g, '');
+                                const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
+                                $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
+                            }
+                        }
+                    } break;
+    
+                    case 'friend:message': {
+                        if(!this.messages.friends[data.author.id]) this.messages.friends[data.author.id] = [];
+                        this.messages.friends[data.author.id].push(data);
+                        if(this.messages.handler) this.messages.handler(data);
+                    } break;
+    
+                    default: {
+                        console.log(data);
+                        console.log(`UNKNOWN EVENT ${event}`);
+                    } break;
+                }
+            }
+        };
         this.menu = new Menu(this, theme);
     }
 
@@ -212,8 +260,8 @@ class System {
             }
         });
 
-        this.setSourceEvent(this.source);
         await this.setProperties();
+        this.setSourceEvent(this.source);
         await this.startMenu();
 
         return this;
@@ -277,6 +325,11 @@ class System {
         this.party = await this.getParty();
         this.friends = await this.getFriends();
         this.hiddenMembers = [];
+        this.messages = {
+            party: [],
+            friends: {},
+            handler: null
+        }
         return this;
     }
 
@@ -1164,40 +1217,6 @@ $(document).ready(async () => {
     //     }
     // });
     // system.source.onmessage = (data) => {
-    //     const json = JSON.parse(data.data);
-    //     if(json.exit) return $('.message-container').fadeIn();
-    //     if(json.event) {
-    //         const data = json.data;
-    //         const event = json.event;
-    //         switch(event) {
-    //             case 'refresh:party': {
-    //                 system.party = json.party;
-    //                 setMembers();
-    //                 if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
-    //                     const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
-    //                     if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
-    //                         $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
-    //                     }
-    //                     if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
-    //                         const id = last('.', emoteItemDef).replace(/'/g, '');
-    //                         const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
-    //                         $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
-    //                     }
-    //                 }
-    //             } break;
-
-    //             case 'friend:message': {
-    //                 if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
-    //                 system.messages.friends[data.author.id].push(data);
-    //                 if(system.messages.handler) system.messages.handler(data);
-    //             } break;
-
-    //             default: {
-    //                 console.log(data);
-    //                 console.log(`UNKNOWN EVENT ${event}`);
-    //             } break;
-    //         }
-    //     }
     // }
     // system.account = await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     // system.party = await (await fetch(`${system.mainURL}/api/account/party`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
