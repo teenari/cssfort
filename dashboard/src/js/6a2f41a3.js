@@ -77,6 +77,11 @@ class Menu {
         return this;
     }
 
+    changeUsername(username) {
+        $('#username').html(username);
+        return this;
+    }
+
     convertPlatform(platform, url) {
         let ENUMNAME;
         switch(platform) {
@@ -165,6 +170,7 @@ class System {
             }
         });
 
+        await this.startMenu();
         this.setSourceEvent(this.source);
         await this.setProperties();
 
@@ -172,7 +178,16 @@ class System {
     }
 
     async startMenu() {
-        
+        this.menu.changeUsername(this.account.displayName).changePlatform('PC');
+        this.menu.setLoadingText('Starting', true);
+        $('#fortnite').fadeOut(300);
+        $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
+        $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
+        $('.members-container').fadeIn();
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        $('#DATA').fadeIn();
+        $('#fortnite').css('padding', '0px');
+        return this;
     }
 
     async logout() {
@@ -1189,19 +1204,6 @@ $(document).ready(async () => {
     //     $('#partyButton').click(async () => await showPartyMenu(menu));
     //     addCloseButton(menu, 'MENU~information~close');
     // });
-    // setLoadingText('Starting');
-    // $('#fortnite').fadeOut(300);
-    // $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
-    // $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
-    // $('.members-container').fadeIn();
-    // if(Cookies.get('colorScheme')) changeColorScheme(Cookies.get('colorScheme'));
-    // else {
-    //     changeColorScheme('Default');
-    // }
-    // stopText();
-    // await new Promise((resolve) => setTimeout(resolve, 300));
-    // $('#DATA').fadeIn();
-    // $('#fortnite').css('padding', '0px');
     // $(`#InformationButton`).hover(
     //     () => {
     //         $(`#InformationButton`).animate({
