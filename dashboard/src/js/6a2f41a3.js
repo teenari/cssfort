@@ -123,7 +123,7 @@ class System {
         eventHandler,
         theme
     }) {
-        this.url = url;
+        this.url = url || 'http://fortnitebtapi.herokuapp.com';
         this.account = null;
         this.party = null;
         this.friends = null;
