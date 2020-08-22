@@ -32,17 +32,17 @@ class Menu {
             Default: {
                 background: 'black&white',
                 cosmetics: {
-                    skins: [
+                    outfit: [
                         "CID_438_Athena_Commando_M_WinterGhoulEclipse",
                         "CID_439_Athena_Commando_F_SkullBriteEclipse",
                         "CID_437_Athena_Commando_F_AztecEclipse",
                         "CID_159_Athena_Commando_M_GumshoeDark"
                     ],
-                    backpacks: [
+                    backpack: [
                         "BID_287_AztecFemaleEclipse",
                         "BID_286_WinterGhoulMaleEclipse"
                     ],
-                    pickaxes: [
+                    pickaxe: [
                         "Pickaxe_ID_164_DragonNinja"
                     ]
                 }
@@ -297,6 +297,7 @@ class System {
         await this.sendRequest(`api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
             method: "PUT"
         });
+        this.items[cosmeticType.toLowerCase()] = this.cosmetics.sorted[cosmeticType.toLowerCase()].find(cosmetic => cosmetic.id === id);
         return this;
     }
 
@@ -326,6 +327,7 @@ class System {
             handler: null
         }
         this.cosmetics.sorted = {};
+        this.items = {};
         await sortCosmetics();
         return this;
     }
@@ -364,6 +366,27 @@ class System {
         for (const value of data) {
             if(!this.cosmetics.sorted[value.type.value]) this.cosmetics.sorted[value.type.value] = [];
             this.cosmetics.sorted[value.type.value].push(value);
+        }
+        return this;
+    }
+
+    async setDefaultItems() {
+        const check = (data, main) => {
+            const t = main.find(e => e.id === data[(Math.floor(Math.random() * data.length - 1) + 1)]);
+            if(!t) return check(data, main);
+            return t;
+        }
+        // if(this.menu.theme.background !== 'black&white') {
+        //     system.items.default = {
+        //         "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 1],
+        //         "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 1],
+        //         "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 1],
+        //     }
+        // }
+        if(this.menu.theme.background === 'black&white') {
+            for (const type of ['outfit', 'backpack', 'pickaxe']) {
+                await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]));
+            }
         }
         return this;
     }
