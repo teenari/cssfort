@@ -208,7 +208,7 @@ class System {
             friends: null,
             handler: null
         };
-        this.eventHandler = async () => {
+        this.eventHandler = (data) => {
             const json = JSON.parse(data.data);
             if(json.exit) return $('.message-container').fadeIn();
             if(json.event) {
@@ -295,12 +295,8 @@ class System {
     }
 
     async changeCosmeticItem(cosmeticType, id) {
-        await fetch(`${this.url}/api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
-            credentials: 'include',
-            method: "PUT",
-            headers: {
-                'Access-Control-Allow-Origin': "https://teenari.github.io"
-            }
+        await this.sendRequest(`api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+            method: "PUT"
         });
         return this;
     }
