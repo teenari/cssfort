@@ -11,7 +11,112 @@
  * limitations under the License.
  */
 
-class FNBT {
+class Menu {
+    constructor(System) {
+        this.system = System;
+        this.cosmetics = {
+            sorted: null,
+            variants: null,
+            all: null
+        };
+
+        this.items = null;
+        this.icons = {
+            platforms: {
+                benbot: {
+                    PC: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
+                    CONSOLE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
+                    EARTH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
+                    MOBILE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
+                    XBL: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
+                    PSN: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
+                    SWITCH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
+                }
+            }
+        };
+        this.themes = {
+            Default: {
+                background: 'black&white',
+                cosmetics: {
+                    skins: [
+                        "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+                        "CID_439_Athena_Commando_F_SkullBriteEclipse",
+                        "CID_437_Athena_Commando_F_AztecEclipse",
+                        "CID_159_Athena_Commando_M_GumshoeDark"
+                    ],
+                    backpacks: [
+                        "BID_287_AztecFemaleEclipse",
+                        "BID_286_WinterGhoulMaleEclipse"
+                    ],
+                    pickaxes: [
+                        "Pickaxe_ID_164_DragonNinja"
+                    ]
+                }
+            }
+        }
+        this.theme = this.themes[theme || 'Default'];
+    }
+
+    async changeMenu(menu, html) {
+        menu[0].innerHTML = '<div class="cosmetic"><div style="width: 200px;height: 250px;align-items: center;display: inline-flex;position: relative;text-align: center;align-content: center;left: 50px;">LOADING</div></div>';
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        menu[0].innerHTML = html;
+        return menu;
+    }
+
+    async hideMenu(menu) {
+        menu.fadeOut(250);
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        menu.remove();
+    }
+
+    changePlatform() {
+        if($('#platform')[0]) $('#platform').remove();
+        $('#username')[0].innerHTML += `<img id="platform" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
+        return this;
+    }
+
+    convertPlatform(platform, url) {
+        let ENUMNAME;
+        switch(platform) {
+            case 'WIN': {
+                ENUMNAME = 'PC';
+            } break;
+    
+            case 'MAC': {
+                ENUMNAME = 'PC';
+            } break;
+    
+            case 'AND': {
+                ENUMNAME = 'MOBILE';
+            } break;
+    
+            case 'IOS': {
+                ENUMNAME = 'MOBILE';
+            } break;
+    
+            case 'AND': {
+                ENUMNAME = 'MOBILE';
+            } break;
+    
+            case 'SWT': {
+                ENUMNAME = 'SWITCH';
+            } break;
+    
+            default: {
+                if(this.icons.platforms.benbot[platform]) {
+                    ENUMNAME = platform;
+                    break;
+                }
+                ENUMNAME = 'EARTH';
+            } break;
+        }
+    
+        return url ? this.icons.platforms.benbot[ENUMNAME] : ENUMNAME;
+    }
+}
+
+class System {
     constructor ({
         url,
         messageHandler,
@@ -30,6 +135,7 @@ class FNBT {
         };
         this.sourceHandler = messageHandler;
         this.eventHandler = eventHandler;
+        this.menu = new Menu(this);
     }
 
     async authorize() {
@@ -46,6 +152,10 @@ class FNBT {
         await this.setProperties();
 
         return this;
+    }
+
+    async startMenu() {
+        
     }
 
     async changeCosmeticItem(cosmeticType, id) {
@@ -183,178 +293,6 @@ class FNBT {
         }
     }
  */
-
-class FNBTMenu {
-    constructor({
-        theme,
-        url
-    }) {
-        this.system = new FNBT({
-            url: url || 'http://fortnitebtapi.herokuapp.com',
-            messageHandler: this.setLoadingText,
-            eventHandler: (data) => {
-                const json = JSON.parse(data.data);
-                if(json.exit) return $('.message-container').fadeIn();
-                if(json.event) {
-                    const data = json.data;
-                    const event = json.event;
-                    switch(event) {
-                        case 'refresh:party': {
-                            system.party = json.party;
-                            setMembers();
-                            if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
-                                const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
-                                if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
-                                    $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
-                                }
-                                if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
-                                    const id = last('.', emoteItemDef).replace(/'/g, '');
-                                    const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
-                                    $(`#${data.id}.member`).children('img')[$(`#${data.id}.member`).children('img').length - 2].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
-                                }
-                            }
-                        } break;
-        
-                        case 'friend:message': {
-                            if(!system.messages.friends[data.author.id]) system.messages.friends[data.author.id] = [];
-                            system.messages.friends[data.author.id].push(data);
-                            if(system.messages.handler) system.messages.handler(data);
-                        } break;
-        
-                        default: {
-                            console.log(data);
-                            console.log(`UNKNOWN EVENT ${event}`);
-                        } break;
-                    }
-                }
-            }
-        });
-        this.cosmetics = {
-            sorted: null,
-            variants: null,
-            all: null
-        };
-
-        this.items = null;
-        this.icons = {
-            platforms: {
-                benbot: {
-                    PC: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
-                    CONSOLE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
-                    EARTH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
-                    MOBILE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
-                    XBL: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
-                    PSN: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
-                    SWITCH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
-                }
-            }
-        };
-        this.themes = {
-            Default: {
-                background: 'black&white',
-                matchingCosmetics: {
-                    skins: [
-                        "CID_438_Athena_Commando_M_WinterGhoulEclipse",
-                        "CID_439_Athena_Commando_F_SkullBriteEclipse",
-                        "CID_437_Athena_Commando_F_AztecEclipse",
-                        "CID_159_Athena_Commando_M_GumshoeDark"
-                    ],
-                    backpacks: [
-                        "BID_287_AztecFemaleEclipse",
-                        "BID_286_WinterGhoulMaleEclipse"
-                    ],
-                    pickaxes: [
-                        "Pickaxe_ID_164_DragonNinja"
-                    ]
-                }
-            }
-        }
-        this.theme = this.themes[theme || 'Default'];
-        this.loadingText = null;
-    }
-
-    async start() {
-        await this.system.authorize();
-    }
-
-    async changeMenu(menu, html) {
-        menu[0].innerHTML = '<div class="cosmetic"><div style="width: 200px;height: 250px;align-items: center;display: inline-flex;position: relative;text-align: center;align-content: center;left: 50px;">LOADING</div></div>';
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        menu[0].innerHTML = html;
-        return menu;
-    }
-
-    async hideMenu(menu) {
-        menu.fadeOut(250);
-        await new Promise((resolve) => setTimeout(resolve, 250));
-        menu.remove();
-    }
-
-    convertPlatform(platform, url) {
-        let ENUMNAME;
-        switch(platform) {
-            case 'WIN': {
-                ENUMNAME = 'PC';
-            } break;
-    
-            case 'MAC': {
-                ENUMNAME = 'PC';
-            } break;
-    
-            case 'AND': {
-                ENUMNAME = 'MOBILE';
-            } break;
-    
-            case 'IOS': {
-                ENUMNAME = 'MOBILE';
-            } break;
-    
-            case 'AND': {
-                ENUMNAME = 'MOBILE';
-            } break;
-    
-            case 'SWT': {
-                ENUMNAME = 'SWITCH';
-            } break;
-    
-            default: {
-                if(this.icons.platforms.benbot[platform]) {
-                    ENUMNAME = platform;
-                    break;
-                }
-                ENUMNAME = 'EARTH';
-            } break;
-        }
-    
-        return url ? this.icons.platforms.benbot[ENUMNAME] : ENUMNAME;
-    }
-
-    changePlatform() {
-        if($('#platformICON')[0]) $('#platformICON').remove();
-        $('#username')[0].innerHTML += `<img id="platformICON" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
-        return this;
-    }
-
-    setLoadingText(text, doNot) {
-        this.loadingText = text;
-        let dots = 0;
-        $('#status').html(text);
-        if(!doNot) {
-            const inv = setInterval(() => {
-                if(this.loadingText !== text) clearInterval(inv);
-                dots += 1;
-                if(dots === 4) dots = 0;
-                $('#status').html(text + '.'.repeat(dots));
-            }, 500);
-        }
-        return this;
-    }
-
-    stopLoadingText() {
-        this.loadingText = null;
-        return this.loadingText;
-    }
-}
 
 console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
 
@@ -1095,7 +1033,8 @@ $(document).ready(async () => {
     //         "sort": {}
     //     }
     // }
-    if(getParm('mainURL')) system.mainURL = getParm('mainURL');
+    system = new System({});
+    // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
     const requestUser = await fetch(`${system.mainURL}/api/user`, {
         credentials: 'include',
         headers: {
@@ -1108,8 +1047,6 @@ $(document).ready(async () => {
     if(user.authorization === false) {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
     }
-
-    system = new FNBTMenu({});
 
     await system.start();
 
