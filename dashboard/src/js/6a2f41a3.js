@@ -146,7 +146,7 @@ class System {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
                 if(json.completed) return resolve();
-                messageHandler(json.message);
+                this.messageHandler(json.message);
             }
         });
 
@@ -229,7 +229,7 @@ class System {
     }
 
     setSourceEvent(source) {
-        source.onmessage = eventHandler;
+        source.onmessage = this.eventHandler;
         return this;
     }
 
