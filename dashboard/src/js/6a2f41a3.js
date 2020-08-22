@@ -12,7 +12,7 @@
  */
 
 class Menu {
-    constructor(System) {
+    constructor(System, theme) {
         this.system = System;
         this.cosmetics = {
             sorted: null,
@@ -120,7 +120,8 @@ class System {
     constructor ({
         url,
         messageHandler,
-        eventHandler
+        eventHandler,
+        theme
     }) {
         this.url = url;
         this.account = null;
@@ -135,7 +136,7 @@ class System {
         };
         this.sourceHandler = messageHandler;
         this.eventHandler = eventHandler;
-        this.menu = new Menu(this);
+        this.menu = new Menu(this, theme);
     }
 
     async authorize() {
@@ -1033,7 +1034,9 @@ $(document).ready(async () => {
     //         "sort": {}
     //     }
     // }
-    system = new System({});
+    system = new System({
+        theme: 'Default'
+    });
     // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
     const requestUser = await fetch(`${system.mainURL}/api/user`, {
         credentials: 'include',
