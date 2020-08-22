@@ -71,7 +71,7 @@ class Menu {
         menu.remove();
     }
 
-    changePlatform() {
+    changePlatform(type) {
         if($('#platform')[0]) $('#platform').remove();
         $('#username')[0].innerHTML += `<img id="platform" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
         return this;
