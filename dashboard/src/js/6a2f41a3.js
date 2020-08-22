@@ -175,6 +175,7 @@ class Menu {
                 $(`#${member.id}.icon`).animate({opacity: 0.5}, 500);
             }
         }
+        return this;
     }
 
     changePlatform(type) {
@@ -330,7 +331,7 @@ class System {
     }
 
     async startMenu() {
-        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Setting Platform').changePlatform('PC').setLoadingText('Loading Members').reloadMembers();
+        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Setting Platform').changePlatform('PC').setLoadingText('Loading Members').reloadMembers().setItems();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
