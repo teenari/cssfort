@@ -219,7 +219,7 @@ class System {
     }
 
     async startMenu() {
-        this.menu.changeUsername(this.account.displayName).changePlatform('PC').setLoadingText('Starting', true);
+        this.menu.changeUsername(this.account.displayName).changePlatform('PC').setLoadingText('Starting', true).reloadMembers();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
