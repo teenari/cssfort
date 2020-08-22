@@ -326,6 +326,7 @@ class System {
             friends: {},
             handler: null
         }
+        await sortCosmetics();
         return this;
     }
 
