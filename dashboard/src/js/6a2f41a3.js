@@ -153,12 +153,10 @@ class System {
     }
 
     async authorize() {
+        await this.logout();
         await this.createSession();
         this.source = await this.makeSource();
-        window.onbeforeunload = async () => 
-            await this.sendRequest('api/account', {
-                method: "DELETE"
-            });
+        window.onbeforeunload = this.logout;
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
@@ -175,6 +173,15 @@ class System {
 
     async startMenu() {
         
+    }
+
+    async logout() {
+        this.account = null;
+        this.party = null;
+        this.friends = null;
+        return await this.sendRequest('api/account', {
+            method: "DELETE"
+        });
     }
 
     async createSession() {
