@@ -155,6 +155,10 @@ class System {
     async authorize() {
         await this.createSession();
         this.source = await this.makeSource();
+        window.onbeforeunload = async () => 
+            await this.sendRequest('api/account', {
+                method: "DELETE"
+            });
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
@@ -1088,10 +1092,6 @@ $(document).ready(async () => {
     // system.source.onerror = (e) => {
     //     return setLoadingText('Error happend, cannot access the error.');
     // }
-
-    // window.onbeforeunload = async () => {
-    //     await fetch(`${system.mainURL}/api/account`, {method: "DELETE", credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-    // };
 
     // await new Promise((resolve) => {
     //     system.source.onmessage = (data) => {
