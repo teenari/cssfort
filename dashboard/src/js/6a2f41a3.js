@@ -399,6 +399,10 @@ class System {
         return this;
     }
 
+    async kickPlayer(id) {
+        return await this.sendRequest(`api/account/party/kick?id=${id}`);
+    }
+
     setSourceEvent(source) {
         source.onmessage = this.eventHandler;
         return this;
