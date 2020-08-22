@@ -140,6 +140,7 @@ class System {
     }
 
     async authorize() {
+        await this.createSession();
         this.source = await this.makeSource();
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
@@ -157,6 +158,12 @@ class System {
 
     async startMenu() {
         
+    }
+
+    async createSession() {
+        return await this.sendRequest('api/account', {
+            method: "POST"
+        });
     }
 
     async changeCosmeticItem(cosmeticType, id) {
@@ -211,13 +218,13 @@ class System {
         return await (await this.sendRequest('api/account/time')).json();
     }
 
-    async sendRequest(path, extraOptions) {
+    async sendRequest(path, options) {
         return await fetch(`${this.url}/${path}`, {
             credentials: 'include',
             headers: {
                 'Access-Control-Allow-Origin': "https://teenari.github.io"
             },
-            ...extraOptions
+            ...options
         });
     }
 
