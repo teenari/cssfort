@@ -174,6 +174,7 @@ class Menu {
                 $('#status').html(text + '.'.repeat(dots));
             }, 500);
         }
+        return this;
     }
 }
 
