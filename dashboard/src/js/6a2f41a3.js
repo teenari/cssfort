@@ -1038,7 +1038,7 @@ $(document).ready(async () => {
         theme: 'Default'
     });
     // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
-    const requestUser = await fetch(`${system.mainURL}/api/user`, {
+    const requestUser = await fetch(`${system.url}/api/user`, {
         credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'
