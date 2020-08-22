@@ -328,7 +328,8 @@ class System {
         }
         this.cosmetics.sorted = {};
         this.items = {};
-        await sortCosmetics();
+        await this.sortCosmetics();
+        await this.setDefaultItems();
         return this;
     }
 
