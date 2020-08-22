@@ -65,6 +65,48 @@ class Menu {
         menu.remove();
     }
 
+    async createImageInElement(element, hidden, argumen, callback) {
+        const html = createImage(...argumen);
+        const div = document.createElement('div');
+        div.id = argumen[0].id;
+        div.hidden = hidden;
+        div.innerHTML = '';
+        div.classList.add('icon');
+        element.appendChild(div);
+        $(`#${argumen[0].id}.icon`).hover(
+            () => {
+                $(`#${argumen[0].id}.icon`).animate({
+                    borderRadius: 3
+                }, 100);
+            },
+            () => {
+                $(`#${argumen[0].id}.icon`).animate({
+                    borderRadius: 8
+                }, 100);
+            }
+        )
+        for (const IMAGE of html) {
+            div.appendChild(IMAGE);
+        }
+        const text = document.createElement('div');
+        text.innerText = argumen[0].type.value.toUpperCase();
+        div.appendChild(text);
+        div.onclick = callback || async function() {
+            // await showMenu(argumen[0].type.value.toUpperCase());
+        }
+        return div;
+    }
+
+    async setItems() {
+        $('#fnItems').empty();
+        for (const key of Object.keys(this.system.items)) {
+            const value = this.system.items[key];
+            if(!value.type) continue;
+            await this.createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true, true]);
+        }
+        return this;
+    }
+
     addCloseButton(menu, id) {
         const div = document.createElement('div');
         div.setAttribute("style", "font-size: 18px; background-color: rgb(0, 0, 0); border-radius: 4px; color: rgb(255, 255, 255); padding: 11px; cursor: pointer; text-align: center; margin: 12px; position: relative; border: 1px solid;");
@@ -262,11 +304,11 @@ class System {
     }
 
     async authorize() {
-        this.menu.setLoadingText('Logging out of last session', true);
+        this.menu.setLoadingText('Logging out of last session');
         await this.logout();
-        this.menu.setLoadingText('Creating new session', true);
+        this.menu.setLoadingText('Creating new session');
         await this.createSession();
-        this.menu.setLoadingText('Creating Event Source', true);
+        this.menu.setLoadingText('Creating Event Source');
         this.source = await this.makeSource();
         window.onbeforeunload = this.logout;
         await new Promise((resolve) => {
@@ -277,18 +319,18 @@ class System {
             }
         });
 
-        this.menu.setLoadingText('Setting Properties', true);
+        this.menu.setLoadingText('Setting Properties');
         await this.setProperties();
-        this.menu.setLoadingText('Setting Source Events', true);
+        this.menu.setLoadingText('Setting Source Events');
         this.setSourceEvent(this.source);
-        this.menu.setLoadingText('Starting Menu', true);
+        this.menu.setLoadingText('Starting Menu');
         await this.startMenu();
 
         return this;
     }
 
     async startMenu() {
-        this.menu.setLoadingText('Setting Username', true).changeUsername(this.account.displayName).setLoadingText('Setting Platform', true).changePlatform('PC').setLoadingText('Loading Members', true).reloadMembers();
+        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Setting Platform').changePlatform('PC').setLoadingText('Loading Members').reloadMembers();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
