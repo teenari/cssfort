@@ -1042,7 +1042,9 @@ $(document).ready(async () => {
     //     }
     // }
     system = new System({
-        theme: 'Default'
+        theme: 'Default',
+        eventHandler: console.log,
+        messageHandler: console.log
     });
     // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
     const requestUser = await fetch(`${system.url}/api/user`, {
