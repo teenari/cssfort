@@ -204,8 +204,7 @@ class System {
         };
         this.cosmetics = {
             sorted: null,
-            variants: null,
-            all: null
+            variants: null
         };
         this.items = null;
         this.eventHandler = (data) => {
@@ -326,6 +325,7 @@ class System {
             friends: {},
             handler: null
         }
+        this.cosmetics.sorted = {};
         await sortCosmetics();
         return this;
     }
