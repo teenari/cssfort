@@ -55,6 +55,7 @@ class Menu {
             }
         }
         this.theme = this.themes[theme || 'Default'];
+        this.LoadingText = null;
     }
 
     async changeMenu(menu, html) {
@@ -114,12 +115,25 @@ class Menu {
     
         return url ? this.icons.platforms.benbot[ENUMNAME] : ENUMNAME;
     }
+
+    setLoadingText(text, doNot) {
+        this.LoadingText = text;
+        let dots = 0;
+        $('#status').html(text);
+        if(!doNot) {
+            const inv = setInterval(() => {
+                if(this.LoadingText !== text) clearInterval(inv);
+                dots += 1;
+                if(dots === 4) dots = 0;
+                $('#status').html(text + '.'.repeat(dots));
+            }, 500);
+        }
+    }
 }
 
 class System {
     constructor ({
         url,
-        messageHandler,
         eventHandler,
         theme
     }) {
@@ -134,7 +148,6 @@ class System {
             friends: null,
             handler: null
         };
-        this.sourceHandler = messageHandler;
         this.eventHandler = eventHandler;
         this.menu = new Menu(this, theme);
     }
@@ -146,7 +159,7 @@ class System {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
                 if(json.completed) return resolve();
-                this.messageHandler(json.message);
+                this.menu.setLoadingText(json.message);
             }
         });
 
