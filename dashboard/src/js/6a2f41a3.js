@@ -262,27 +262,33 @@ class System {
     }
 
     async authorize() {
+        this.menu.setLoadingText('Logging out of last session', true);
         await this.logout();
+        this.menu.setLoadingText('Creating new session', true);
         await this.createSession();
+        this.menu.setLoadingText('Creating Event Source', true);
         this.source = await this.makeSource();
         window.onbeforeunload = this.logout;
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
                 if(json.completed) return resolve();
-                this.menu.setLoadingText(json.message);
+                if(json.message) this.menu.setLoadingText(json.message);
             }
         });
 
+        this.menu.setLoadingText('Setting Properties', true);
         await this.setProperties();
+        this.menu.setLoadingText('Setting Source Events', true);
         this.setSourceEvent(this.source);
+        this.menu.setLoadingText('Starting Menu', true);
         await this.startMenu();
 
         return this;
     }
 
     async startMenu() {
-        this.menu.changeUsername(this.account.displayName).changePlatform('PC').setLoadingText('Starting', true).reloadMembers();
+        this.menu.setLoadingText('Setting Username', true).changeUsername(this.account.displayName).setLoadingText('Setting Platform', true).changePlatform('PC').setLoadingText('Loading Members', true).reloadMembers();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
