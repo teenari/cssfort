@@ -386,7 +386,7 @@ class System {
         // }
         if(this.menu.theme.background === 'black&white') {
             for (const type of ['outfit', 'backpack', 'pickaxe']) {
-                await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]));
+                await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]).id);
             }
         }
         return this;
