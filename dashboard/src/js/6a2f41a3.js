@@ -14,13 +14,7 @@
 class Menu {
     constructor(System, theme) {
         this.system = System;
-        this.cosmetics = {
-            sorted: null,
-            variants: null,
-            all: null
-        };
 
-        this.items = null;
         this.icons = {
             platforms: {
                 benbot: {
@@ -208,6 +202,12 @@ class System {
             friends: null,
             handler: null
         };
+        this.cosmetics = {
+            sorted: null,
+            variants: null,
+            all: null
+        };
+        this.items = null;
         this.eventHandler = (data) => {
             const json = JSON.parse(data.data);
             if(json.exit) return $('.message-container').fadeIn();
@@ -355,6 +355,16 @@ class System {
             },
             ...options
         });
+    }
+
+    async sortCosmetics() {
+        const data = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
+        this.cosmetics.all = data;
+        for (const value of data) {
+            if(!this.cosmetics.sorted[value.type.value]) this.cosmetics.sorted[value.type.value] = [];
+            this.cosmetics.sorted[value.type.value].push(value);
+        }
+        return this;
     }
 
     setSourceEvent(source) {
