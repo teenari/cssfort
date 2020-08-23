@@ -1401,7 +1401,6 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
     const user = await (await fetch(`http://fortnitebtapi.herokuapp.com/api/user`, {
         credentials: 'include',
         headers: {
@@ -1410,12 +1409,6 @@ $(document).ready(async () => {
     }).catch((e) => {
         throw e;
     })).json();
-    $('#copyright').fadeOut(300);
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    if(user.authorization === false) {
-        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
-    }
-
     const accounts = await (await fetch(`http://fortnitebtapi.herokuapp.com/api/accounts`, {
         credentials: 'include',
         headers: {
@@ -1424,6 +1417,13 @@ $(document).ready(async () => {
     }).catch((e) => {
         throw e;
     })).json();
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    $('#copyright').fadeOut(300);
+    if(user.authorization === false) {
+        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
+    }
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
     if(!accounts.auth) {
         return;
     }
@@ -1435,6 +1435,7 @@ $(document).ready(async () => {
         "CID_437_Athena_Commando_F_AztecEclipse",
         "CID_159_Athena_Commando_M_GumshoeDark"
     ];
+
     for (const account of accounts.accounts) {
         const div = document.createElement('div');
         document.getElementById('options').appendChild(div);
