@@ -1452,7 +1452,7 @@ $(document).ready(async () => {
             }
         );
         $(`#${account}`).click(() => {
-            $('#fortnite')[0].innerHTML = '<div id="items"><img id="logo" src="./src/images/5c2f428e.png" width="150" height="150">s<div id="status" style="color: white"></div></div>';
+            $('#fortnite')[0].innerHTML = '<div id="items"><img id="logo" src="./src/images/5c2f428e.png" width="150" height="150"><div id="status" style="color: white"></div></div>';
             displayName = account;
         });
     };
