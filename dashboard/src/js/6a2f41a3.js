@@ -1441,10 +1441,10 @@ $(document).ready(async () => {
         div.outerHTML = `<div id="${account}" style="overflow: hidden;width: 135px;background: black;border: 1px solid;height: 204px;border-radius: 11px;margin: 2px;cursor: pointer;"><div style="background: black;border: 1px solid;border-radius: 400px;width: 100px;height: 100px;overflow: hidden;position: relative;left: 17px;top: 10px;"><img src="https://fortnite-api.com/images/cosmetics/br/${cids[cids.length * Math.random() | 0]}/icon.png" style="width: 100px;"></div><div style="font-size: 42px;position: relative;top: 28px;">${account}</div></div>`;
         $(`#${account}`).hover(
             () => {
-                $(`#${account}`).animate({borderRadius: 3}, 50);
+                $(`#${account}`).animate({borderRadius: 3}, 100);
             },
             () => {
-                $(`#${account}`).animate({borderRadius: 11}, 50);
+                $(`#${account}`).animate({borderRadius: 11}, 100);
             }
         );
     }
