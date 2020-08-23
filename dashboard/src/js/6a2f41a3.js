@@ -65,6 +65,172 @@ class Menu {
         menu.remove();
     }
 
+    async showMenu(cosmeticType) {
+        this.createMenu('cosmeticMenu');
+        const menu = $('[id="MENU~cosmeticMenu"]');
+        const id = this.system.items[cosmeticType.toLowerCase()].id;
+        $(document).unbind('click');
+        menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(this.system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(this.system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
+        menu.fadeIn(250);
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        $('#selectVariant').click(async () => {
+            if(!this.system.items[cosmeticType.toLowerCase()].variants) return;
+            // let selectedVariants = [];
+            // await new Promise((resolve) => setTimeout(resolve, 1));
+            // await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+            // addCloseButton(menu, 'MENU~cosmeticMenu~close');
+            // $('#search').keyup(() => {
+            //     const searchQuery = $('#search').val().toUpperCase();
+            //     for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
+            //         element.hidden = true;
+            //     }
+            //     for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
+            //         element.hidden = false;
+            //     }
+            // });
+            // for (const item of system.items[cosmeticType.toLowerCase()].variants) {
+            //     for (const variant of item.options) {
+            //         const div = document.createElement("div");
+            //         div.id = `VARIANT/${variant.tag}#${variant.name}`;
+            //         const images = document.createElement("div");
+            //         for (const src of [{
+            //             src: variant.image
+            //         }]) {
+            //             const IMAGE = document.createElement("IMG");
+            //             if(src.src) IMAGE.width = 100;
+            //             if(src.src) IMAGE.height = 100;
+            //             IMAGE.draggable = false;
+            //             if(src.src) IMAGE.src = src.src;
+            //             images.appendChild(IMAGE);
+            //         }
+            //         div.appendChild(images);
+            //         const name = document.createElement("div");
+            //         name.innerHTML = variant.name;
+            //         div.appendChild(name);
+            //         div.onclick = async () => {
+            //             if(selectedVariants.find((e) => {
+            //                 return e.image === variant.image;
+            //             })) {
+            //                 selectedVariants = selectedVariants.filter((e) => {
+            //                     return e.image !== variant.image;
+            //                 });
+            //                 $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 32}, 200);
+            //             }
+            //             else {
+            //                 selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
+            //                 $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200);
+            //             }
+            //         }
+            //         $('#cosmetics')[0].appendChild(div);
+            //     }
+            // }
+            // if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
+            //     $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
+            //     selectedVariants.push(variant);
+            // }
+            // $('#SaveVariant').click(async () => {
+            //     if(selectedVariants.length === 0) return;
+            //     if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
+            //     system.items.variants[cosmeticType] = selectedVariants;
+            //     const img = $(`#${id}`)[0].children[0];
+            //     if($(`#${id}`)[0].children[1].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[1].remove();
+            //     $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
+            //     const variants = [];
+            //     for (const variant of selectedVariants) {
+            //         variants.push({
+            //             "item": system.items[cosmeticType.toLowerCase()].type.backendValue,
+            //             "channel": variant.channel,
+            //             "variant": variant.tag
+            //         })
+            //     }
+            //     addVariant(variants, cosmeticType.toLowerCase());
+            //     await hideMenu(menu);
+            // });
+        });
+        $('#selectItem').click(async () => {
+            let selectedItem;
+            await new Promise((resolve) => setTimeout(resolve, 1));
+            await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
+            $('#search').keyup(() => {
+                const searchQuery = $('#search').val().toUpperCase();
+                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
+                    element.hidden = true;
+                }
+                for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
+                    element.hidden = false;
+                }
+            });
+            for (const item of system.items.cosmetics[cosmeticType.toLowerCase()]) {
+                const div = document.createElement("div");
+                div.id = `ITEM/${item.id}`;
+                const images = document.createElement("div");
+                for (const src of [{
+                    src: item.images.icon
+                }]) {
+                    const IMAGE = document.createElement("IMG");
+                    if(src.src) IMAGE.width = 100;
+                    if(src.src) IMAGE.height = 100;
+                    IMAGE.draggable = false;
+                    if(src.src) IMAGE.src = src.src;
+                    images.appendChild(IMAGE);
+                }
+                div.appendChild(images);
+                const name = document.createElement("div");
+                name.innerHTML = item.name;
+                div.appendChild(name);
+                $('#cosmetics')[0].appendChild(div);
+                $(`[id="ITEM/${item.id}"]`).hover(
+                    () => {
+                        $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 3}, 200);
+                    },
+                    () => {
+                        $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 17}, 200);
+                    }
+                )
+                $(`[id="ITEM/${item.id}"]`)[0].onclick = async (e) => {
+                    if(selectedItem === item) return;
+                    if(selectedItem && selectedItem !== item) {
+                        $('#cosmetics').children().filter(function() {
+                            return this.innerHTML.includes('border-radius: 3px');
+                        }).children().filter(function() {
+                            return this.outerHTML.includes('border-radius: 3px');
+                        }).animate({borderRadius: 32}, 200);
+                    }
+                    $(`[id="ITEM/${item.id}"]`).children().eq(0).animate({borderRadius: 3}, 200);
+                    selectedItem = item;
+                };
+            }
+            $('#SaveAvatar').click(async () => {
+               if(!selectedItem) return;
+                system.items[cosmeticType.toLowerCase()] = selectedItem;
+                setItems(system.items, system.items);
+                changeItem(selectedItem.id, cosmeticType.toLowerCase());
+                system.items.variants[cosmeticType] = [];
+                await hideMenu(menu);
+            });
+            addCloseButton(menu, 'MENU~cosmeticMenu~close');
+        });
+        $('#SaveID').click(async () => {
+            if($('[id="cosmeticID"]').val().trim() === "" || !system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val())) return;
+            const item = system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val());
+            system.items[cosmeticType.toLowerCase()] = item;
+            const img = $(`#${id}`)[0].children[0];
+            $(`#${id}`)[0].id = $('[id="cosmeticID"]').val();
+            $(`#${$('[id="cosmeticID"]').val()}`)[0].innerHTML = '';
+            for (const image of createImage(item, img.style.top.split('px')[0], img.style.left.split('px')[0], 'absolute', img.width, img.height)) {
+                $(`#${$('[id="cosmeticID"]').val()}`).append(image);
+                image.onclick = async () => {
+                    await showMenu(item.type.value.toUpperCase());
+                }
+            }
+            await hideMenu(menu);
+        });
+        menu.draggable({
+            "containment": "window"
+        });
+        addCloseButton(menu, 'MENU~cosmeticMenu~close');
+    }
+
     async createImageInElement(element, hidden, argumen, callback) {
         const html = createImage(...argumen);
         const div = document.createElement('div');
@@ -140,7 +306,7 @@ class Menu {
                 }
             );
             $(`#${member.id}.icon`).click(async () => {
-                createMenu(`MEMBER${member.id}`);
+                this.createMenu(`MEMBER${member.id}`);
                 const menu = $(`[id="MENU~MEMBER${member.id}"]`);
                 let items = '';
                 for (const key of Object.keys(images)) {
@@ -182,6 +348,16 @@ class Menu {
         if($('#platform')[0]) $('#platform').remove();
         $('#username')[0].innerHTML += `<img id="platform" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
         return this;
+    }
+
+    createMenu(purpose) {
+        if(document.getElementById(`MENU~${purpose}`)) document.getElementById(`MENU~${purpose}`).remove();
+        const menu = document.createElement('div');
+        menu.classList.add('menu');
+        menu.id = `MENU~${purpose}`;
+        menu.hidden = true;
+        document.getElementById('menus').appendChild(menu);
+        return menu;
     }
 
     changeUsername(username) {
@@ -1225,6 +1401,39 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    $('#copyright').fadeOut(300);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    const user = await (await fetch(`http://fortnitebtapi.herokuapp.com/api/user`, {
+        credentials: 'include',
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+    }).catch((e) => {
+        throw e;
+    })).json();
+    if(user.authorization === false) {
+        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
+    }
+
+    const accounts = await (await fetch(`http://fortnitebtapi.herokuapp.com/api/accounts`, {
+        credentials: 'include',
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+    }).catch((e) => {
+        throw e;
+    })).json();
+    if(!accounts.auth) {
+        return;
+    }
+    $('#fortnite')[0].outerHTML = '<div id="fortnite" style="position: absolute;width: 86%;height: 85%;display: flex;justify-content: center;align-items: center;font-size: 100px;font-family: t;text-align: center;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;color: white;padding: 60px;"><div id="items"><div style="font-size: 43px;">What option do you want to use</div><div id="options" style="display: flex;justify-content: center;align-items: center;"></div></div></div>';
+
+    for (const account of accounts.accounts) {
+        const div = document.createElement('div');
+        div.outerHTML = `<div style="overflow: hidden;width: 135px;background: black;border: 1px solid;height: 204px;border-radius: 11px;margin: 2px;cursor: pointer;"><div style="background: black;border: 1px solid;border-radius: 400px;width: 100px;height: 100px;overflow: hidden;position: relative;left: 17px;top: 10px;"><img src="https://fortnite-api.com/images/cosmetics/br/cid_776_athena_commando_m_professorpup/icon.png" style="width: 100px;"></div><div style="font-size: 42px;position: relative;top: 28px;">${account}</div></div>`;
+        document.getElementById('options').appendChild(div);
+    }
     // system = {
     //     "account": null,
     //     "party": null,
@@ -1285,26 +1494,14 @@ $(document).ready(async () => {
     //         "sort": {}
     //     }
     // }
-    system = new System({
-        theme: 'Default',
-        eventHandler: console.log,
-        messageHandler: console.log
-    });
+    // system = new System({
+    //     theme: 'Default',
+    //     eventHandler: console.log,
+    //     messageHandler: console.log
+    // });
     // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
-    const requestUser = await fetch(`${system.url}/api/user`, {
-        credentials: 'include',
-        headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
-    }).catch((e) => {
-        throw e;
-    });
-    const user = await requestUser.json();
-    if(user.authorization === false) {
-        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
-    }
 
-    await system.authorize();
+    // await system.authorize();
 
     // if(!(await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
     //     switch((await fetch(`${system.mainURL}/api/account/`, {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
