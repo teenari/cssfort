@@ -1429,10 +1429,16 @@ $(document).ready(async () => {
     }
     $('#fortnite')[0].outerHTML = '<div id="fortnite" style="position: absolute;width: 86%;height: 85%;display: flex;justify-content: center;align-items: center;font-size: 100px;font-family: t;text-align: center;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;color: white;padding: 60px;"><div id="items"><div style="font-size: 43px;">What option do you want to use</div><div id="options" style="display: flex;justify-content: center;align-items: center;"></div></div></div>';
 
+    const cids = [
+        "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+        "CID_439_Athena_Commando_F_SkullBriteEclipse",
+        "CID_437_Athena_Commando_F_AztecEclipse",
+        "CID_159_Athena_Commando_M_GumshoeDark"
+    ];
     for (const account of accounts.accounts) {
         const div = document.createElement('div');
         document.getElementById('options').appendChild(div);
-        div.outerHTML = `<div style="overflow: hidden;width: 135px;background: black;border: 1px solid;height: 204px;border-radius: 11px;margin: 2px;cursor: pointer;"><div style="background: black;border: 1px solid;border-radius: 400px;width: 100px;height: 100px;overflow: hidden;position: relative;left: 17px;top: 10px;"><img src="https://fortnite-api.com/images/cosmetics/br/cid_776_athena_commando_m_professorpup/icon.png" style="width: 100px;"></div><div style="font-size: 42px;position: relative;top: 28px;">${account}</div></div>`;
+        div.outerHTML = `<div style="overflow: hidden;width: 135px;background: black;border: 1px solid;height: 204px;border-radius: 11px;margin: 2px;cursor: pointer;"><div style="background: black;border: 1px solid;border-radius: 400px;width: 100px;height: 100px;overflow: hidden;position: relative;left: 17px;top: 10px;"><img src="https://fortnite-api.com/images/cosmetics/br/${cids[cids.length * Math.random() | 0]}/icon.png" style="width: 100px;"></div><div style="font-size: 42px;position: relative;top: 28px;">${account}</div></div>`;
     }
     // system = {
     //     "account": null,
