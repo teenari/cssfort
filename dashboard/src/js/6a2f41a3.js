@@ -1435,6 +1435,7 @@ $(document).ready(async () => {
         "CID_437_Athena_Commando_F_AztecEclipse",
         "CID_159_Athena_Commando_M_GumshoeDark"
     ];
+    let displayName;
 
     for (const account of accounts.accounts) {
         const div = document.createElement('div');
@@ -1448,7 +1449,25 @@ $(document).ready(async () => {
                 $(`#${account}`).animate({borderRadius: 11}, 100);
             }
         );
-    }
+        $(`#${account}`).click(() => {
+            $('#fortnite').fadeOut();
+            displayName = account;
+        });
+    };
+    await new Promise((resolve) => {
+        const inv = setInterval(() => {
+            if(displayName) {
+                resolve();
+                clearInterval(inv);
+            }
+        });
+    });
+    system = new System({
+        theme: 'Default',
+        eventHandler: console.log,
+        messageHandler: console.log,
+        displayName
+    });
     // system = {
     //     "account": null,
     //     "party": null,
@@ -1509,11 +1528,6 @@ $(document).ready(async () => {
     //         "sort": {}
     //     }
     // }
-    // system = new System({
-    //     theme: 'Default',
-    //     eventHandler: console.log,
-    //     messageHandler: console.log
-    // });
     // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
 
     // await system.authorize();
