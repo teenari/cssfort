@@ -1438,7 +1438,15 @@ $(document).ready(async () => {
     for (const account of accounts.accounts) {
         const div = document.createElement('div');
         document.getElementById('options').appendChild(div);
-        div.outerHTML = `<div style="overflow: hidden;width: 135px;background: black;border: 1px solid;height: 204px;border-radius: 11px;margin: 2px;cursor: pointer;"><div style="background: black;border: 1px solid;border-radius: 400px;width: 100px;height: 100px;overflow: hidden;position: relative;left: 17px;top: 10px;"><img src="https://fortnite-api.com/images/cosmetics/br/${cids[cids.length * Math.random() | 0]}/icon.png" style="width: 100px;"></div><div style="font-size: 42px;position: relative;top: 28px;">${account}</div></div>`;
+        div.outerHTML = `<div id="${account}" style="overflow: hidden;width: 135px;background: black;border: 1px solid;height: 204px;border-radius: 11px;margin: 2px;cursor: pointer;"><div style="background: black;border: 1px solid;border-radius: 400px;width: 100px;height: 100px;overflow: hidden;position: relative;left: 17px;top: 10px;"><img src="https://fortnite-api.com/images/cosmetics/br/${cids[cids.length * Math.random() | 0]}/icon.png" style="width: 100px;"></div><div style="font-size: 42px;position: relative;top: 28px;">${account}</div></div>`;
+        $(`#${account}`).hover(
+            () => {
+                $(`#${account}`).animate({borderRadius: 3}, 200);
+            },
+            () => {
+                $(`#${account}`).animate({borderRadius: 11}, 200);
+            }
+        );
     }
     // system = {
     //     "account": null,
