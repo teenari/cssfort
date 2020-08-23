@@ -423,7 +423,8 @@ class Menu {
 class System {
     constructor ({
         url,
-        theme
+        theme,
+        displayName
     }) {
         this.url = url || 'http://fortnitebtapi.herokuapp.com';
         this.account = null;
@@ -431,6 +432,7 @@ class System {
         this.friends = null;
         this.hiddenMembers = null;
         this.source = null;
+        this.displayName = displayName;
         this.messages = {
             party: null,
             friends: null,
@@ -527,8 +529,8 @@ class System {
         });
     }
 
-    async createSession() {
-        return await this.sendRequest('api/account', {
+    async createSession(displayName) {
+        return await this.sendRequest(`api/account?displayName=${displayName}`, {
             method: "POST"
         });
     }
@@ -1450,7 +1452,7 @@ $(document).ready(async () => {
             }
         );
         $(`#${account}`).click(() => {
-            $('#fortnite').fadeOut();
+            $('#fortnite')[0].innerHTML = '<div id="items"><img id="logo" src="./src/images/5c2f428e.png" width="150" height="150">s<div id="status" style="color: white"></div></div>';
             displayName = account;
         });
     };
@@ -1468,6 +1470,7 @@ $(document).ready(async () => {
         messageHandler: console.log,
         displayName
     });
+    await system.authorize();
     // system = {
     //     "account": null,
     //     "party": null,
