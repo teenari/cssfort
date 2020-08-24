@@ -287,6 +287,11 @@ class Menu {
         return $(`[id="${id}"]`);
     }
 
+    setPercent(percent) {
+        $('#percent').html(`${percent}%`);
+        return this;
+    }
+
     reloadMembers() {
         const members = this.system.party.members;
         $('#members').html(null);
@@ -483,13 +488,19 @@ class System {
     }
 
     async authorize() {
+        setPercent(0);
         this.menu.setLoadingText('Logging out of last session');
         await this.logout();
+        setPercent(5);
         this.menu.setLoadingText('Creating new session');
+        setPercent(20);
         await this.createSession(this.displayName);
+        setPercent(40);
         this.menu.setLoadingText('Creating Event Source');
+        setPercent(60);
         this.source = await this.makeSource();
         window.onbeforeunload = this.logout;
+        setPercent(70);
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
@@ -497,19 +508,24 @@ class System {
                 if(json.message) this.menu.setLoadingText(json.message);
             }
         });
+        setPercent(75);
 
         this.menu.setLoadingText('Setting Properties');
         await this.setProperties();
+        setPercent(80);
         this.menu.setLoadingText('Setting Source Events');
         this.setSourceEvent(this.source);
+        setPercent(85);
         this.menu.setLoadingText('Starting Menu');
+        setPercent(99);
         await this.startMenu();
+        setPercent(100);
 
         return this;
     }
 
     async startMenu() {
-        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Setting Platform').changePlatform('PC').setLoadingText('Loading Members').reloadMembers().setItems();
+        this.menu.setLoadingText('Setting Username').setPercent(91).changeUsername(this.account.displayName).setPercent(94).setLoadingText('Setting Platform').setPercent(97).changePlatform('PC').setLoadingText('Loading Members').setPercent(98).reloadMembers().setItems();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
