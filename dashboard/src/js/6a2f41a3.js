@@ -257,8 +257,9 @@ class Menu {
         const text = document.createElement('div');
         text.innerText = argumen[0].type.value.toUpperCase();
         div.appendChild(text);
+        const showMenu = this.showMenu;
         div.onclick = callback || async function() {
-            // await showMenu(argumen[0].type.value.toUpperCase());
+            await showMenu(argumen[0].type.value.toUpperCase());
         }
         return div;
     }
