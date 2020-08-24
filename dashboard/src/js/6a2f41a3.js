@@ -274,7 +274,7 @@ class Menu {
     }
 
     async newNotification(type, text) {
-        $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).fadeIn().animate({
+        $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).css('padding', '22px').fadeIn().animate({
             width: '201px'
         }, 600);
         await new Promise((resolve) => setTimeout(resolve, 2600));
