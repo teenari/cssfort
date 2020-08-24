@@ -370,6 +370,41 @@ html {
     font-size: 40px;
 }
 
+#notification {
+    background-color: black;
+    padding: 22px;
+    position: absolute;
+    z-index: 99;
+    border-radius: 6px;
+    box-shadow: 2px 3px rgba(0, 0, 0, 0.5);
+    border: 1px solid white;
+    top: 20px;
+    color: white;
+    font-family: t;
+    overflow: hidden;
+    display: inline-block;
+    width: 201px;
+}
+
+#notification div:nth-of-type(1) {
+    position: absolute;
+    border: 1px solid;
+    left: -2px;
+    top: -10px;
+    padding: 16px;
+    font-size: 37px;
+}
+
+#notification div:nth-of-type(2) {
+    position: absolute;
+    width: 196px;
+    height: 30px;
+    text-align: center;
+    top: 15px;
+    left: 49px;
+    font-size: 16px;
+}
+
 @font-face {
     font-family: t;
     src: url(../fonts/BurbankBigCondensed-Black.otf);

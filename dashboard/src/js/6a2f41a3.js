@@ -287,6 +287,12 @@ class Menu {
         return $(`[id="${id}"]`);
     }
 
+    newNotification(type, text) {
+        return $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).fadeIn().animate({
+            width: '201px'
+        }, 600);
+    }
+
     setPercent(percent) {
         $('#percent').html(`${percent}%`);
         return this;
