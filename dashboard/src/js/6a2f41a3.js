@@ -496,6 +496,10 @@ class System {
                         this.messages.friends[data.author.id].push(data);
                         if(this.messages.handler) this.messages.handler(data);
                     } break;
+
+                    case 'party:member:joined': {
+                        await this.menu.newNotification('P', `${data.displayName} has joined`);
+                    } break;
     
                     default: {
                         console.log(data);
