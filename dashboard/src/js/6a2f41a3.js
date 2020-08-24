@@ -273,6 +273,18 @@ class Menu {
         return this;
     }
 
+    async newNotification(type, text) {
+        $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).fadeIn().animate({
+            width: '201px'
+        }, 600);
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        return $("#notification").animate({
+            width: '0px',
+            height: '0px',
+            padding: '0px'
+        }, 400).fadeOut();
+    }
+
     addCloseButton(menu, id) {
         const div = document.createElement('div');
         div.setAttribute("style", "font-size: 18px; background-color: rgb(0, 0, 0); border-radius: 4px; color: rgb(255, 255, 255); padding: 11px; cursor: pointer; text-align: center; margin: 12px; position: relative; border: 1px solid;");
@@ -285,12 +297,6 @@ class Menu {
             () => $(`[id="${id}"]`).stop().animate({borderRadius: 4}, 100)
         );
         return $(`[id="${id}"]`);
-    }
-
-    newNotification(type, text) {
-        return $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).fadeIn().animate({
-            width: '201px'
-        }, 600);
     }
 
     setPercent(percent) {
