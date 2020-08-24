@@ -277,7 +277,7 @@ class Menu {
         $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).fadeIn().animate({
             width: '201px'
         }, 600);
-        await new Promise((resolve) => setTimeout(resolve, 1200));
+        await new Promise((resolve) => setTimeout(resolve, 2600));
         return $("#notification").animate({
             width: '0px',
             height: '0px',
