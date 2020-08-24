@@ -65,16 +65,16 @@ class Menu {
         menu.remove();
     }
 
-    async showMenu(cosmeticType) {
-        this.createMenu('cosmeticMenu');
+    async showMenu(cosmeticType, menSu) {
+        menSu.createMenu('cosmeticMenu');
         const menu = $('[id="MENU~cosmeticMenu"]');
-        const id = this.system.items[cosmeticType.toLowerCase()].id;
+        const id = menSu.system.items[cosmeticType.toLowerCase()].id;
         $(document).unbind('click');
-        menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(this.system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(this.system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
+        menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(menSu.system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(menSu.system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
         menu.fadeIn(250);
         await new Promise((resolve) => setTimeout(resolve, 250));
         $('#selectVariant').click(async () => {
-            if(!this.system.items[cosmeticType.toLowerCase()].variants) return;
+            if(!menSu.system.items[cosmeticType.toLowerCase()].variants) return;
             // let selectedVariants = [];
             // await new Promise((resolve) => setTimeout(resolve, 1));
             // await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
@@ -191,9 +191,9 @@ class Menu {
                     if(selectedItem === item) return;
                     if(selectedItem && selectedItem !== item) {
                         $('#cosmetics').children().filter(function() {
-                            return this.innerHTML.includes('border-radius: 3px');
+                            return menSu.innerHTML.includes('border-radius: 3px');
                         }).children().filter(function() {
-                            return this.outerHTML.includes('border-radius: 3px');
+                            return menSu.outerHTML.includes('border-radius: 3px');
                         }).animate({borderRadius: 32}, 200);
                     }
                     $(`[id="ITEM/${item.id}"]`).children().eq(0).animate({borderRadius: 3}, 200);
@@ -258,8 +258,9 @@ class Menu {
         text.innerText = argumen[0].type.value.toUpperCase();
         div.appendChild(text);
         const showMenu = this.showMenu;
+        const menu = this;
         div.onclick = callback || async function() {
-            await showMenu(argumen[0].type.value.toUpperCase());
+            await showMenu(argumen[0].type.value.toUpperCase(), menu);
         }
         return div;
     }
