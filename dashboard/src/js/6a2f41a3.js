@@ -500,6 +500,14 @@ class System {
                     case 'party:member:joined': {
                         await this.menu.newNotification('P', `${data.displayName} has joined`);
                     } break;
+
+                    case 'party:member:left': {
+                        await this.menu.newNotification('P', `${data.displayName} has left`);
+                    } break;
+
+                    case 'party:member:kicked': {
+                        await this.menu.newNotification('P', `${data.displayName} has been kicked`);
+                    } break;
     
                     default: {
                         console.log(data);
