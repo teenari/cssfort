@@ -274,6 +274,16 @@ class Menu {
     }
 
     async newNotification(type, text) {
+        if($("#notification").css('display') !== 'none') {
+            await new Promise((resolve) => {
+                const inv = setInterval(() => {
+                    if($("#notification").css('display') === 'none') {
+                        resolve();
+                        clearInterval(inv);
+                    }
+                });
+            });
+        }
         $("#notification").html(`<div>${type}</div><div>${text}</div>`).css('width', 0).css('padding', '22px').fadeIn().animate({
             width: '201px'
         }, 600);
