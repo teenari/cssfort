@@ -468,7 +468,7 @@ class System {
             variants: null
         };
         this.items = null;
-        this.eventHandler = (data) => {
+        this.eventHandler = async (data) => {
             const json = JSON.parse(data.data);
             if(json.exit) return $('.message-container').fadeIn();
             if(json.event) {
