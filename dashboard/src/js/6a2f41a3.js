@@ -279,9 +279,7 @@ class Menu {
         }, 600);
         await new Promise((resolve) => setTimeout(resolve, 2600));
         return $("#notification").animate({
-            width: '0px',
-            height: '0px',
-            padding: '0px'
+            width: '0px'
         }, 400).fadeOut();
     }
 
