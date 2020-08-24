@@ -488,19 +488,14 @@ class System {
     }
 
     async authorize() {
-        setPercent(0);
-        this.menu.setLoadingText('Logging out of last session');
+        this.menu.setPercent(0).setLoadingText('Logging out of last session');
         await this.logout();
-        setPercent(5);
-        this.menu.setLoadingText('Creating new session');
-        setPercent(20);
+        this.menu.setPercent(20).setLoadingText('Creating new session');
         await this.createSession(this.displayName);
-        setPercent(40);
-        this.menu.setLoadingText('Creating Event Source');
-        setPercent(60);
+        this.menu.setPercent(60).setLoadingText('Creating Event Source');
         this.source = await this.makeSource();
         window.onbeforeunload = this.logout;
-        setPercent(70);
+        this.menu.setPercent(70);
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
@@ -508,18 +503,13 @@ class System {
                 if(json.message) this.menu.setLoadingText(json.message);
             }
         });
-        setPercent(75);
-
-        this.menu.setLoadingText('Setting Properties');
+        this.menu.setPercent(75).setLoadingText('Setting Properties');
         await this.setProperties();
-        setPercent(80);
-        this.menu.setLoadingText('Setting Source Events');
+        this.menu.setPercent(80).setLoadingText('Setting Source Events');
         this.setSourceEvent(this.source);
-        setPercent(85);
-        this.menu.setLoadingText('Starting Menu');
-        setPercent(99);
+        this.menu.setLoadingText('Starting Menu').setPercent(99);
         await this.startMenu();
-        setPercent(100);
+        this.menu.setPercent(100);
 
         return this;
     }
