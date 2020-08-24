@@ -495,8 +495,7 @@ class System {
                         if(!this.messages.friends[data.author.id]) this.messages.friends[data.author.id] = [];
                         this.messages.friends[data.author.id].push(data);
                         if(this.messages.handler) this.messages.handler(data);
-                        console.log(data);
-                        // await this.menu.newNotification('F', `You have a new message!`);
+                        await this.menu.newNotification('F', `You have a new message from ${data.author.displayName}`);
                     } break;
 
                     case 'party:member:joined': {
