@@ -339,16 +339,16 @@ class Menu {
                     items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`;
                 }
                 const menuPrefix = `MENU~MEMBER${member.id}~`;
-                menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div style="display: flex;"><div id="${menuPrefix}kickPlayer" class="clickHereButton" style="${member.id === system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="${menuPrefix}hiddenPlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">${this.system.hiddenMembers.find(m => m.id === member.id) ? 'Show Player' : 'Hide Player'}</div></div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
+                menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div>${this.system.party.members.find(m => m.id === this.system.account.id).role === 'CAPTAIN' && member.id !== this.system.account.id ? `<div style="display: flex;"><div id="${menuPrefix}kickPlayer" class="clickHereButton" style="${member.id === this.system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="${menuPrefix}hiddenPlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">${this.system.hiddenMembers.find(m => m.id === member.id) ? 'Show Player' : 'Hide Player'}</div></div>` : ''}</div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
                 menu.fadeIn(250);
                 $(`[id="${menuPrefix}kickPlayer"]`).click(async () => {
-                    if(member.id === system.account.id) return;
+                    if(member.id === this.system.account.id || this.system.party.members.find(m => m.displayName === $("#username")[0].innerText).role !== 'CAPTAIN') return;
                     await hideMenu(menu);
                     await this.system.kickPlayer(member.id);
                 });
 
                 $(`[id="${menuPrefix}hiddenPlayer"]`).click(async () => {
-                    if(member.id === system.account.id) return;
+                    if(member.id === this.system.account.id || this.system.party.members.find(m => m.displayName === $("#username")[0].innerText).role !== 'CAPTAIN') return;
                     await hideMenu(menu);
                     const f = this.system.hiddenMembers.find(m => m.id === member.id) ? 'showPlayer' : 'hidePlayer';
                     await this.system[f](member.id);
