@@ -486,7 +486,7 @@ class System {
         this.menu.setLoadingText('Logging out of last session');
         await this.logout();
         this.menu.setLoadingText('Creating new session');
-        await this.createSession();
+        await this.createSession(this.displayName);
         this.menu.setLoadingText('Creating Event Source');
         this.source = await this.makeSource();
         window.onbeforeunload = this.logout;
