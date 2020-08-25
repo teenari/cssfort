@@ -203,6 +203,7 @@ class Menu {
             $('#SaveAvatar').click(async () => {
                if(!selectedItem) return;
                await menSu.system.changeCosmeticItem(cosmeticType.toLowerCase(), selectedItem.id);
+               await menSu.setItems();
                 // system.items[cosmeticType.toLowerCase()] = selectedItem;
                 // setItems(system.items, system.items);
                 // changeItem(selectedItem.id, cosmeticType.toLowerCase());
