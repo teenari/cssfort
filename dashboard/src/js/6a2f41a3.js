@@ -191,9 +191,9 @@ class Menu {
                     if(selectedItem === item) return;
                     if(selectedItem && selectedItem !== item) {
                         $('#cosmetics').children().filter(function() {
-                            return menSu.innerHTML.includes('border-radius: 3px');
+                            return this.innerHTML.includes('border-radius: 3px');
                         }).children().filter(function() {
-                            return menSu.outerHTML.includes('border-radius: 3px');
+                            return this.outerHTML.includes('border-radius: 3px');
                         }).animate({borderRadius: 32}, 200);
                     }
                     $(`[id="ITEM/${item.id}"]`).children().eq(0).animate({borderRadius: 3}, 200);
