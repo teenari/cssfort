@@ -150,7 +150,7 @@ class Menu {
         $('#selectItem').click(async () => {
             let selectedItem;
             await new Promise((resolve) => setTimeout(resolve, 1));
-            await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
+            await changeMenuHtml(menu, `<div class="cosmetic">PICK YOUR ${cosmeticType}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val().toUpperCase();
                 for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
@@ -160,7 +160,7 @@ class Menu {
                     element.hidden = false;
                 }
             });
-            for (const item of system.items.cosmetics[cosmeticType.toLowerCase()]) {
+            for (const item of menSu.system.cosmetics.sorted[cosmeticType.toLowerCase()]) {
                 const div = document.createElement("div");
                 div.id = `ITEM/${item.id}`;
                 const images = document.createElement("div");
