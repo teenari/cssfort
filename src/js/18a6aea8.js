@@ -30,7 +30,7 @@ $(document).ready(async () => {
             window.location = 'https://teenari.github.io/nlood/dashboard';
         });
         $('#data').animate({
-            top: '-18px'
+            top: '0px'
         }, 300);
         await new Promise((resolve) => setTimeout(resolve, 350));
         $('#username')[0].innerText = `${user.username}#${user.discriminator}`;
