@@ -130,8 +130,8 @@ class Menu {
             // }
             $('#SaveVariant').click(async () => {
                 if(selectedVariants.length === 0) return;
-                if(!menSu.system.items.variants[cosmeticType]) menSu.system.items.variants[cosmeticType] = [];
-                menSu.system.items.variants[cosmeticType] = selectedVariants;
+                if(!menSu.system.items.variants[cosmeticType.toLowerCase()]) menSu.system.items.variants[cosmeticType.toLowerCase()] = [];
+                menSu.system.items.variants[cosmeticType.toLowerCase()] = selectedVariants;
                 const img = $(`#${id}`)[0].children[0];
                 if($(`#${id}`)[0].children[1].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[1].remove();
                 $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="opacity: 0.7;left: -120px;">`;
