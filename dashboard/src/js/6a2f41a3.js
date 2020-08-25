@@ -202,11 +202,12 @@ class Menu {
             }
             $('#SaveAvatar').click(async () => {
                if(!selectedItem) return;
-                system.items[cosmeticType.toLowerCase()] = selectedItem;
-                setItems(system.items, system.items);
-                changeItem(selectedItem.id, cosmeticType.toLowerCase());
-                system.items.variants[cosmeticType] = [];
-                await hideMenu(menu);
+               await menSu.system.changeCosmeticItem(cosmeticType.toLowerCase(), selectedItem.id);
+                // system.items[cosmeticType.toLowerCase()] = selectedItem;
+                // setItems(system.items, system.items);
+                // changeItem(selectedItem.id, cosmeticType.toLowerCase());
+                // system.items.variants[cosmeticType] = [];
+               await hideMenu(menu);
             });
             addCloseButton(menu, 'MENU~cosmeticMenu~close');
         });
