@@ -124,10 +124,10 @@ class Menu {
                     $('#cosmetics')[0].appendChild(div);
                 }
             }
-            // if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
-            //     $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
-            //     selectedVariants.push(variant);
-            // }
+            if(menSu.system.items.variants[cosmeticType.toLowerCase()]) for (const variant of menSu.system.items.variants[cosmeticType.toLowerCase()]) {
+                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
+                selectedVariants.push(variant);
+            }
             $('#SaveVariant').click(async () => {
                 if(selectedVariants.length === 0) return;
                 if(!menSu.system.items.variants[cosmeticType.toLowerCase()]) menSu.system.items.variants[cosmeticType.toLowerCase()] = [];
