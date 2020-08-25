@@ -88,7 +88,7 @@ class Menu {
                     element.hidden = false;
                 }
             });
-            for (const item of system.items[cosmeticType.toLowerCase()].variants) {
+            for (const item of menSu.system.items[cosmeticType.toLowerCase()].variants) {
                 for (const variant of item.options) {
                     const div = document.createElement("div");
                     div.id = `VARIANT/${variant.tag}#${variant.name}`;
@@ -130,21 +130,21 @@ class Menu {
             // }
             $('#SaveVariant').click(async () => {
                 if(selectedVariants.length === 0) return;
-                if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
-                system.items.variants[cosmeticType] = selectedVariants;
+                if(!menSu.system.items.variants[cosmeticType]) menSu.system.items.variants[cosmeticType] = [];
+                menSu.system.items.variants[cosmeticType] = selectedVariants;
                 const img = $(`#${id}`)[0].children[0];
                 if($(`#${id}`)[0].children[1].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[1].remove();
-                $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
+                $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="opacity: 0.7;left: -120px;">`;
                 const variants = [];
                 for (const variant of selectedVariants) {
                     variants.push({
                         "item": system.items[cosmeticType.toLowerCase()].type.backendValue,
                         "channel": variant.channel,
                         "variant": variant.tag
-                    })
+                    });
                 }
-                addVariant(variants, cosmeticType.toLowerCase());
-                await hideMenu(menu);
+                await menSu.hideMenu(menu);
+                await menSu.system.changeVariants(variants, cosmeticType.toLowerCase());
             });
         });
         $('#selectItem').click(async () => {
@@ -202,7 +202,7 @@ class Menu {
             }
             $('#SaveAvatar').click(async () => {
                if(!selectedItem) return;
-               await hideMenu(menu);
+               await menSu.hideMenu(menu);
                await menSu.system.changeCosmeticItem(cosmeticType.toLowerCase(), selectedItem.id);
                await menSu.setItems();
                 // system.items[cosmeticType.toLowerCase()] = selectedItem;
@@ -213,19 +213,10 @@ class Menu {
             addCloseButton(menu, 'MENU~cosmeticMenu~close');
         });
         $('#SaveID').click(async () => {
-            if($('[id="cosmeticID"]').val().trim() === "" || !system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val())) return;
-            const item = system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val());
-            system.items[cosmeticType.toLowerCase()] = item;
-            const img = $(`#${id}`)[0].children[0];
-            $(`#${id}`)[0].id = $('[id="cosmeticID"]').val();
-            $(`#${$('[id="cosmeticID"]').val()}`)[0].innerHTML = '';
-            for (const image of createImage(item, img.style.top.split('px')[0], img.style.left.split('px')[0], 'absolute', img.width, img.height)) {
-                $(`#${$('[id="cosmeticID"]').val()}`).append(image);
-                image.onclick = async () => {
-                    await showMenu(item.type.value.toUpperCase());
-                }
-            }
-            await hideMenu(menu);
+            if($('[id="cosmeticID"]').val().trim() === "" || !menSu.system.cosmetics.sorted[cosmeticType].find(e => e.id === $('[id="cosmeticID"]').val())) return;
+            await menSu.hideMenu(menu);
+            await menSu.system.changeCosmeticItem(cosmeticType.toLowerCase(), $('[id="cosmeticID"]').val());
+            await menSu.setItems();
         });
         menu.draggable({
             "containment": "window"
@@ -471,7 +462,9 @@ class System {
             sorted: null,
             variants: null
         };
-        this.items = null;
+        this.items = {
+            variants: {}
+        };
         this.eventHandler = async (data) => {
             const json = JSON.parse(data.data);
             if(json.exit) return $('.message-container').fadeIn();
@@ -587,6 +580,7 @@ class System {
     }
 
     async changeVariants(array, cosmeticType) {
+        this.items.variants[cosmeticType] = array;
         await this.sendRequest(`api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
             method: "PUT"
         });
@@ -612,7 +606,7 @@ class System {
             handler: null
         }
         this.cosmetics.sorted = {};
-        this.items = {};
+        this.items.variants = [];
         await this.sortCosmetics();
         await this.setDefaultItems();
         return this;
