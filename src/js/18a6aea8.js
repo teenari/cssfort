@@ -24,7 +24,7 @@ $(document).ready(async () => {
     })).json();
     $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
-        $('#loginwithDiscord').css('left', '34px');
+        $('#loginwithDiscord').css('left', '71px');
         $('#loginwithDiscord')[0].innerText = 'Continue';
         $('#loginwithDiscord').click(() => {
             window.location = 'https://teenari.github.io/webfort/dashboard';
