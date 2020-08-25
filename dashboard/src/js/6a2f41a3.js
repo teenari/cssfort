@@ -75,77 +75,77 @@ class Menu {
         await new Promise((resolve) => setTimeout(resolve, 250));
         $('#selectVariant').click(async () => {
             if(!menSu.system.items[cosmeticType.toLowerCase()].variants) return;
-            // let selectedVariants = [];
-            // await new Promise((resolve) => setTimeout(resolve, 1));
-            // await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
-            // addCloseButton(menu, 'MENU~cosmeticMenu~close');
-            // $('#search').keyup(() => {
-            //     const searchQuery = $('#search').val().toUpperCase();
-            //     for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
-            //         element.hidden = true;
-            //     }
-            //     for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
-            //         element.hidden = false;
-            //     }
-            // });
-            // for (const item of system.items[cosmeticType.toLowerCase()].variants) {
-            //     for (const variant of item.options) {
-            //         const div = document.createElement("div");
-            //         div.id = `VARIANT/${variant.tag}#${variant.name}`;
-            //         const images = document.createElement("div");
-            //         for (const src of [{
-            //             src: variant.image
-            //         }]) {
-            //             const IMAGE = document.createElement("IMG");
-            //             if(src.src) IMAGE.width = 100;
-            //             if(src.src) IMAGE.height = 100;
-            //             IMAGE.draggable = false;
-            //             if(src.src) IMAGE.src = src.src;
-            //             images.appendChild(IMAGE);
-            //         }
-            //         div.appendChild(images);
-            //         const name = document.createElement("div");
-            //         name.innerHTML = variant.name;
-            //         div.appendChild(name);
-            //         div.onclick = async () => {
-            //             if(selectedVariants.find((e) => {
-            //                 return e.image === variant.image;
-            //             })) {
-            //                 selectedVariants = selectedVariants.filter((e) => {
-            //                     return e.image !== variant.image;
-            //                 });
-            //                 $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 32}, 200);
-            //             }
-            //             else {
-            //                 selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
-            //                 $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200);
-            //             }
-            //         }
-            //         $('#cosmetics')[0].appendChild(div);
-            //     }
-            // }
-            // if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
-            //     $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
-            //     selectedVariants.push(variant);
-            // }
-            // $('#SaveVariant').click(async () => {
-            //     if(selectedVariants.length === 0) return;
-            //     if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
-            //     system.items.variants[cosmeticType] = selectedVariants;
-            //     const img = $(`#${id}`)[0].children[0];
-            //     if($(`#${id}`)[0].children[1].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[1].remove();
-            //     $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
-            //     const variants = [];
-            //     for (const variant of selectedVariants) {
-            //         variants.push({
-            //             "item": system.items[cosmeticType.toLowerCase()].type.backendValue,
-            //             "channel": variant.channel,
-            //             "variant": variant.tag
-            //         })
-            //     }
-            //     addVariant(variants, cosmeticType.toLowerCase());
-            //     await hideMenu(menu);
-            // });
+            let selectedVariants = [];
+            await new Promise((resolve) => setTimeout(resolve, 1));
+            await changeMenuHtml(menu, `<div class="cosmetic">PICK YOUR VARIANT<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+            addCloseButton(menu, 'MENU~cosmeticMenu~close');
+            $('#search').keyup(() => {
+                const searchQuery = $('#search').val().toUpperCase();
+                for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
+                    element.hidden = true;
+                }
+                for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
+                    element.hidden = false;
+                }
+            });
+            for (const item of system.items[cosmeticType.toLowerCase()].variants) {
+                for (const variant of item.options) {
+                    const div = document.createElement("div");
+                    div.id = `VARIANT/${variant.tag}#${variant.name}`;
+                    const images = document.createElement("div");
+                    for (const src of [{
+                        src: variant.image
+                    }]) {
+                        const IMAGE = document.createElement("IMG");
+                        if(src.src) IMAGE.width = 100;
+                        if(src.src) IMAGE.height = 100;
+                        IMAGE.draggable = false;
+                        if(src.src) IMAGE.src = src.src;
+                        images.appendChild(IMAGE);
+                    }
+                    div.appendChild(images);
+                    const name = document.createElement("div");
+                    name.innerHTML = variant.name;
+                    div.appendChild(name);
+                    div.onclick = async () => {
+                        if(selectedVariants.find((e) => {
+                            return e.image === variant.image;
+                        })) {
+                            selectedVariants = selectedVariants.filter((e) => {
+                                return e.image !== variant.image;
+                            });
+                            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 32}, 200);
+                        }
+                        else {
+                            selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
+                            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200);
+                        }
+                    }
+                    $('#cosmetics')[0].appendChild(div);
+                }
+            }
+            if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
+                $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
+                selectedVariants.push(variant);
+            }
+            $('#SaveVariant').click(async () => {
+                if(selectedVariants.length === 0) return;
+                if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
+                system.items.variants[cosmeticType] = selectedVariants;
+                const img = $(`#${id}`)[0].children[0];
+                if($(`#${id}`)[0].children[1].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[1].remove();
+                $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
+                const variants = [];
+                for (const variant of selectedVariants) {
+                    variants.push({
+                        "item": system.items[cosmeticType.toLowerCase()].type.backendValue,
+                        "channel": variant.channel,
+                        "variant": variant.tag
+                    })
+                }
+                addVariant(variants, cosmeticType.toLowerCase());
+                await hideMenu(menu);
+            });
         });
         $('#selectItem').click(async () => {
             let selectedItem;
