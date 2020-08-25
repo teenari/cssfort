@@ -1496,7 +1496,7 @@ $(document).ready(async () => {
             }
         );
         $(`#${account}`).click(() => {
-            $('#fortnite')[0].innerHTML = '<div id="items" style="background: black;border: 1px solid;padding: 10px;border-radius: 23px;width: 400px;height: 147px;"><div id="percent">%</div><div id="status" style="color: white;overflow: hidden;width: 400px;height: 40px;"></div>';
+            $('#fortnite')[0].innerHTML = '<div id="items" style="background: #f3af19;border: 1px solid black;padding: 10px;border-radius: 23px;width: 400px;height: 147px;"><div id="percent">%</div><div id="status" style="color: white;overflow: hidden;width: 400px;height: 40px;"></div>';
             displayName = account;
         });
     };
