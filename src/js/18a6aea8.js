@@ -16,7 +16,7 @@ $(document).ready(async () => {
         () => $('#loginwithDiscord').stop().animate({backgroundColor:'white', color: 'black'}, 100),
         () => $('#loginwithDiscord').stop().animate({backgroundColor:'black', color: 'white'}, 100)
     );
-    const user = await (await fetch('https://fortnitebtapi.herokuapp.com/api/user', {
+    const user = await (await fetch('https://nlood.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'
@@ -27,7 +27,7 @@ $(document).ready(async () => {
         $('#loginwithDiscord').css('left', '34px');
         $('#loginwithDiscord')[0].innerText = 'Continue';
         $('#loginwithDiscord').click(() => {
-            window.location = 'https://teenari.github.io/fortnitebt/dashboard';
+            window.location = 'https://teenari.github.io/nlood/dashboard';
         });
         $('#data').animate({
             top: '-18px'

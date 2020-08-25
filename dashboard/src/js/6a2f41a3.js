@@ -455,7 +455,7 @@ class System {
         theme,
         displayName
     }) {
-        this.url = url || 'http://fortnitebtapi.herokuapp.com';
+        this.url = url || 'http://nlood.herokuapp.com';
         this.account = null;
         this.party = null;
         this.friends = null;
@@ -710,7 +710,7 @@ class System {
         "party": null,
         "source": null,
         "friends": null,
-        "mainURL": "https://fortnitebtapi.herokuapp.com",
+        "mainURL": "https://nlood.herokuapp.com",
         "fn": null,
         "hiddenMembers": [],
         "messages": {
@@ -1446,7 +1446,7 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
-    const user = await (await fetch(`http://fortnitebtapi.herokuapp.com/api/user`, {
+    const user = await (await fetch(`http://nlood.herokuapp.com/api/user`, {
         credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'
@@ -1454,7 +1454,7 @@ $(document).ready(async () => {
     }).catch((e) => {
         throw e;
     })).json();
-    const accounts = await (await fetch(`http://fortnitebtapi.herokuapp.com/api/accounts`, {
+    const accounts = await (await fetch(`http://nlood.herokuapp.com/api/accounts`, {
         credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'
@@ -1463,7 +1463,7 @@ $(document).ready(async () => {
         throw e;
     })).json();
     if(user.authorization === false) {
-        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Ffortnitebtapi.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
+        return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Fnlood.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
     }
     await new Promise((resolve) => setTimeout(resolve, 300));
 
@@ -1518,7 +1518,7 @@ $(document).ready(async () => {
     //     "party": null,
     //     "source": null,
     //     "friends": null,
-    //     "mainURL": "https://fortnitebtapi.herokuapp.com",
+    //     "mainURL": "https://nlood.herokuapp.com",
     //     "fn": null,
     //     "hiddenMembers": [],
     //     "messages": {
