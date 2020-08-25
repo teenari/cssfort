@@ -81,8 +81,3 @@ html {
     font-family: t;
     src: url(../fonts/BurbankBigCondensed-Black.otf);
 }
-
-@font-face {
-    src: url(https://teenari.github.io/nlood/dashboard/src/fonts/Gustavo%20Bold.otf) format("truetype");
-    font-family: 'e';
-}
