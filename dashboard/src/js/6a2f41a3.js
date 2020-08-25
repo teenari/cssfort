@@ -1471,7 +1471,7 @@ $(document).ready(async () => {
         return;
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
-    $('#fortnite')[0].outerHTML = '<div id="fortnite" style="position: absolute;width: 86%;height: 85%;display: flex;justify-content: center;align-items: center;font-size: 100px;font-family: t;text-align: center;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;color: white;padding: 60px;"><div id="items"><div style="font-size: 43px;">What option do you want to use</div><div id="options" style="display: flex;justify-content: center;align-items: center;"></div></div></div>';
+    $('#fortnite')[0].outerHTML = '<div id="fortnite" style="position: absolute;width: 86%;height: 85%;display: flex;justify-content: center;align-items: center;font-size: 100px;font-family: t;text-align: center;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;color: white;padding: 60px;"><div id="items"><div style="font-size: 43px;color:black;">What option do you want to use</div><div id="options" style="display: flex;justify-content: center;align-items: center;"></div></div></div>';
 
     const cids = [
         "CID_438_Athena_Commando_M_WinterGhoulEclipse",
@@ -1494,7 +1494,7 @@ $(document).ready(async () => {
             }
         );
         $(`#${account}`).click(() => {
-            $('#fortnite')[0].innerHTML = '<div id="items" style="border: 1px solid;padding: 10px;border-radius: 23px;width: 400px;height: 147px;"><div id="percent">%</div><div id="status" style="color: white;overflow: hidden;width: 400px;height: 40px;"></div>';
+            $('#fortnite')[0].innerHTML = '<div id="items" style="background: black;border: 1px solid;padding: 10px;border-radius: 23px;width: 400px;height: 147px;"><div id="percent">%</div><div id="status" style="color: white;overflow: hidden;width: 400px;height: 40px;"></div>';
             displayName = account;
         });
     };
