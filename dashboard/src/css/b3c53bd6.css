@@ -413,15 +413,7 @@ html {
     color: white;
     white-space: nowrap;
     display: flex;
-    text-shadow: 2px 1px black, 0px 0px black;
-}
-
-#colorsA div {
-    width: 33.3333333333%;
-    position: relative;
-    top: -208px;
-    left: -208px;
-    height: 300%;
+    text-shadow: 2px 1px black;
 }
 
 #username img {
