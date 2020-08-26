@@ -453,7 +453,7 @@ class Menu {
                     }, 100);
                 }
             );
-            $(`#${member.id}.icon`).click(async () => {
+            const memberFunction = async () => {
                 this.createMenu(`MEMBER${member.id}`);
                 const menu = $(`[id="MENU~MEMBER${member.id}"]`);
                 let items = '';
@@ -480,7 +480,9 @@ class Menu {
                     "containment": "window"
                 });
                 this.addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
-            });
+            };
+            $(`#${member.id}.icon`)[0].onclick = async () => await memberFunction();
+            $(`#${member.id}.icon`).click(async () => await memberFunction());
             if(!this.system.party.meta['Default:RawSquadAssignments_j'].RawSquadAssignments.find(m => m.memberId === member.id) && !this.system.hiddenMembers.find(m => m.id === member.id)) {
                 $(`#${member.id}.icon`).animate({opacity: 0.5}, 500);
                 $(`#${member.id}.icon`)[0].innerHTML += '<div style="position: absolute;font-family: t;color: white;opacity: 0.8;top: 44px;">Player may be glitched.</div>';
