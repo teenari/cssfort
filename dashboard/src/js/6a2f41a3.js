@@ -682,7 +682,7 @@ class System {
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
         $('.members-container').fadeIn();
         $('.bar-container').fadeIn();
-        $('.bar-emote').click(this.menu.showEmoteMenu);
+        $('.bar-emote').click(async () => await this.menu.showEmoteMenu());
         await this.menu.setTimeLeft();
         await new Promise((resolve) => setTimeout(resolve, 300));
         $('#DATA').fadeIn();
