@@ -347,7 +347,7 @@ html {
     text-align: center;
     font-size: 19px;
     transform: skew(-7deg);
-    border: 1px solid white;
+    border: 1px solid #f3af19;
     left: 86%;
     cursor: pointer;
     color: white;
@@ -356,7 +356,7 @@ html {
 .bar-chat {
     position: absolute;
     background: black;
-    border: 1px solid white;
+    border: 1px solid #f3af19;
     padding: 9px;
     width: 211px;
     height: 16px;
