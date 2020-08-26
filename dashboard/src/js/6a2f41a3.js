@@ -65,6 +65,27 @@ class Menu {
         menu.remove();
     }
 
+    async setTimeLeft() {
+        const timerSettings = await this.system.getTimeLeft();
+        const timer = setInterval(() => {
+            const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
+            if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
+                timerSettings.seconds = 60;
+                timerSettings.minutes --;
+                document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+            }
+            if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
+                document.getElementById('30MIN').innerHTML = `None minutes left`;
+                clearInterval(timer);
+            }
+            if(timerSettings.seconds !== 0) {
+                timerSettings.seconds --;
+                document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+            }
+        }, 1000);
+        return this;
+    }
+
     async showMenu(cosmeticType, menSu) {
         menSu.createMenu('cosmeticMenu');
         const menu = $('[id="MENU~cosmeticMenu"]');
@@ -205,10 +226,6 @@ class Menu {
                await menSu.hideMenu(menu);
                await menSu.system.changeCosmeticItem(cosmeticType.toLowerCase(), selectedItem.id);
                await menSu.setItems();
-                // system.items[cosmeticType.toLowerCase()] = selectedItem;
-                // setItems(system.items, system.items);
-                // changeItem(selectedItem.id, cosmeticType.toLowerCase());
-                // system.items.variants[cosmeticType] = [];
             });
             menSu.addCloseButton(menu, 'MENU~cosmeticMenu~close');
         });
@@ -588,6 +605,7 @@ class System {
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
         $('.members-container').fadeIn();
+        await this.menu.setTimeLeft();
         await new Promise((resolve) => setTimeout(resolve, 300));
         $('#DATA').fadeIn();
         $('#fortnite').css('padding', '0px');
@@ -694,13 +712,6 @@ class System {
             if(!t) return check(data, main);
             return t;
         }
-        // if(this.menu.theme.background !== 'black&white') {
-        //     system.items.default = {
-        //         "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 1],
-        //         "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 1],
-        //         "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 1],
-        //     }
-        // }
         if(this.menu.theme.background === 'black&white') {
             for (const type of ['outfit', 'backpack', 'pickaxe']) {
                 await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]).id);
@@ -737,15 +748,6 @@ class System {
 }
 
 let system = null;
-
-function getParm(name) { // from https://community.esri.com/thread/33634
-    const url = location.href;
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(url);
-    return results == null ? null : results[1];
-}
 
 async function showPartyMenu(menu) {
     await changeMenuHtml(menu, `<div class="cosmetic">PARTY<br><div style="font-size: 20px; margin: 10px;"><div id="changeLTM" class="clickHereButton" style="">Change Playlist</div></div><div style="margin: 10px;font-size: 20px;">CREATED AT: ${system.party.createdAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${system.party.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: CAPTAIN</div></div>`);
@@ -1033,23 +1035,6 @@ $(document).ready(async () => {
         displayName
     });
     await system.authorize();
-    // const timerSettings = await (await fetch(`${system.mainURL}/api/account/time`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    // const timer = setInterval(() => {
-    //     const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
-    //     if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
-    //         timerSettings.seconds = 60;
-    //         timerSettings.minutes --;
-    //         document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-    //     }
-    //     if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
-    //         document.getElementById('30MIN').innerHTML = `None minutes left`;
-    //         clearInterval(timer);
-    //     }
-    //     if(timerSettings.seconds !== 0) {
-    //         timerSettings.seconds --;
-    //         document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-    //     }
-    // }, 1000);
     // $('#InformationButton').click(async () => {
     //     createMenu('information');
     //     const menu = $('[id="MENU~information"]');
