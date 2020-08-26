@@ -421,8 +421,7 @@ html {
     top: -2vh;
 }
 
-#copyright {
-    color: red;
+.copyright-container {
     color: #e8e8e8;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
@@ -436,6 +435,16 @@ html {
     width: 60%;
     position: absolute;
     padding: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#copyright {
+    background: #f3af19;
+    padding: 12px;
+    border: 1px solid black;
+    box-shadow: -1px -1px #f3af19, 1px 1px #f3af19, 1px -1px #f3af19, -1px 1px #f3af19;
 }
 
 #status {
