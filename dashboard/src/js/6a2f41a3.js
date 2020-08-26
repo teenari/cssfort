@@ -691,6 +691,7 @@ class System {
         await new Promise((resolve) => setTimeout(resolve, 300));
         $('#DATA').fadeIn();
         $('#fortnite').css('padding', '0px');
+        $('.bar-container').fadeIn();
         return this;
     }
 
