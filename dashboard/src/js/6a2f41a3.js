@@ -307,11 +307,19 @@ class Menu {
         return this;
     }
 
+    getImages(AthenaCosmeticLoadout) {
+        return {
+            character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`,
+            backpack: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.backpackDef).replace(/'/g, '')}/icon.png`,
+            pickaxe: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.pickaxeDef).replace(/'/g, '')}/icon.png`
+        };
+    }
+
     reloadMembers() {
         const members = this.system.party.members;
         $('#members').empty();
         for (const member of members) {
-            const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
+            const images = this.getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
             $('#members')[0].innerHTML += `<div id="${member.id}" class="icon"><img width="120" height="120" draggable="false" src="${images.character}"><img width="30" height="30" draggable="false" src="${this.convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr, true)}" style="left: 84px;top: 6px;background: black;border-radius: 9px;padding: 2px;border-color: white;"><div>${member.displayName}</div></div>`;
             $(`#${member.id}.icon`).hover(
                 () => {
@@ -466,6 +474,9 @@ class System {
             variants: {}
         };
         this.eventHandler = async (data) => {
+            const last = (character, data) => {
+                return data.substring(data.lastIndexOf(character) + 1, data.length);
+            }
             const json = JSON.parse(data.data);
             if(json.exit) return $('.message-container').fadeIn();
             if(json.event) {
@@ -698,74 +709,7 @@ class System {
     }
 }
 
-/**
- *     system = {
-        "account": null,
-        "party": null,
-        "source": null,
-        "friends": null,
-        "mainURL": "https://webfort.herokuapp.com",
-        "fn": null,
-        "hiddenMembers": [],
-        "messages": {
-            "party": [],
-            "friends": {},
-            "handler": null
-        },
-        "settings": {
-            "colorScheme": {
-                "Default": {
-                    "back": './src/images/schemes/black/back.png',
-                    "faceplate": './src/images/schemes/black/faceplate.png'
-                },
-                "faceplate": './src/images/schemes/a77ecea5.png'
-            },
-            "currentScheme": 'Default'
-        },
-        "platforms": {
-            "benbot": {
-                "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
-                "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
-                "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
-                "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
-                "XBL": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
-                "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
-                "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
-            }
-        },
-        "matching": {
-            "skins": [
-                "CID_438_Athena_Commando_M_WinterGhoulEclipse",
-                "CID_439_Athena_Commando_F_SkullBriteEclipse",
-                "CID_437_Athena_Commando_F_AztecEclipse",
-                "CID_159_Athena_Commando_M_GumshoeDark"
-            ],
-            "backpacks": [
-                "BID_287_AztecFemaleEclipse",
-                "BID_286_WinterGhoulMaleEclipse"
-            ],
-            "pickaxes": [
-                "Pickaxe_ID_164_DragonNinja"
-            ]
-        },
-        "items": {
-            "outfit": null,
-            "backpack": null,
-            "pickaxe": null,
-            "conversions": {},
-            "default": {},
-            "variants": {},
-            "cosmetics": {},
-            "sort": {}
-        }
-    }
- */
-
-console.image('https://teenari.github.io/fortnitebt/src/images/74d1fa16.png');
-
 let system = null;
-
-let LoadingText = '';
 
 function getParm(name) { // from https://community.esri.com/thread/33634
     const url = location.href;
@@ -774,106 +718,6 @@ function getParm(name) { // from https://community.esri.com/thread/33634
     var regex = new RegExp(regexS);
     var results = regex.exec(url);
     return results == null ? null : results[1];
-}
-
-function changeColorScheme(scheme) {
-    if(!system.settings.colorScheme[scheme]) scheme = 'Default';
-    Cookies.set('colorScheme', scheme);
-    system.settings.currentScheme = scheme;
-    if(system.settings.currentScheme === 'Default') {
-        $('html').removeClass('backgroundImage gradient');
-        $('html').addClass('defaultBackground');
-        $('#colorsA').show();
-    }
-    if(system.settings.currentScheme === 'Party Royale') {
-        $('#colorsA').hide();
-        $('html').removeClass('backgroundImage gradient defaultBackground');
-        $('html').addClass('backgroundImage gradient');
-    }
-    for (const item of $('img[src*="images/schemes"]')) {
-        if(item.src.includes('faceplate.png')) item.src = system.settings.colorScheme[system.settings.currentScheme].faceplate;
-        if(item.src.includes('back.png')) item.src = system.settings.colorScheme[system.settings.currentScheme].back;
-    }
-}
-
-function setPlatformIcon(type) {
-    if($('#platformICON')[0]) $('#platformICON').remove();
-    $('#username')[0].innerHTML += `<img id="platformICON" width="50" height="50" src="${system.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
-}
-
-async function changeMenuHtml(menu, html) {
-    menu[0].innerHTML = '<div class="cosmetic"><div style="width: 200px;height: 250px;align-items: center;display: inline-flex;position: relative;text-align: center;align-content: center;left: 50px;">LOADING</div></div>';
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    menu[0].innerHTML = html;
-}
-
-function convertPlatform(platform, url) {
-    let ENUMNAME;
-    switch(platform) {
-        case 'WIN': {
-            ENUMNAME = 'PC';
-        } break;
-
-        case 'MAC': {
-            ENUMNAME = 'PC';
-        } break;
-
-        case 'AND': {
-            ENUMNAME = 'MOBILE';
-        } break;
-
-        case 'IOS': {
-            ENUMNAME = 'MOBILE';
-        } break;
-
-        case 'AND': {
-            ENUMNAME = 'MOBILE';
-        } break;
-
-        case 'SWT': {
-            ENUMNAME = 'SWITCH';
-        } break;
-
-        default: {
-            if(system.platforms.benbot[platform]) {
-                ENUMNAME = platform;
-                break;
-            }
-            ENUMNAME = 'EARTH';
-        } break;
-    }
-
-    return url ? system.platforms.benbot[ENUMNAME] : ENUMNAME;
-}
-
-async function hideMenu(menu) {
-    menu.fadeOut(250);
-    await new Promise((resolve) => setTimeout(resolve, 250));
-    menu.remove();
-}
-
-function createMenu(purpose) {
-    if(document.getElementById(`MENU~${purpose}`)) document.getElementById(`MENU~${purpose}`).remove();
-    const menu = document.createElement('div');
-    menu.classList.add('menu');
-    menu.id = `MENU~${purpose}`;
-    menu.hidden = true;
-    document.getElementById('menus').appendChild(menu);
-    return menu;
-}
-
-function addCloseButton(menu, id) {
-    const div = document.createElement('div');
-    div.setAttribute("style", "font-size: 18px; background-color: rgb(0, 0, 0); border-radius: 4px; color: rgb(255, 255, 255); padding: 11px; cursor: pointer; text-align: center; margin: 12px; position: relative; border: 1px solid;");
-    div.id = id;
-    div.innerHTML = 'Close Menu';
-    [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
-    $(`[id="${id}"]`).click(async () => await hideMenu(menu));
-    $(`[id="${id}"]`).unbind('hover').hover(
-        () => $(`[id="${id}"]`).stop().animate({borderRadius: 10}, 100),
-        () => $(`[id="${id}"]`).stop().animate({borderRadius: 4}, 100)
-    );
-    return $(`[id="${id}"]`);
 }
 
 async function showPartyMenu(menu) {
@@ -905,299 +749,6 @@ async function showPartyMenu(menu) {
             $('#cosmetics')[0].appendChild(div);
         }
     });
-}
-
-async function showMenu(cosmeticType) {
-    createMenu('cosmeticMenu');
-    const menu = $('[id="MENU~cosmeticMenu"]');
-    const id = system.items[cosmeticType.toLowerCase()].id;
-    $(document).unbind('click');
-    menu[0].innerHTML = `<div class="cosmetic">${cosmeticType}<br><div style="font-size: 20px; margin: 10px;">Select item by icon<div id="selectItem" class="clickHereButton">Click Here</div></div><div style="font-size: 20px; margin: 0px;">${id}</div><textarea placeholder="Item ID Here" id="cosmeticID"></textarea><div class="clickHereButton" id="SaveID" style="padding: 1px;font-size: 20px;">Save</div><div style="font-size: 20px; margin: 10px;">Select Variant by icon</div><div id="selectVariant" ${!Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'disabled' : ''} class="clickHereButton" style="font-size: 22px;margin: -2px;">${Array.isArray(system.items[cosmeticType.toLowerCase()].variants) ? 'Click Here' : 'Item does not have variant option'}</div></div>`;
-    menu.fadeIn(250);
-    await new Promise((resolve) => setTimeout(resolve, 250));
-    $('#selectVariant').click(async () => {
-        if(!system.items[cosmeticType.toLowerCase()].variants) return;
-        let selectedVariants = [];
-        await new Promise((resolve) => setTimeout(resolve, 1));
-        await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR VARIANT${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="background: none;color: #f3af19;margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
-        addCloseButton(menu, 'MENU~cosmeticMenu~close');
-        $('#search').keyup(() => {
-            const searchQuery = $('#search').val().toUpperCase();
-            for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
-                element.hidden = true;
-            }
-            for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
-                element.hidden = false;
-            }
-        });
-        for (const item of system.items[cosmeticType.toLowerCase()].variants) {
-            for (const variant of item.options) {
-                const div = document.createElement("div");
-                div.id = `VARIANT/${variant.tag}#${variant.name}`;
-                const images = document.createElement("div");
-                for (const src of [{
-                    src: variant.image
-                }]) {
-                    const IMAGE = document.createElement("IMG");
-                    if(src.src) IMAGE.width = 100;
-                    if(src.src) IMAGE.height = 100;
-                    IMAGE.draggable = false;
-                    if(src.src) IMAGE.src = src.src;
-                    images.appendChild(IMAGE);
-                }
-                div.appendChild(images);
-                const name = document.createElement("div");
-                name.innerHTML = variant.name;
-                div.appendChild(name);
-                div.onclick = async () => {
-                    if(selectedVariants.find((e) => {
-                        return e.image === variant.image;
-                    })) {
-                        selectedVariants = selectedVariants.filter((e) => {
-                            return e.image !== variant.image;
-                        });
-                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 32}, 200);
-                    }
-                    else {
-                        selectedVariants.push({channel: item.channel, tag: variant.tag, name: variant.name, image: variant.image});
-                        $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200);
-                    }
-                }
-                $('#cosmetics')[0].appendChild(div);
-            }
-        }
-        if(system.items.variants[cosmeticType]) for (const variant of system.items.variants[cosmeticType]) {
-            $(`[id="VARIANT/${variant.tag}#${variant.name}"]`).children().eq(0).animate({borderRadius: 3}, 200)
-            selectedVariants.push(variant);
-        }
-        $('#SaveVariant').click(async () => {
-            if(selectedVariants.length === 0) return;
-            if(!system.items.variants[cosmeticType]) system.items.variants[cosmeticType] = [];
-            system.items.variants[cosmeticType] = selectedVariants;
-            const img = $(`#${id}`)[0].children[0];
-            if($(`#${id}`)[0].children[1].outerHTML.includes('opacity: 0.7')) $(`#${id}`)[0].children[1].remove();
-            $(`#${id}`)[0].children[0].outerHTML += `<img width="${img.width}" height="${img.height}" draggable="false" src="${selectedVariants[selectedVariants.length - 1].image}" style="cursor: pointer;position: absolute;opacity: 0.7;top: ${img.style.top};left: ${img.style.left};">`;
-            const variants = [];
-            for (const variant of selectedVariants) {
-                variants.push({
-                    "item": system.items[cosmeticType.toLowerCase()].type.backendValue,
-                    "channel": variant.channel,
-                    "variant": variant.tag
-                })
-            }
-            addVariant(variants, cosmeticType.toLowerCase());
-            await hideMenu(menu);
-        });
-    });
-    $('#selectItem').click(async () => {
-        let selectedItem;
-        await new Promise((resolve) => setTimeout(resolve, 1));
-        await changeMenuHtml(menu, `<div class="cosmetic">${system.settings.currentScheme === 'partyroyale' ? '<div class="textBackground gradient">' : ''}PICK YOUR ${cosmeticType}${system.settings.currentScheme === 'partyroyale' ? '</div>' : '<br>'}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
-        $('#search').keyup(() => {
-            const searchQuery = $('#search').val().toUpperCase();
-            for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
-                element.hidden = true;
-            }
-            for (const element of [...$('#cosmetics').children()].filter(e => e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
-                element.hidden = false;
-            }
-        });
-        for (const item of system.items.cosmetics[cosmeticType.toLowerCase()]) {
-            const div = document.createElement("div");
-            div.id = `ITEM/${item.id}`;
-            const images = document.createElement("div");
-            for (const src of [{
-                src: item.images.icon
-            }]) {
-                const IMAGE = document.createElement("IMG");
-                if(src.src) IMAGE.width = 100;
-                if(src.src) IMAGE.height = 100;
-                IMAGE.draggable = false;
-                if(src.src) IMAGE.src = src.src;
-                images.appendChild(IMAGE);
-            }
-            div.appendChild(images);
-            const name = document.createElement("div");
-            name.innerHTML = item.name;
-            div.appendChild(name);
-            $('#cosmetics')[0].appendChild(div);
-            $(`[id="ITEM/${item.id}"]`).hover(
-                () => {
-                    $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 3}, 200);
-                },
-                () => {
-                    $(`[id="ITEM/${item.id}"]`).animate({borderRadius: 17}, 200);
-                }
-            )
-            $(`[id="ITEM/${item.id}"]`)[0].onclick = async (e) => {
-                if(selectedItem === item) return;
-                if(selectedItem && selectedItem !== item) {
-                    $('#cosmetics').children().filter(function() {
-                        return this.innerHTML.includes('border-radius: 3px');
-                    }).children().filter(function() {
-                        return this.outerHTML.includes('border-radius: 3px');
-                    }).animate({borderRadius: 32}, 200);
-                }
-                $(`[id="ITEM/${item.id}"]`).children().eq(0).animate({borderRadius: 3}, 200);
-                selectedItem = item;
-            };
-        }
-        $('#SaveAvatar').click(async () => {
-           if(!selectedItem) return;
-            system.items[cosmeticType.toLowerCase()] = selectedItem;
-            setItems(system.items, system.items);
-            changeItem(selectedItem.id, cosmeticType.toLowerCase());
-            system.items.variants[cosmeticType] = [];
-            await hideMenu(menu);
-        });
-        addCloseButton(menu, 'MENU~cosmeticMenu~close');
-    });
-    $('#SaveID').click(async () => {
-        if($('[id="cosmeticID"]').val().trim() === "" || !system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val())) return;
-        const item = system.items.cosmetics.find(e => e.id === $('[id="cosmeticID"]').val());
-        system.items[cosmeticType.toLowerCase()] = item;
-        const img = $(`#${id}`)[0].children[0];
-        $(`#${id}`)[0].id = $('[id="cosmeticID"]').val();
-        $(`#${$('[id="cosmeticID"]').val()}`)[0].innerHTML = '';
-        for (const image of createImage(item, img.style.top.split('px')[0], img.style.left.split('px')[0], 'absolute', img.width, img.height)) {
-            $(`#${$('[id="cosmeticID"]').val()}`).append(image);
-            image.onclick = async () => {
-                await showMenu(item.type.value.toUpperCase());
-            }
-        }
-        await hideMenu(menu);
-    });
-    menu.draggable({
-        "containment": "window"
-    });
-    addCloseButton(menu, 'MENU~cosmeticMenu~close');
-}
-
-function setLoadingText(text, doNot) {
-    LoadingText = text;
-    let dots = 0;
-    $('#status').html(text);
-    if(!doNot) {
-        const inv = setInterval(() => {
-            if(LoadingText !== text) clearInterval(inv);
-            dots += 1;
-            if(dots === 4) dots = 0;
-            $('#status').html(text + '.'.repeat(dots));
-        }, 500);
-    }
-}
-
-function stopText() {
-    LoadingText = ' '.repeat(1000);
-}
-
-function createImage(item, top, left, position, width=100, height=100, right=null, id=null, noExtra=false, noExtras) {
-    const IMAGES = [];
-
-    for (const src of [
-        ...noExtras ? [system.settings.colorScheme[system.settings.currentScheme].back] : [], item.images.icon, ...noExtras ? [system.settings.colorScheme[system.settings.currentScheme].faceplate] : []]) {
-        const IMAGE = document.createElement("IMG");
-        IMAGE.width = width;
-        IMAGE.height = height;
-        IMAGE.draggable = false;
-        IMAGE.src = src;
-        if(!noExtra) {
-            if(position) IMAGE.style.position = position;
-            if(top) IMAGE.style.top = `${top}px`;
-            if(left) IMAGE.style.left = `${left}px`;
-            if(right) IMAGE.style.left = `${right}px`;
-            IMAGE.style.cursor = 'pointer';
-        }
-        if(id) IMAGE.id = item.id;
-        IMAGES.push(IMAGE);
-    }
-
-    return IMAGES;
-}
-
-async function createImageInElement(element, hidden, argumen, callback) {
-    const html = createImage(...argumen);
-    const div = document.createElement('div');
-    div.id = argumen[0].id;
-    div.hidden = hidden;
-    div.innerHTML = '';
-    div.classList.add('icon');
-    element.appendChild(div);
-    $(`#${argumen[0].id}.icon`).hover(
-        () => {
-            $(`#${argumen[0].id}.icon`).animate({
-                borderRadius: 3
-            }, 100);
-        },
-        () => {
-            $(`#${argumen[0].id}.icon`).animate({
-                borderRadius: 8
-            }, 100);
-        }
-    )
-    for (const IMAGE of html) {
-        div.appendChild(IMAGE);
-    }
-    const text = document.createElement('div');
-    text.innerText = argumen[0].type.value.toUpperCase();
-    div.appendChild(text);
-    div.onclick = callback || async function() {
-        await showMenu(argumen[0].type.value.toUpperCase());
-    }
-}
-
-function changeItem(id, cosmeticType) {
-    if(cosmeticType.toLowerCase() === 'banner') return;
-    fetch(`${system.mainURL}/api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {credentials: 'include', method: "PUT", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
-}
-
-function addVariant(array, cosmeticType) {
-    fetch(`${system.mainURL}/api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
-        credentials: 'include',
-        method: "PUT",
-        headers: {
-            'Access-Control-Allow-Origin': "https://teenari.github.io"
-        }
-    });
-}
-
-function setDefaultItems() {
-    const check = (data, main) => {
-        const t = main.find(e => e.id === data[(Math.floor(Math.random() * data.length - 1) + 1)]);
-        if(!t) return check(data, main);
-        return t;
-    }
-    if(system.settings.currentScheme !== 'Default') system.items.default = {
-        "outfit": system.items.cosmetics.outfit[Math.floor(Math.random() * system.items.cosmetics.outfit.length - 1) + 1],
-        "backpack": system.items.cosmetics.backpack[Math.floor(Math.random() * system.items.cosmetics.backpack.length - 1) + 1],
-        "pickaxe": system.items.cosmetics.pickaxe[Math.floor(Math.random() * system.items.cosmetics.pickaxe.length - 1) + 1],
-    }
-    if(system.settings.currentScheme === 'Default') system.items.default = {
-        "outfit": check(system.matching.skins, system.items.cosmetics.outfit),
-        "backpack": check(system.matching.backpacks, system.items.cosmetics.backpack),
-        "pickaxe": check(system.matching.pickaxes, system.items.cosmetics.pickaxe)
-    }
-    return system.items.default;
-}
-
-function sortItems() {
-    for (const value of system.items.cosmetics) {
-        if(!system.items.sort[value.type.value]) system.items.sort[value.type.value] = [];
-        system.items.sort[value.type.value].push(value);
-    }
-    return system.items.cosmetics;
-}
-
-function categorizeItems(setDefaultItem) {
-    for (const item of system.items.cosmetics) {
-        system.items.conversions[item.type.value] = item.path.split('/Cosmetics/')[1] ? item.path.split('/Cosmetics/')[1].split('/')[0] : null;
-        if(system.items.cosmetics[item.type.value]) continue;
-        system.items.cosmetics[item.type.value] = system.items.cosmetics.filter(e => e.type.value === item.type.value);
-    }
-    if(setDefaultItem) {
-        setDefaultItems();
-    }
-    return system.items.cosmetics;
 }
 
 async function removeFriend(id) {
