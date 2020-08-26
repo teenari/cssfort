@@ -77,7 +77,7 @@ class Menu {
             if(!menSu.system.items[cosmeticType.toLowerCase()].variants) return;
             let selectedVariants = [];
             await new Promise((resolve) => setTimeout(resolve, 1));
-            await changeMenuHtml(menu, `<div class="cosmetic">PICK YOUR VARIANT<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+            await menSu.changeMenu(menu, `<div class="cosmetic">PICK YOUR VARIANT<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
             addCloseButton(menu, 'MENU~cosmeticMenu~close');
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val().toUpperCase();
@@ -150,7 +150,7 @@ class Menu {
         $('#selectItem').click(async () => {
             let selectedItem;
             await new Promise((resolve) => setTimeout(resolve, 1));
-            await changeMenuHtml(menu, `<div class="cosmetic">PICK YOUR ${cosmeticType}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="background: none;color: #f3af19;margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
+            await menSu.changeMenu(menu, `<div class="cosmetic">PICK YOUR ${cosmeticType}<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="background: none;color: #f3af19;margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveAvatar" style="padding: 1px;font-size: 21px;">SAVE</div></div>`);
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val().toUpperCase();
                 for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
@@ -222,6 +222,30 @@ class Menu {
             "containment": "window"
         });
         addCloseButton(menu, 'MENU~cosmeticMenu~close');
+    }
+
+    createImage(item, top, left, position, width=100, height=100, right=null, id=null, noExtra=false, noExtras) {
+        const IMAGES = [];
+    
+        for (const src of [
+            ...noExtras ? [system.settings.colorScheme[system.settings.currentScheme].back] : [], item.images.icon, ...noExtras ? [system.settings.colorScheme[system.settings.currentScheme].faceplate] : []]) {
+            const IMAGE = document.createElement("IMG");
+            IMAGE.width = width;
+            IMAGE.height = height;
+            IMAGE.draggable = false;
+            IMAGE.src = src;
+            if(!noExtra) {
+                if(position) IMAGE.style.position = position;
+                if(top) IMAGE.style.top = `${top}px`;
+                if(left) IMAGE.style.left = `${left}px`;
+                if(right) IMAGE.style.left = `${right}px`;
+                IMAGE.style.cursor = 'pointer';
+            }
+            if(id) IMAGE.id = item.id;
+            IMAGES.push(IMAGE);
+        }
+    
+        return IMAGES;
     }
 
     async createImageInElement(element, hidden, argumen, callback) {
@@ -856,18 +880,6 @@ async function setItems(items, itemss) {
     return true;
 }
 
-function last(character, data) {
-    return data.substring(data.lastIndexOf(character) + 1, data.length);
-}
-
-function getImages(AthenaCosmeticLoadout) {
-    return {
-        character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`,
-        backpack: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.backpackDef).replace(/'/g, '')}/icon.png`,
-        pickaxe: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.pickaxeDef).replace(/'/g, '')}/icon.png`
-    };
-}
-
 function kickPlayer(id) {
     fetch(`${system.mainURL}/api/account/party/kick?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
 }
@@ -882,48 +894,6 @@ function showPlayer(id) {
     $(`#${id}`).animate({opacity: 1}, 300);
     fetch(`${system.mainURL}/api/account/party/member/show?id=${id}`, {credentials: 'include', method: "GET", headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}});
     system.hiddenMembers = system.hiddenMembers.filter(m => m !== id);
-}
-
-function setMembers() {
-    const members = system.party.members;
-    $('#members').html(null);
-    for (const member of members) {
-        const images = getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
-        $('#members')[0].innerHTML += `<div id="${member.id}" class="icon"><img width="120" height="120" draggable="false" src="${images.character}"><img width="30" height="30" draggable="false" src="${convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr, true)}" style="left: 84px;top: 6px;background: black;border-radius: 9px;padding: 2px;border-color: white;"><div>${member.displayName}</div></div>`;
-        $(`#${member.id}.icon`).hover(
-            () => {
-                $(`#${member.id}.icon`).animate({
-                    borderRadius: 10
-                }, 100);
-            },
-            () => {
-                $(`#${member.id}.icon`).animate({
-                    borderRadius: 18
-                }, 100);
-            }
-        );
-        $(`#${member.id}.icon`).click(async () => {
-            $(document).unbind('click');
-            createMenu(`MEMBER${member.id}`);
-            const menu = $(`[id="MENU~MEMBER${member.id}"]`);
-            let items = '';
-            for (const key of Object.keys(images)) {
-                const value = images[key];
-                items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`
-            }
-            menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div><div style="display: flex;"><div id="kickPlayer" class="clickHereButton" style="${member.id === system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="hidePlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">Hide Player</div></div></div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
-            menu.fadeIn(250);
-            $('#kickPlayer').click(async () => {
-                if(member.id === system.account.id) return;
-                kickPlayer(member.id);
-                await hideMenu(menu);
-            });
-            menu.draggable({
-                "containment": "window"
-            });
-            addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
-        });
-    }
 }
 
 function sendMessage(id, message) {
@@ -1060,98 +1030,6 @@ $(document).ready(async () => {
         displayName
     });
     await system.authorize();
-    // system = {
-    //     "account": null,
-    //     "party": null,
-    //     "source": null,
-    //     "friends": null,
-    //     "mainURL": "https://webfort.herokuapp.com",
-    //     "fn": null,
-    //     "hiddenMembers": [],
-    //     "messages": {
-    //         "party": [],
-    //         "friends": {},
-    //         "handler": null
-    //     },
-    //     "settings": {
-    //         "colorScheme": {
-    //             "Default": {
-    //                 "back": './src/images/schemes/black/back.png',
-    //                 "faceplate": './src/images/schemes/black/faceplate.png'
-    //             },
-    //             "faceplate": './src/images/schemes/a77ecea5.png'
-    //         },
-    //         "currentScheme": 'Default'
-    //     },
-    //     "platforms": {
-    //         "benbot": {
-    //             "PC": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
-    //             "CONSOLE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
-    //             "EARTH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
-    //             "MOBILE": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
-    //             "XBL": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
-    //             "PSN": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
-    //             "SWITCH": "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
-    //         }
-    //     },
-    //     "matching": {
-    //         "skins": [
-    //             "CID_438_Athena_Commando_M_WinterGhoulEclipse",
-    //             "CID_439_Athena_Commando_F_SkullBriteEclipse",
-    //             "CID_437_Athena_Commando_F_AztecEclipse",
-    //             "CID_159_Athena_Commando_M_GumshoeDark"
-    //         ],
-    //         "backpacks": [
-    //             "BID_287_AztecFemaleEclipse",
-    //             "BID_286_WinterGhoulMaleEclipse"
-    //         ],
-    //         "pickaxes": [
-    //             "Pickaxe_ID_164_DragonNinja"
-    //         ]
-    //     },
-    //     "items": {
-    //         "outfit": null,
-    //         "backpack": null,
-    //         "pickaxe": null,
-    //         "conversions": {},
-    //         "default": {},
-    //         "variants": {},
-    //         "cosmetics": {},
-    //         "sort": {}
-    //     }
-    // }
-    // if(getParm('mainURL')) system.mainURL = getParm('mainURL');
-
-    // await system.authorize();
-
-    // if(!(await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).displayName) {
-    //     switch((await fetch(`${system.mainURL}/api/account/`, {method: 'POST', credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).statusCode) {
-    //         case 529: {
-    //             console.log('DEBUG To much accounts used has been set.');
-    //             return setLoadingText('All accounts have been used.<br>Please try again later.', true);
-    //         };
-    //     }
-    // }
-
-    // system.source = new EventSource(`${system.mainURL}/api/account/authorize?auth=${(await (await fetch(`${system.mainURL}/api/auth`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json()).auth}`);
-    // system.source.onerror = (e) => {
-    //     return setLoadingText('Error happend, cannot access the error.');
-    // }
-
-    // await new Promise((resolve) => {
-    //     system.source.onmessage = (data) => {
-    //         const json = JSON.parse(data.data);
-    //         if(json.completed) return resolve();
-    //         setLoadingText(json.message);
-    //     }
-    // });
-    // system.source.onmessage = (data) => {
-    // }
-    // system.account = await (await fetch(`${system.mainURL}/api/account/`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    // system.party = await (await fetch(`${system.mainURL}/api/account/party`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    // system.friends = await (await fetch(`${system.mainURL}/api/account/friends`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-    // system.fn = await (await fetch(`${system.mainURL}/api/account/fn/content`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
-
     // const timerSettings = await (await fetch(`${system.mainURL}/api/account/time`, {credentials: 'include', headers: {'Access-Control-Allow-Origin': "https://teenari.github.io"}})).json();
     // const timer = setInterval(() => {
     //     const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
@@ -1169,17 +1047,6 @@ $(document).ready(async () => {
     //         document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
     //     }
     // }, 1000);
-    // $('#username')[0].innerHTML = `${system.account.displayName}`;
-    // setPlatformIcon('PC');
-    // setLoadingText('Loading account');
-    // setLoadingText('Loading cosmetics');
-    // const cos = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
-    // system.items.cosmetics = cos;
-    // setLoadingText('Categorizing cosmetics');
-    // categorizeItems(true);
-    // sortItems();
-    // setLoadingText('Creating default images');
-    // await setItems(system.items.default, system.items);
     // $('#InformationButton').click(async () => {
     //     createMenu('information');
     //     const menu = $('[id="MENU~information"]');
@@ -1205,5 +1072,4 @@ $(document).ready(async () => {
     //         }, 100);
     //     }
     // );
-    // setMembers();
 });
