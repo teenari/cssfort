@@ -78,7 +78,7 @@ class Menu {
             let selectedVariants = [];
             await new Promise((resolve) => setTimeout(resolve, 1));
             await menSu.changeMenu(menu, `<div class="cosmetic">PICK YOUR VARIANT<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><h1 style="border: 1px solid black;margin: 0px;"></h1><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
-            addCloseButton(menu, 'MENU~cosmeticMenu~close');
+            menSu.addCloseButton(menu, 'MENU~cosmeticMenu~close');
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val().toUpperCase();
                 for (const element of [...$('#cosmetics').children()].filter(e => !e.children[1].innerText.toUpperCase().startsWith(searchQuery))) {
@@ -210,7 +210,7 @@ class Menu {
                 // changeItem(selectedItem.id, cosmeticType.toLowerCase());
                 // system.items.variants[cosmeticType] = [];
             });
-            addCloseButton(menu, 'MENU~cosmeticMenu~close');
+            menSu.addCloseButton(menu, 'MENU~cosmeticMenu~close');
         });
         $('#SaveID').click(async () => {
             if($('[id="cosmeticID"]').val().trim() === "" || !menSu.system.cosmetics.sorted[cosmeticType].find(e => e.id === $('[id="cosmeticID"]').val())) return;
@@ -221,7 +221,7 @@ class Menu {
         menu.draggable({
             "containment": "window"
         });
-        addCloseButton(menu, 'MENU~cosmeticMenu~close');
+        menSu.addCloseButton(menu, 'MENU~cosmeticMenu~close');
     }
 
     createImage(item, top, left, position, width=100, height=100, right=null, id=null, noExtra=false, noExtras) {
