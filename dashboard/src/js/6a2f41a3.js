@@ -687,11 +687,11 @@ class System {
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
         $('.members-container').fadeIn();
+        $('.bar-container').fadeIn();
         await this.menu.setTimeLeft();
         await new Promise((resolve) => setTimeout(resolve, 300));
         $('#DATA').fadeIn();
         $('#fortnite').css('padding', '0px');
-        $('.bar-container').fadeIn();
         return this;
     }
 
