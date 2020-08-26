@@ -249,7 +249,7 @@ class Menu {
     }
 
     async createImageInElement(element, hidden, argumen, callback) {
-        const html = createImage(...argumen);
+        const html = this.createImage(...argumen);
         const div = document.createElement('div');
         div.id = argumen[0].id;
         div.hidden = hidden;
