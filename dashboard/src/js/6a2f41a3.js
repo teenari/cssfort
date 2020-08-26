@@ -332,6 +332,9 @@ class Menu {
     }
 
     getImages(AthenaCosmeticLoadout) {
+        const last = (character, data) => {
+            return data.substring(data.lastIndexOf(character) + 1, data.length);
+        }
         return {
             character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`,
             backpack: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.backpackDef).replace(/'/g, '')}/icon.png`,
