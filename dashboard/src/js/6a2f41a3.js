@@ -385,9 +385,9 @@ class Menu {
                     await this.hideMenu(menu);
                     await this.system.changeCosmeticItem('emote', selectedItem.id);
                 });
-                addCloseButton(menu, 'MENU~cosmeticMenu~close');
+                this.addCloseButton(menu, 'MENU~cosmeticMenu~close');
             });
-            addCloseButton(menu, 'MENU~cosmeticMenu~close');
+            this.addCloseButton(menu, 'MENU~cosmeticMenu~close');
         });
         return this;
     }
