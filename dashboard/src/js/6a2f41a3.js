@@ -318,7 +318,7 @@ class Menu {
         div.id = id;
         div.innerHTML = 'Close Menu';
         [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
-        $(`[id="${id}"]`).click(async () => await hideMenu(menu));
+        $(`[id="${id}"]`).click(async () => await this.hideMenu(menu));
         $(`[id="${id}"]`).unbind('hover').hover(
             () => $(`[id="${id}"]`).stop().animate({borderRadius: 10}, 100),
             () => $(`[id="${id}"]`).stop().animate({borderRadius: 4}, 100)
@@ -373,13 +373,13 @@ class Menu {
                 menu.fadeIn(250);
                 $(`[id="${menuPrefix}kickPlayer"]`).click(async () => {
                     if(member.id === this.system.account.id || this.system.party.members.find(m => m.displayName === $("#username")[0].innerText).role !== 'CAPTAIN') return;
-                    await hideMenu(menu);
+                    await this.hideMenu(menu);
                     await this.system.kickPlayer(member.id);
                 });
 
                 $(`[id="${menuPrefix}hiddenPlayer"]`).click(async () => {
                     if(member.id === this.system.account.id || this.system.party.members.find(m => m.displayName === $("#username")[0].innerText).role !== 'CAPTAIN') return;
-                    await hideMenu(menu);
+                    await this.hideMenu(menu);
                     const f = this.system.hiddenMembers.find(m => m.id === member.id) ? 'showPlayer' : 'hidePlayer';
                     await this.system[f](member.id);
                 });
