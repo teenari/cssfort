@@ -441,18 +441,6 @@ class Menu {
         for (const member of members) {
             const images = this.getImages(member.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout);
             $('#members')[0].innerHTML += `<div id="${member.id}" class="icon"><img width="120" height="120" draggable="false" src="${images.character}"><img width="30" height="30" draggable="false" src="${this.convertPlatform(member.meta['Default:Platform_j'].Platform.platformStr, true)}" style="left: 84px;top: 6px;background: black;border-radius: 9px;padding: 2px;border-color: white;"><div>${member.displayName}</div></div>`;
-            $(`#${member.id}.icon`).hover(
-                () => {
-                    $(`#${member.id}.icon`).animate({
-                        borderRadius: 10
-                    }, 100);
-                },
-                () => {
-                    $(`#${member.id}.icon`).animate({
-                        borderRadius: 18
-                    }, 100);
-                }
-            );
             const memberFunction = async () => {
                 this.createMenu(`MEMBER${member.id}`);
                 const menu = $(`[id="MENU~MEMBER${member.id}"]`);
@@ -484,6 +472,18 @@ class Menu {
             $(`#${member.id}.icon`)[0].onclick = async () => await memberFunction();
             $(`#${member.id}.icon`).click(async () => await memberFunction());
             document.querySelector(`[id="${member.id}"].icon`).onclick = async () => await memberFunction();
+            $(`#${member.id}.icon`).hover(
+                () => {
+                    $(`#${member.id}.icon`).animate({
+                        borderRadius: 10
+                    }, 100);
+                },
+                () => {
+                    $(`#${member.id}.icon`).animate({
+                        borderRadius: 18
+                    }, 100);
+                }
+            );
             if(!this.system.party.meta['Default:RawSquadAssignments_j'].RawSquadAssignments.find(m => m.memberId === member.id) && !this.system.hiddenMembers.find(m => m.id === member.id)) {
                 $(`#${member.id}.icon`).animate({opacity: 0.5}, 500);
                 $(`#${member.id}.icon`)[0].innerHTML += '<div style="position: absolute;font-family: t;color: white;opacity: 0.8;top: 44px;">Player may be glitched.</div>';
