@@ -11,6 +11,8 @@
  * limitations under the License.
  */
 
+const ifMobile = navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i);
+
 class Menu {
     constructor(System, theme) {
         this.system = System;
@@ -72,15 +74,15 @@ class Menu {
             if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
                 timerSettings.seconds = 60;
                 timerSettings.minutes --;
-                document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+                document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
             }
             if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
-                document.getElementById('30MIN').innerHTML = `None minutes left`;
+                document.getElementById('timer').innerHTML = `None minutes left`;
                 clearInterval(timer);
             }
             if(timerSettings.seconds !== 0) {
                 timerSettings.seconds --;
-                document.getElementById('30MIN').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+                document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
             }
         }, 1000);
         return this;
@@ -963,12 +965,14 @@ async function friendsMenu(menu) {
 }
 
 $(document).ready(async () => {
-    if(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+    if(ifMobile) {
         const link = document.createElement('link');  
         link.rel = 'stylesheet';  
         link.type = 'text/css'; 
         link.href = './src/css/mobile.css';  
-        document.getElementsByTagName('HEAD')[0].appendChild(link); 
+        document.getElementsByTagName('HEAD')[0].appendChild(link);
+        $('.username').remove();
+        $('.bar-content')[0].innerHTML = `<div id="username"></div><div id="timer"></div>`;
     }
     const user = await (await fetch(`http://webfort.herokuapp.com/api/user`, {
         credentials: 'include',
