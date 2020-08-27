@@ -1,0 +1,60 @@
+.bar {
+    border-top: none;
+}
+
+.bar-background {
+    height: 1400%;
+    width: 1400%;
+    opacity: 1;
+    border-top: 3px solid white;
+}
+
+.bar-content {
+    position: relative;
+    left: 80px;
+    top: 16px;
+    text-align: center;
+}
+
+.bar-content div:nth-of-type(1) {
+    color: white;
+    font-size: 199px;
+}
+
+.bar-content div:nth-of-type(2) {
+    color: #f3af19;
+    font-size: 97px;
+    position: relative;
+    top: -34px;
+}
+
+#members {
+    display: inline;
+    width: 320px;
+    overflow-y: scroll;
+    height: 630px;
+}
+
+.icon {
+    width: 300px;
+    height: 300px;
+}
+
+.icon img:nth-of-type(1) {
+    width: 300px;
+    height: 300px;
+}
+
+.icon div:nth-of-type(1) {
+    font-size: 54px;
+    overflow: visible;
+    margin-left: 0px;
+    display: inline;
+    width: 100%;
+    left: 0;
+}
+
+.members-container {
+    width: 196%;
+    height: 50%;
+}
