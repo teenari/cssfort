@@ -24,16 +24,16 @@ $(document).ready(async () => {
     })).json();
     $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
+        $('#icon').children()[0].src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
         $('#loginwithDiscord').css('left', '71px');
         $('#loginwithDiscord')[0].innerText = 'Continue';
         $('#loginwithDiscord').click(() => {
-            window.location = 'https://teenari.github.io/webfort/dashboard';
+            window.location = 'https://www.webfort.cf/dashboard/';
         });
         $('#data').animate({
             top: '0px'
         }, 300);
         await new Promise((resolve) => setTimeout(resolve, 350));
-        $('#username')[0].innerText = `${user.username}#${user.discriminator}`;
     }
 
     $('.loginDiscord').fadeIn();
