@@ -421,11 +421,6 @@ class Menu {
         return $(`[id="${id}"]`);
     }
 
-    setPercent(percent) {
-        $('#percent').html(`${percent}%`);
-        return this;
-    }
-
     getImages(AthenaCosmeticLoadout) {
         const last = (character, data) => {
             return data.substring(data.lastIndexOf(character) + 1, data.length);
@@ -653,14 +648,13 @@ class System {
     }
 
     async authorize() {
-        this.menu.setPercent(0).setLoadingText('Logging out of last session');
+        this.menu.setLoadingText('Logging out of last session');
         await this.logout();
-        this.menu.setPercent(20).setLoadingText('Creating new session');
+        this.menu.setLoadingText('Creating new session');
         await this.createSession(this.displayName);
-        this.menu.setPercent(60).setLoadingText('Creating Event Source');
+        this.menu.setLoadingText('Creating Event Source');
         this.source = await this.makeSource();
         window.onbeforeunload = this.logout;
-        this.menu.setPercent(70);
         await new Promise((resolve) => {
             this.source.onmessage = (data) => {
                 const json = JSON.parse(data.data);
@@ -668,19 +662,18 @@ class System {
                 if(json.message) this.menu.setLoadingText(json.message);
             }
         });
-        this.menu.setPercent(75).setLoadingText('Setting Properties');
+        this.menu.setLoadingText('Setting Properties');
         await this.setProperties();
-        this.menu.setPercent(80).setLoadingText('Setting Source Events');
+        this.menu.setLoadingText('Setting Source Events');
         this.setSourceEvent(this.source);
-        this.menu.setLoadingText('Starting Menu').setPercent(99);
+        this.menu.setLoadingText('Starting Menu');
         await this.startMenu();
-        this.menu.setPercent(100);
 
         return this;
     }
 
     async startMenu() {
-        this.menu.setLoadingText('Setting Username').setPercent(91).changeUsername(this.account.displayName).setPercent(94).setLoadingText('Setting Platform').setPercent(97).changePlatform('PC').setLoadingText('Loading Members').setPercent(98).reloadMembers().setItems();
+        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Setting Platform').changePlatform('PC').setLoadingText('Loading Members').reloadMembers().setItems();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);
@@ -1024,7 +1017,7 @@ $(document).ready(async () => {
             }
         );
         $(`#${account}`).click(() => {
-            $('#fortnite')[0].innerHTML = '<div id="items" style="background: #f3af19;border: 1px solid black;padding: 10px;border-radius: 23px;width: 400px;height: 147px;"><div id="percent">%</div><div id="status" style="color: white;overflow: hidden;width: 400px;height: 40px;"></div>';
+            $('#fortnite')[0].innerHTML = '<div id="items" style="background: #f3af19;border: 1px solid black;padding: 10px;border-radius: 23px;width: 400px;height: 147px;"><div id="W" style="color: white;position: relative;text-shadow: 3px 1px #f3af19, -3px 3px black;">W</div><div id="status" style="color: white;overflow: hidden;width: 400px;height: 40px;"></div>';
             displayName = account;
         });
     };
