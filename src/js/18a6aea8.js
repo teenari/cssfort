@@ -22,7 +22,7 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     })).json();
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     $('#Understand').fadeIn();
     await new Promise((resolve) => $('#Understand').click(resolve));
     $('.copyright-container').fadeOut();

@@ -153,15 +153,6 @@ html {
     cursor: pointer;
 }
 
-@keyframes W {
-    0%, 100% {
-      bottom: -50px;
-    }
-    50% {
-      bottom: 50px;
-    }
-}
-
 @font-face {
     font-family: t;
     src: url(../fonts/BurbankBigCondensed-Black.otf);

@@ -986,7 +986,9 @@ $(document).ready(async () => {
     if(user.authorization === false) {
         return window.location = 'https://discord.com/api/oauth2/authorize?client_id=735921855340347412&redirect_uri=https%3A%2F%2Fwebfort.herokuapp.com%2Fapi%2Fauthorize&response_type=code&scope=identify';
     }
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    $('#Understand').fadeIn();
+    await new Promise((resolve) => $('#Understand').click(resolve));
 
     if(!accounts.auth) {
         return;
