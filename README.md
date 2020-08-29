@@ -1,3 +1,2 @@
 # webfort
-Official WebFort repository.  
-mogga bach slack
+Official WebFort repository.
