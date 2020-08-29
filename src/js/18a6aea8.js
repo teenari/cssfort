@@ -24,7 +24,7 @@ $(document).ready(async () => {
     })).json();
     if(user.error) {
         $('[id="error-content"]')[0].innerHTML = `<div>${user.error}</div><div>${user.message}</div>`;
-        $('[id="error-content"]').fadeIn();
+        $('[class="error-container"]').fadeIn();
         return;
     }
     $('[class="loader-container"]').remove();
