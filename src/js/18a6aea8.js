@@ -24,7 +24,7 @@ $(document).ready(async () => {
     })).json();
     await new Promise((resolve) => setTimeout(resolve, 350));
     $('#Understand').fadeIn();
-    await new Promise($('#Understand').click);
+    await new Promise((resolve) => $('#Understand').click(resolve));
     $('.copyright-container').fadeOut();
 
     if(user.error) {
