@@ -24,6 +24,7 @@ $(document).ready(async () => {
     })).json();
     $('#w').fadeOut(350);
     await new Promise((resolve) => setTimeout(resolve, 350));
+    $('#fortnite').fadeOut();
     if(user.error) {
         $('[id="error-content"]')[0].innerHTML = `<div>${user.error}</div><div>${user.message}</div>`;
         $('[class="error-container"]').fadeIn();
