@@ -87,6 +87,52 @@ html {
     justify-content: center;
 }
 
+.error-container {
+    color: #e8e8e8;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 24px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 60%;
+    position: absolute;
+    padding: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-container div:nth-child(1) {
+    background: black;
+    width: 10000%;
+    height: 10000%;
+    border: 1px solid white;
+    position: absolute;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+#error-content {
+    z-index: 2;
+    background: black;
+    border: 1px solid;
+    padding: 12px;
+}
+
+#error-content div:nth-child(1) {
+    font-size: 46px;
+    font-family: t;
+}
+
+#error-content div:nth-child(2) {
+    font-size: 46px;
+    font-family: t;
+}
+
 @keyframes loader {
     to {
         transform: rotate(360deg);

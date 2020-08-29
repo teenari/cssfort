@@ -22,6 +22,11 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     })).json();
+    if(user.error) {
+        $('[id="error-content"]').innerHTML = `<div>${user.error}</div><div>${user.message}</div>`;
+        $('[id="error-content"]').fadeOut();
+        return;
+    }
     $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
         $('#icon').children()[0].src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
@@ -36,5 +41,6 @@ $(document).ready(async () => {
         await new Promise((resolve) => setTimeout(resolve, 350));
     }
 
+    $('#fortnite').fadeIn();
     $('.loginDiscord').fadeIn();
 });
