@@ -133,6 +133,23 @@ html {
     font-family: t;
 }
 
+#W {
+    color: white;
+    position: relative;
+    font-size: 104px;
+    text-shadow: 3px 1px #f3af19, -3px 3px black;
+    animation: W 1s infinite;
+}
+
+@keyframes W {
+    0%, 100% {
+      bottom: -50px;
+    }
+    50% {
+      bottom: 50px;
+    }
+}
+
 @keyframes loader {
     to {
         transform: rotate(360deg);
