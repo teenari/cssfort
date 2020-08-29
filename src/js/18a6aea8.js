@@ -48,6 +48,6 @@ $(document).ready(async () => {
         await new Promise((resolve) => setTimeout(resolve, 350));
     }
 
-    $('#fortnite').fadeIn();
+    $('#fortnite').fadeIn().css('display', 'flex');
     $('.loginDiscord').fadeIn();
 });
