@@ -106,7 +106,7 @@ html {
     align-items: center;
 }
 
-.error-container > div {
+.error-container > div:nth-child(1) {
     background: black;
     width: 10000%;
     height: 10000%;
