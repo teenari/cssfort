@@ -128,7 +128,7 @@ html {
     font-family: t;
 }
 
-#error-content div:nth-child(2) {
+#error-content div:nth-child(1) {
     font-size: 46px;
     font-family: t;
 }
