@@ -22,17 +22,19 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     })).json();
-    $('#w').fadeOut(350);
     await new Promise((resolve) => setTimeout(resolve, 350));
-    $('#fortnite').fadeOut();
+    $('#Understand').fadeIn();
+    await new Promise($('#Understand').click);
+    $('.copyright-container').fadeOut();
+
     if(user.error) {
         $('[id="error-content"]')[0].innerHTML = `<div>${user.error}</div><div>${user.message}</div>`;
         $('[class="error-container"]').fadeIn();
-        $('#fortnite').fadeOut();
+        $('.copyright-container').fadeOut();
         return;
     }
+    $('.copyright-container').fadeOut();
     $('#fortnite')[0].innerHTML = '<div id="items"><div id="avatar"><div id="icon"><img src="https://cdn.discordapp.com/avatars/734848834986967096/1de4e2d6318008d40ca5d8f1549ac6b5.png?size=128" width="200px"></div><div style="justify-content: center;align-items: center;width: 100%;height: 100%;"><div id="loginwithDiscord" style="background-color: rgb(32, 34, 37);color: rgb(255, 255, 255);justify-content: center;position: inherit;align-items: center;" onclick="window.location = `https://discord.com/api/oauth2/authorize?client_id=735921855340347412&amp;redirect_uri=https%3A%2F%2Fwebfort.herokuapp.com%2Fapi%2Fauthorize&amp;response_type=code&amp;scope=identify`" class="loginDiscord">Authorize</div></div></div></div>';
-    $('[class="loader-container"]').remove();
     if(user.authorization !== false) {
         $('#icon').children()[0].src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
         $('#loginwithDiscord').css('left', '71px');
@@ -46,6 +48,6 @@ $(document).ready(async () => {
         await new Promise((resolve) => setTimeout(resolve, 350));
     }
 
-    $('#fortnite').fadeIn().css('display', 'flex');
+    $('#fortnite').fadeIn();
     $('.loginDiscord').fadeIn();
 });
