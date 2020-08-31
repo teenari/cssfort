@@ -11,8 +11,6 @@
  * limitations under the License.
  */
 
- const client = new Client({});
-
 class Client {
     constructor ({
         url,
@@ -215,6 +213,8 @@ class Client {
         return this.party.members;
     }
 }
+
+const client = new Client({});
 
 $(document).ready(async () => {
     const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
