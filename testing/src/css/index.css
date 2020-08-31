@@ -31,15 +31,21 @@ html {
     position: absolute;
 }
 
-.loading-W {
+.loading-content {
     color: #382C52;
     position: absolute;
     align-items: center;
     text-align: center;
     font-family: t;
     left: 43%;
-    top: 40%;
-    width: 0px;
+    font-size: 200px;
+    animation: UpDown 1s linear infinite;
+    text-shadow: 3px 2px #5B4885;
+}
+
+.loading-W {
+    color: #382C52;
+    position: absolute;
     font-size: 200px;
     animation: UpDown 1s linear infinite;
     text-shadow: 3px 2px #5B4885;
@@ -136,6 +142,40 @@ html {
     background: #382C52;
     padding: 10px;
     margin: 11px;
+}
+
+.account {
+    overflow: hidden;
+    width: 135px;
+    background: #382C52;
+    border: 1px solid black;
+    height: 204px;
+    border-radius: 11px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.account > div:nth-child(1) {
+    background: #5B4885;
+    border: 1px solid white;
+    border-radius: 400px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    position: relative;
+    left: 17px;
+    top: 10px;
+}
+
+.account > div:nth-child(2) {
+    font-size: 42px;
+    position: relative;
+    top: 28px;
+    color: #5B489F;
+}
+
+.account > div:nth-child(1) > img {
+    width: 100px;
 }
 
 @font-face {
