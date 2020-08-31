@@ -18,6 +18,9 @@ $(document).ready(async () => {
             'Access-Control-Allow-Origin': '*'
         }
     })).json();
-    await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(user);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    $('.loading-W').fadeOut(500);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    $('.notice').fadeIn();
 });

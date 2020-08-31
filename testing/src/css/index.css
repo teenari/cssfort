@@ -108,6 +108,27 @@ html {
     font-size: 39px;
 }
 
+.notice {
+    background: #5B4885;
+    color: #e8e8e8;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 24px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 60%;
+    left: 20%;
+    top: 24%;
+    position: absolute;
+    padding: 37px;
+    justify-content: center;
+    align-items: center;
+}
+
 @font-face {
     font-family: t;
     src: url(../fonts/BurbankBigCondensed-Black.otf);
