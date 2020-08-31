@@ -32,15 +32,6 @@ html {
 }
 
 .loading-content {
-    color: #382C52;
-    position: absolute;
-    align-items: center;
-    text-align: center;
-    font-family: t;
-    left: 43%;
-    font-size: 200px;
-    animation: UpDown 1s linear infinite;
-    text-shadow: 3px 2px #5B4885;
 }
 
 .loading-W {
