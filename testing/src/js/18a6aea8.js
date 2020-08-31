@@ -42,7 +42,7 @@ $(document).ready(async () => {
     await new Promise((resolve) => $('.notice-understand').click(resolve));
     $('.notice-understand').fadeOut(300);
     await new Promise((resolve) => setTimeout(resolve, 300));
-    $('.notice-understand').remove();
+    $('.loading-content')[0].innerHTML = '<div class="accounts-container"><div>What option do you want to use</div><div class="accounts"></div></div>';
 
     const cids = [
         "CID_438_Athena_Commando_M_WinterGhoulEclipse",
@@ -54,7 +54,7 @@ $(document).ready(async () => {
 
     for (const account of accountsNames.accounts) {
         const div = document.createElement('div');
-        document.getElementsByClassName('loading-content')[0].appendChild(div);
+        document.getElementsByClassName('accounts')[0].appendChild(div);
         div.outerHTML = `<div id="${account}" class="account"><div><img src="https://fortnite-api.com/images/cosmetics/br/${cids[cids.length * Math.random() | 0]}/icon.png"></div><div>${account}</div></div>`;
         $(`#${account}`).hover(
             () => {

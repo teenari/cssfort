@@ -21,6 +21,10 @@ html {
     font-family: t;
 }
 
+.loading-content {
+    display: flex;
+}
+
 .loading-background {
     width: 100%;
     height: 100%;
@@ -31,12 +35,15 @@ html {
     position: absolute;
 }
 
-.loading-content {
-}
-
 .loading-W {
     color: #382C52;
     position: absolute;
+    align-items: center;
+    text-align: center;
+    font-family: t;
+    left: 43%;
+    top: 40%;
+    width: 0px;
     font-size: 200px;
     animation: UpDown 1s linear infinite;
     text-shadow: 3px 2px #5B4885;
@@ -133,6 +140,39 @@ html {
     background: #382C52;
     padding: 10px;
     margin: 11px;
+}
+
+.accounts-container {
+    position: absolute;
+    width: 86%;
+    height: 85%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    font-family: t;
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: white;
+    padding: 60px;
+}
+
+.accounts-container > div:nth-child(1) {
+    color: #5B4885;
+    position: relative;
+    font-size: 55px;
+    top: -136px;
+    left: 26px;
+}
+
+.accounts {
+    position: absolute;
+    display: flex;
 }
 
 .account {
