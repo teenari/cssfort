@@ -74,7 +74,6 @@ class Client {
         });
         await this.setProperties();
         this.setSourceEvent(this.source);
-        await this.startMenu();
 
         return this;
     }
