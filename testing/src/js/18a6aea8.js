@@ -11,9 +11,210 @@
  * limitations under the License.
  */
 
-//  class Client {
-//     constructor()
-//  }
+ const client = new Client({});
+
+class Client {
+    constructor ({
+        url,
+        displayName
+    }) {
+        this.url = url || 'http://webfort.herokuapp.com';
+        this.account = null;
+        this.party = null;
+        this.friends = null;
+        this.hiddenMembers = null;
+        this.source = null;
+        this.displayName = displayName;
+        this.messages = {
+            party: null,
+            friends: null,
+            handler: null
+        };
+        this.cosmetics = {
+            sorted: null,
+            variants: null
+        };
+        this.items = {
+            variants: {}
+        };
+        this.eventHandler = async (data) => {
+            const json = JSON.parse(data.data);
+            if(json.exit) return $('.message-container').fadeIn();
+            if(json.event) {
+                const data = json.data;
+                const event = json.event;
+                switch(event) {
+                    case 'refresh:party': {
+                        system.party = json.party;
+                    } break;
+    
+                    case 'friend:message': {
+                        if(!this.messages.friends[data.author.id]) this.messages.friends[data.author.id] = [];
+                        this.messages.friends[data.author.id].push(data);
+                        if(this.messages.handler) this.messages.handler(data);
+                    } break;
+    
+                    default: {
+                        console.log(data);
+                        console.log(`UNKNOWN EVENT ${event}`);
+                    } break;
+                }
+            }
+        };
+    }
+
+    async authorize() {
+        await this.logout();
+        await this.createSession(this.displayName);
+        this.source = await this.makeSource();
+        window.onbeforeunload = this.logout;
+        await new Promise((resolve) => {
+            this.source.onmessage = (data) => {
+                const json = JSON.parse(data.data);
+                if(json.completed) return resolve();
+            }
+        });
+        await this.setProperties();
+        this.setSourceEvent(this.source);
+        await this.startMenu();
+
+        return this;
+    }
+
+    async logout() {
+        this.account = null;
+        this.party = null;
+        this.friends = null;
+        return await this.sendRequest('api/account', {
+            method: "DELETE"
+        });
+    }
+
+    async createSession(displayName) {
+        return await this.sendRequest(`api/account?displayName=${displayName}`, {
+            method: "POST"
+        });
+    }
+
+    async changeCosmeticItem(cosmeticType, id) {
+        await this.sendRequest(`api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+            method: "PUT"
+        });
+        this.items[cosmeticType.toLowerCase()] = this.cosmetics.sorted[cosmeticType.toLowerCase()].find(cosmetic => cosmetic.id === id);
+        return this;
+    }
+
+    async changeVariants(array, cosmeticType) {
+        this.items.variants[cosmeticType] = array;
+        await this.sendRequest(`api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+            method: "PUT"
+        });
+        return this;
+    }
+
+    async makeSource() {
+        return new EventSource(`${this.url}/api/account/authorize?auth=${await this.getAuthorizeCode()}`);
+    }
+
+    async getAuthorizeCode() {
+        return (await (await this.sendRequest('api/auth')).json()).auth;
+    }
+
+    async setProperties() {
+        this.account = await this.getAccount();
+        this.party = await this.getParty();
+        this.friends = await this.getFriends();
+        this.hiddenMembers = [];
+        this.messages = {
+            party: [],
+            friends: {},
+            handler: null
+        }
+        this.cosmetics.sorted = {};
+        this.items.variants = [];
+        await this.sortCosmetics();
+        await this.setDefaultItems();
+        return this;
+    }
+
+    async getAccount() {
+        const response = await (await this.sendRequest('api/account')).json();
+        if(response.authorization === false) return null;
+        return response;
+    }
+
+    async getParty() {
+        return await (await this.sendRequest('api/account/party')).json();
+    }
+
+    async getFriends() {
+        return await (await this.sendRequest('api/account/friends')).json();
+    }
+
+    async getTimeLeft() {
+        return await (await this.sendRequest('api/account/time')).json();
+    }
+
+    async sendRequest(path, options) {
+        return await fetch(`${this.url}/${path}`, {
+            credentials: 'include',
+            headers: {
+                'Access-Control-Allow-Origin': "https://teenari.github.io"
+            },
+            ...options
+        });
+    }
+
+    async sortCosmetics() {
+        const data = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
+        this.cosmetics.all = data;
+        for (const value of data) {
+            if(!this.cosmetics.sorted[value.type.value]) this.cosmetics.sorted[value.type.value] = [];
+            this.cosmetics.sorted[value.type.value].push(value);
+        }
+        return this;
+    }
+
+    async setDefaultItems() {
+        const check = (data, main) => {
+            const t = main.find(e => e.id === data[(Math.floor(Math.random() * data.length - 1) + 1)]);
+            if(!t) return check(data, main);
+            return t;
+        }
+        // if(this.menu.theme.background === 'black&white') {
+        //     for (const type of ['outfit', 'backpack', 'pickaxe']) {
+        //         await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]).id);
+        //     }
+        // }
+        return this;
+    }
+
+    async kickPlayer(id) {
+        return await this.sendRequest(`api/account/party/kick?id=${id}`);
+    }
+
+    async hidePlayer(id) {
+        $(`#${id}.icon`).animate({opacity: 0.5}, 300);
+        this.hiddenMembers.push({id});
+        return await this.sendRequest(`api/account/party/member/hide?id=${id}`);
+    }
+    
+    async showPlayer(id) {
+        $(`#${id}.icon`).animate({opacity: 1}, 300);
+        this.hiddenMembers = this.hiddenMembers.filter(m => m.id !== id);
+        return await this.sendRequest(`api/account/party/member/show?id=${id}`);
+    }
+
+    setSourceEvent(source) {
+        source.onmessage = this.eventHandler;
+        return this;
+    }
+
+    get members() {
+        if(!this.party) return null;
+        return this.party.members;
+    }
+}
 
 $(document).ready(async () => {
     const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
@@ -76,7 +277,10 @@ $(document).ready(async () => {
             }
         });
     });
-    console.log(displayName)
+    $('.loading').fadeOut(300);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    client.displayName = displayName;
+    await client.authorize();
     
     // login ect..
     // $('.taskbar').fadeIn();
