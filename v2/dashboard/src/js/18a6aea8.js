@@ -282,6 +282,6 @@ $(document).ready(async () => {
     await client.authorize();
     
     // login ect..
-    // $('.taskbar').fadeIn();
-    // $('.actionbar').fadeIn();
+    $('.taskbar').fadeIn();
+    $('.actionbar').fadeIn();
 });
