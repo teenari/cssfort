@@ -23,9 +23,8 @@ $(document).ready(async () => {
     $('.loading-W').fadeOut(500);
     await new Promise((resolve) => setTimeout(resolve, 500));
     $('.notice').fadeIn();
-    try {
-        const audio = new Audio('https://webfort.cf/testing/src/audio/epicgames.mp3');
-        audio.loop = false;
-        audio.play();
-    } catch(e) {}
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    $('.notice-understand').fadeIn();
+    await new Promise((resolve) => $('.notice-understand').click(resolve));
+    console.log('yas')
 });

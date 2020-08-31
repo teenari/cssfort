@@ -130,6 +130,14 @@ html {
     align-items: center;
 }
 
+.notice-understand {
+    border-radius: 10px;
+    cursor: pointer;
+    background: #382C52;
+    padding: 10px;
+    margin: 11px;
+}
+
 @font-face {
     font-family: t;
     src: url(../fonts/BurbankBigCondensed-Black.otf);
