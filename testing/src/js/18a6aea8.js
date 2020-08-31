@@ -16,7 +16,7 @@ class Client {
         url,
         displayName
     }) {
-        this.url = url || 'http://webfort.herokuapp.com';
+        this.url = url || 'https://webfort.herokuapp.com';
         this.account = null;
         this.party = null;
         this.friends = null;
@@ -157,7 +157,7 @@ class Client {
         return await fetch(`${this.url}/${path}`, {
             credentials: 'include',
             headers: {
-                'Access-Control-Allow-Origin': "https://teenari.github.io"
+                'Access-Control-Allow-Origin': "*"
             },
             ...options
         });
