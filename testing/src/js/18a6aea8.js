@@ -11,9 +11,9 @@
  * limitations under the License.
  */
 
- class Client {
-    constructor()
- }
+//  class Client {
+//     constructor()
+//  }
 
 $(document).ready(async () => {
     const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
