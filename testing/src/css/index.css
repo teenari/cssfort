@@ -13,6 +13,7 @@
 
 html {
     background: #382C52;
+    overflow: hidden;
 }
 
 .items {
