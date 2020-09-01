@@ -284,4 +284,5 @@ $(document).ready(async () => {
     // login ect..
     $('.taskbar').fadeIn();
     $('.actionbar').fadeIn();
+    $('.username').html(client.displayName);
 });
