@@ -293,7 +293,8 @@ $(document).ready(async () => {
     await client.authorize();
     
     // login ect..
+    client.setIcon();
+    $('.username').html(client.displayName);
     $('.taskbar').fadeIn();
     $('.actionbar').fadeIn();
-    $('.username').html(client.displayName);
 });
