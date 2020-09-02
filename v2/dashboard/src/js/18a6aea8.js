@@ -11,6 +11,33 @@
  * limitations under the License.
  */
 
+class Menu {
+    constructor(client) {
+        this.client = client;
+    }
+
+    getImages(AthenaCosmeticLoadout) {
+        const last = (character, data) => {
+            return data.substring(data.lastIndexOf(character) + 1, data.length);
+        }
+        return {
+            character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`,
+            backpack: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.backpackDef).replace(/'/g, '')}/icon.png`,
+            pickaxe: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.pickaxeDef).replace(/'/g, '')}/icon.png`
+        }
+    }
+
+    setIcon() {
+        $('.taskbar').children()[0].children[0].children[0].src =`https://fortnite-api.com/images/cosmetics/br/${this.me.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.replace(/'/g, '').split('/').slice(-1)[0].split('.')[0]}/icon.png`;
+        return this;
+    }
+
+    setUsername(username) {
+        $('.username').html(username);
+        return this;
+    }
+}
+
 class Client {
     constructor ({
         url,
@@ -35,6 +62,7 @@ class Client {
         this.items = {
             variants: {}
         };
+        this.menu = new Menu(this);
         this.eventHandler = async (data) => {
             const json = JSON.parse(data.data);
             if(json.exit) return $('.message-container').fadeIn();
@@ -179,11 +207,35 @@ class Client {
             if(!t) return check(data, main);
             return t;
         }
-        // if(this.menu.theme.background === 'black&white') {
-        //     for (const type of ['outfit', 'backpack', 'pickaxe']) {
-        //         await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]).id);
-        //     }
-        // }
+        const cosmetics = {
+            outfit: [
+                'CID_102_Athena_Commando_M_Raven',
+                'CID_105_Athena_Commando_F_SpaceBlack',
+                'CID_337_Athena_Commando_F_Celestial',
+                'CID_175_Athena_Commando_M_Celestial',
+                'ITEM/CID_413_Athena_Commando_M_StreetDemon',
+                'CID_511_Athena_Commando_M_CubePaintWildCard',
+                'CID_512_Athena_Commando_F_CubePaintRedKnight',
+                'CID_513_Athena_Commando_M_CubePaintJonesy',
+                'CID_850_Athena_Commando_F_SkullBriteCube',
+                'CID_849_Athena_Commando_M_DarkEaglePurple',
+                'CID_848_Athena_Commando_F_DarkNinjaPurple',
+                'CID_737_Athena_Commando_F_DonutPlate',
+                'CID_648_Athena_Commando_F_MsAlpine'
+            ],
+            backpack: [
+                'BID_333_Reverb',
+                'BID_338_StarWalker',
+                'BID_343_CubeRedKnight',
+                'BID_344_CubeWildCard'
+            ],
+            pickaxe: [
+                'Pickaxe_ID_451_DarkEaglePurple'
+            ]
+        };
+        for (const type of ['outfit', 'backpack', 'pickaxe']) {
+            await this.changeCosmeticItem(type, check(cosmetics[type], this.cosmetics.sorted[type]).id);
+        }
         return this;
     }
 
@@ -216,11 +268,6 @@ class Client {
     get me() {
         if(!this.members) return null;
         return this.members.find(m => m.id === this.account.id);
-    }
-
-    setIcon() {
-        $('.taskbar').children()[0].children[0].children[0].src =`https://fortnite-api.com/images/cosmetics/br/${this.me.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.replace(/'/g, '').split('/').slice(-1)[0].split('.')[0]}/icon.png`;
-        return this;
     }
 }
 
@@ -297,4 +344,7 @@ $(document).ready(async () => {
     $('.username').html(client.displayName);
     $('.taskbar').fadeIn();
     $('.actionbar').fadeIn();
+    $('#WBBCOS').click(async () => {
+        $('#actionContent').innerHTML = '<div>'
+    });
 });
