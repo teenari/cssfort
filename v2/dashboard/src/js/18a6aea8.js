@@ -267,6 +267,12 @@ class Client {
         $('.actionbar').fadeIn();
         $('#WBBCOS').click(async () => {
             $('#actionContent')[0].innerHTML = '<div class="actionbar-bar"></div>';
+            for (const type of Object.keys(this.items).filter(e => e !== 'variants')) {
+                const value = this.items[type];
+                const div = document.createElement('div');
+                document.getElementsByClassName('actionbar-bar')[0].appendChild(div);
+                div.outerHTML = `<div class="icon" style="margin: 12px;"><img draggable="false" src="${value.images.icon}" height="123" width="120"></div>`;
+            }
         });
         return this;
     }
