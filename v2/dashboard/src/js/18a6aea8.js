@@ -262,7 +262,7 @@ class Client {
     }
 
     setMenu() {
-        this.menu.changeUsername(this.displayName);
+        this.menu.setUsername(this.displayName);
         $('.taskbar').fadeIn();
         $('.actionbar').fadeIn();
         $('#WBBCOS').click(async () => {
@@ -349,7 +349,4 @@ $(document).ready(async () => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     client.displayName = displayName;
     await client.authorize();
-    
-    // login ect..
-    client.setIcon();
 });
