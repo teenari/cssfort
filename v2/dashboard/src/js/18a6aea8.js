@@ -214,7 +214,7 @@ class Client {
     }
     
     get me() {
-        if(this.members) return null;
+        if(!this.members) return null;
         return this.members.find(m => m.id === this.account.id);
     }
 
