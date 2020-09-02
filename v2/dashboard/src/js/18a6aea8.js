@@ -28,7 +28,7 @@ class Menu {
     }
 
     setIcon() {
-        $('.taskbar').children()[0].children[0].children[0].src =`https://fortnite-api.com/images/cosmetics/br/${this.me.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.replace(/'/g, '').split('/').slice(-1)[0].split('.')[0]}/icon.png`;
+        $('.taskbar').children()[0].children[0].children[0].src =`https://fortnite-api.com/images/cosmetics/br/${this.client.me.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.replace(/'/g, '').split('/').slice(-1)[0].split('.')[0]}/icon.png`;
         return this;
     }
 
