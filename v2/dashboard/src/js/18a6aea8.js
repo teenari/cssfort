@@ -71,8 +71,8 @@ class Client {
                 const event = json.event;
                 switch(event) {
                     case 'refresh:party': {
-                        client.party = json.party;
-                        client.setIcon();
+                        this.party = json.party;
+                        this.menu.setIcon();
                     } break;
     
                     case 'friend:message': {
@@ -160,6 +160,7 @@ class Client {
         this.items.variants = [];
         await this.sortCosmetics();
         await this.setDefaultItems();
+        this.setMenu();
         return this;
     }
 
@@ -260,6 +261,16 @@ class Client {
         return this;
     }
 
+    setMenu() {
+        this.menu.changeUsername(this.displayName);
+        $('.taskbar').fadeIn();
+        $('.actionbar').fadeIn();
+        $('#WBBCOS').click(async () => {
+            $('#actionContent').innerHTML = '<div>'
+        });
+        return this;
+    }
+
     get members() {
         if(!this.party) return null;
         return this.party.members;
@@ -341,10 +352,4 @@ $(document).ready(async () => {
     
     // login ect..
     client.setIcon();
-    $('.username').html(client.displayName);
-    $('.taskbar').fadeIn();
-    $('.actionbar').fadeIn();
-    $('#WBBCOS').click(async () => {
-        $('#actionContent').innerHTML = '<div>'
-    });
 });
