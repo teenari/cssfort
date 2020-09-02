@@ -43,7 +43,8 @@ class Client {
                 const event = json.event;
                 switch(event) {
                     case 'refresh:party': {
-                        system.party = json.party;
+                        client.party = json.party;
+                        client.setIcon();
                     } break;
     
                     case 'friend:message': {
@@ -103,7 +104,7 @@ class Client {
 
     async changeVariants(array, cosmeticType) {
         this.items.variants[cosmeticType] = array;
-        await this.sendRequest(`api/account/party/me/meta?array=["${system.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+        await this.sendRequest(`api/account/party/me/meta?array=["${this.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
             method: "PUT"
         });
         return this;
@@ -210,6 +211,16 @@ class Client {
     get members() {
         if(!this.party) return null;
         return this.party.members;
+    }
+    
+    get me() {
+        if(this.members) return null;
+        return this.members.find(m => m.id === this.account.id);
+    }
+
+    setIcon() {
+        $('.taskbar').children()[0].children[0].children[0].src =`https://fortnite-api.com/images/cosmetics/br/${this.me.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.replace(/'/g, '').split('/').slice(-1)[0].split('.')[0]}/icon.png`;
+        return this;
     }
 }
 
