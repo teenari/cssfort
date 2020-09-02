@@ -266,7 +266,7 @@ class Client {
         $('.taskbar').fadeIn();
         $('.actionbar').fadeIn();
         $('#WBBCOS').click(async () => {
-            $('#actionContent').innerHTML = '<div>'
+            $('#actionContent')[0].innerHTML = '<div class="actionbar-bar"></div>';
         });
         return this;
     }
