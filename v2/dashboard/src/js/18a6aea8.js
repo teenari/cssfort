@@ -271,7 +271,7 @@ class Client {
                 const value = this.items[type];
                 const div = document.createElement('div');
                 document.getElementsByClassName('actionbar-bar')[0].appendChild(div);
-                div.outerHTML = `<div class="icon" style="margin: 12px;"><img draggable="false" src="${value.images.icon}" height="123" width="120"></div>`;
+                div.outerHTML = `<div class="icon" style="margin: 12px;cursor: pointer;"><img draggable="false" src="${value.images.icon}" height="123" width="120"></div>`;
             }
         });
         return this;

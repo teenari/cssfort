@@ -19,6 +19,9 @@ html {
 .items {
     display: flex;
     font-family: t;
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
 
 .loading-content {
@@ -96,6 +99,7 @@ html {
     position: absolute;
     width: 100%;
     height: 100%;
+    color: #322f3d;
 }
 
 .taskbar-buttons > div {
@@ -106,7 +110,6 @@ html {
     height: fit-content;
     padding: 10px;
     cursor: pointer;
-    color: #322f3d;
     box-shadow: 1px 1px 11px black;
 }
 
@@ -116,7 +119,7 @@ html {
     width: 206px;
     top: -8px;
     left: -8px;
-    background: #4b5d67;
+    background: #19181F;
     overflow: hidden;
     display: inline-flex;
 }
