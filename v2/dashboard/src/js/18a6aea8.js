@@ -1339,6 +1339,6 @@ $(document).ready(async () => {
     });
     $('.loading').fadeOut(300);
     await new Promise((resolve) => setTimeout(resolve, 300));
-    client.displayName = displayName;
-    await client.authorize();
+    system.displayName = displayName;
+    await system.authorize();
 });
