@@ -357,23 +357,23 @@ class Menu {
     }
 
     async setTimeLeft() {
-        const timerSettings = await this.system.getTimeLeft();
-        const timer = setInterval(() => {
-            const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
-            if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
-                timerSettings.seconds = 60;
-                timerSettings.minutes --;
-                document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-            }
-            if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
-                document.getElementById('timer').innerHTML = `None minutes left`;
-                clearInterval(timer);
-            }
-            if(timerSettings.seconds !== 0) {
-                timerSettings.seconds --;
-                document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-            }
-        }, 1000);
+        // const timerSettings = await this.system.getTimeLeft();
+        // const timer = setInterval(() => {
+        //     const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
+        //     if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
+        //         timerSettings.seconds = 60;
+        //         timerSettings.minutes --;
+        //         document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+        //     }
+        //     if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
+        //         document.getElementById('timer').innerHTML = `None minutes left`;
+        //         clearInterval(timer);
+        //     }
+        //     if(timerSettings.seconds !== 0) {
+        //         timerSettings.seconds --;
+        //         document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+        //     }
+        // }, 1000);
         return this;
     }
 
@@ -564,18 +564,6 @@ class Menu {
         div.innerHTML = '';
         div.classList.add('icon');
         element.appendChild(div);
-        $(`#${argumen[0].id}.icon`).hover(
-            () => {
-                $(`#${argumen[0].id}.icon`).animate({
-                    borderRadius: 3
-                }, 100);
-            },
-            () => {
-                $(`#${argumen[0].id}.icon`).animate({
-                    borderRadius: 8
-                }, 100);
-            }
-        )
         for (const IMAGE of html) {
             div.appendChild(IMAGE);
         }
@@ -667,7 +655,7 @@ class Menu {
     }
 
     async setItems() {
-        $('#fnItems').empty();
+        $('#username').nextAll().remove();
         for (const key of Object.keys(this.system.items)) {
             const value = this.system.items[key];
             if(!value.type) continue;
@@ -757,18 +745,6 @@ class Menu {
                 });
                 this.addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
             };
-            $(`#${member.id}.icon`).click(async () => await memberFunction()).hover(
-                () => {
-                    $(`#${member.id}.icon`).animate({
-                        borderRadius: 10
-                    }, 100);
-                },
-                () => {
-                    $(`#${member.id}.icon`).animate({
-                        borderRadius: 18
-                    }, 100);
-                }
-            );
             if(!this.system.party.meta['Default:RawSquadAssignments_j'].RawSquadAssignments.find(m => m.memberId === member.id) && !this.system.hiddenMembers.find(m => m.id === member.id)) {
                 $(`#${member.id}.icon`).animate({opacity: 0.5}, 500);
                 $(`#${member.id}.icon`)[0].innerHTML += '<div style="position: absolute;font-family: t;color: white;opacity: 0.8;top: 44px;">Player may be glitched.</div>';
@@ -777,12 +753,6 @@ class Menu {
                 $(`#${member.id}.icon`).animate({opacity: 0.5}, 500);
             }
         }
-        return this;
-    }
-
-    changePlatform(type) {
-        if($('#platform')[0]) $('#platform').remove();
-        $('#username')[0].innerHTML += `<img id="platform" width="50" height="50" src="${this.icons.platforms.benbot[type]}" style="display: flex;align-content: flex-end;z-index: 2;">`;
         return this;
     }
 
@@ -962,7 +932,7 @@ class System {
     }
 
     async startMenu() {
-        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Setting Platform').changePlatform('PC').setLoadingText('Loading Members').reloadMembers().setItems();
+        this.menu.setLoadingText('Setting Username').changeUsername(this.account.displayName).setLoadingText('Loading Members').reloadMembers().setItems();
         $('#fortnite').fadeOut(300);
         $('.menu-container').css('left', '300vh').show().animate({left: '58.5px'}, 700);
         $('#avatar').css('position', 'absolute').css('left', '-500px').show().animate({left: 10}, 700);

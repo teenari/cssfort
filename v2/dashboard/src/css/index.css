@@ -67,7 +67,15 @@ html {
     text-align: center;
     margin: 5px;
     transition: 0.3s;
-    align-items: center;
+    align-items: center;font-family: t;
+    font-size: 40px;
+    position: absolute;
+    top: -44px;
+    left: 27px;
+    color: white;
+    white-space: nowrap;
+    display: flex;
+    text-shadow: 2px 1px black;
     display: flex;
     background-color: black;
     border: 1px solid #19181F;
@@ -77,6 +85,30 @@ html {
     width: 120px;
     background: #19181F;
     box-shadow: 2px 4px 9px #19181F, 6px 2px 32px #19181F;
+}
+
+.icon img:nth-of-type(1) {
+    position: relative;
+}
+
+.icon img:nth-of-type(n+2) {
+    position: absolute;
+    left: 0px;
+}
+
+.icon div:nth-of-type(1) {
+    position: absolute;
+    font-family: t;
+    color: white;
+    text-shadow: 1px 0px black;
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    overflow: auto;
+    margin-top: 23px;
 }
 
 .notice {
