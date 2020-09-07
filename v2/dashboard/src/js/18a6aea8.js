@@ -24,9 +24,288 @@
  * limitations under the License.
  */
 
+// class Client {
+//     constructor ({
+//         url,
+//         displayName
+//     }) {
+//         this.url = url || 'https://webfort.herokuapp.com';
+//         this.account = null;
+//         this.party = null;
+//         this.friends = null;
+//         this.hiddenMembers = null;
+//         this.source = null;
+//         this.displayName = displayName;
+//         this.messages = {
+//             party: null,
+//             friends: null,
+//             handler: null
+//         };
+//         this.cosmetics = {
+//             sorted: null,
+//             variants: null
+//         };
+//         this.items = {
+//             variants: {}
+//         };
+//         this.menu = new Menu(this);
+//         this.eventHandler = async (data) => {
+//             const last = (character, data) => {
+//                 return data.substring(data.lastIndexOf(character) + 1, data.length);
+//             }
+//             const json = JSON.parse(data.data);
+//             if(json.exit) return $('.message-container').fadeIn();
+//             if(json.event) {
+//                 const data = json.data;
+//                 const event = json.event;
+//                 switch(event) {
+//                     case 'refresh:party': {
+//                         system.party = json.party;
+//                         this.menu.reloadMembers();
+//                         if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
+//                             const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
+//                             if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
+//                                 $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
+//                             }
+//                             if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
+//                                 const id = last('.', emoteItemDef).replace(/'/g, '');
+//                                 const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
+//                                 $(`#${data.id}.icon`).children('img')[0].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
+//                             }
+//                         }
+//                     } break;
+    
+//                     case 'friend:message': {
+//                         if(!this.messages.friends[data.author.id]) this.messages.friends[data.author.id] = [];
+//                         this.messages.friends[data.author.id].push(data);
+//                         if(this.messages.handler) this.messages.handler(data);
+//                         await this.menu.newNotification('F', `You have a new message from ${data.author.displayName}`);
+//                     } break;
+
+//                     case 'party:member:joined': {
+//                         await this.menu.newNotification('P', `${data.displayName} has joined`);
+//                     } break;
+
+//                     case 'party:member:left': {
+//                         await this.menu.newNotification('P', `${data.displayName} has left`);
+//                     } break;
+
+//                     case 'party:member:kicked': {
+//                         await this.menu.newNotification('P', `${data.displayName} has been kicked`);
+//                     } break;
+    
+//                     default: {
+//                         console.log(data);
+//                         console.log(`UNKNOWN EVENT ${event}`);
+//                     } break;
+//                 }
+//             }
+//         };
+//     }
+
+//     async authorize() {
+//         await this.logout();
+//         await this.createSession(this.displayName);
+//         this.source = await this.makeSource();
+//         window.onbeforeunload = this.logout;
+//         await new Promise((resolve) => {
+//             this.source.onmessage = (data) => {
+//                 const json = JSON.parse(data.data);
+//                 if(json.completed) return resolve();
+//             }
+//         });
+//         await this.setProperties();
+//         this.setSourceEvent(this.source);
+
+//         return this;
+//     }
+
+//     async logout() {
+//         this.account = null;
+//         this.party = null;
+//         this.friends = null;
+//         return await this.sendRequest('api/account', {
+//             method: "DELETE"
+//         });
+//     }
+
+//     async createSession(displayName) {
+//         return await this.sendRequest(`api/account?displayName=${displayName}`, {
+//             method: "POST"
+//         });
+//     }
+
+//     async changeCosmeticItem(cosmeticType, id) {
+//         await this.sendRequest(`api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+//             method: "PUT"
+//         });
+//         this.items[cosmeticType.toLowerCase()] = this.cosmetics.sorted[cosmeticType.toLowerCase()].find(cosmetic => cosmetic.id === id);
+//         return this;
+//     }
+
+//     async changeVariants(array, cosmeticType) {
+//         this.items.variants[cosmeticType] = array;
+//         await this.sendRequest(`api/account/party/me/meta?array=["${this.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
+//             method: "PUT"
+//         });
+//         return this;
+//     }
+
+//     async makeSource() {
+//         return new EventSource(`${this.url}/api/account/authorize?auth=${await this.getAuthorizeCode()}`);
+//     }
+
+//     async getAuthorizeCode() {
+//         return (await (await this.sendRequest('api/auth')).json()).auth;
+//     }
+
+//     async setProperties() {
+//         this.account = await this.getAccount();
+//         this.party = await this.getParty();
+//         this.friends = await this.getFriends();
+//         this.hiddenMembers = [];
+//         this.messages = {
+//             party: [],
+//             friends: {},
+//             handler: null
+//         }
+//         this.cosmetics.sorted = {};
+//         this.items.variants = [];
+//         await this.sortCosmetics();
+//         await this.setDefaultItems();
+//         this.setMenu();
+//         return this;
+//     }
+
+//     async getAccount() {
+//         const response = await (await this.sendRequest('api/account')).json();
+//         if(response.authorization === false) return null;
+//         return response;
+//     }
+
+//     async getParty() {
+//         return await (await this.sendRequest('api/account/party')).json();
+//     }
+
+//     async getFriends() {
+//         return await (await this.sendRequest('api/account/friends')).json();
+//     }
+
+//     async getTimeLeft() {
+//         return await (await this.sendRequest('api/account/time')).json();
+//     }
+
+//     async sendRequest(path, options) {
+//         return await fetch(`${this.url}/${path}`, {
+//             credentials: 'include',
+//             headers: {
+//                 'Access-Control-Allow-Origin': "*"
+//             },
+//             ...options
+//         });
+//     }
+
+//     async sortCosmetics() {
+//         const data = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
+//         this.cosmetics.all = data;
+//         for (const value of data) {
+//             if(!this.cosmetics.sorted[value.type.value]) this.cosmetics.sorted[value.type.value] = [];
+//             this.cosmetics.sorted[value.type.value].push(value);
+//         }
+//         return this;
+//     }
+
+//     async setDefaultItems() {
+//         const check = (data, main) => {
+//             const t = main.find(e => e.id === data[(Math.floor(Math.random() * data.length - 1) + 1)]);
+//             if(!t) return check(data, main);
+//             return t;
+//         }
+//         const cosmetics = {
+//             outfit: [
+//                 'CID_102_Athena_Commando_M_Raven',
+//                 'CID_105_Athena_Commando_F_SpaceBlack',
+//                 'CID_337_Athena_Commando_F_Celestial',
+//                 'CID_175_Athena_Commando_M_Celestial',
+//                 'ITEM/CID_413_Athena_Commando_M_StreetDemon',
+//                 'CID_511_Athena_Commando_M_CubePaintWildCard',
+//                 'CID_512_Athena_Commando_F_CubePaintRedKnight',
+//                 'CID_513_Athena_Commando_M_CubePaintJonesy',
+//                 'CID_850_Athena_Commando_F_SkullBriteCube',
+//                 'CID_849_Athena_Commando_M_DarkEaglePurple',
+//                 'CID_848_Athena_Commando_F_DarkNinjaPurple',
+//                 'CID_737_Athena_Commando_F_DonutPlate',
+//                 'CID_648_Athena_Commando_F_MsAlpine'
+//             ],
+//             backpack: [
+//                 'BID_333_Reverb',
+//                 'BID_338_StarWalker',
+//                 'BID_343_CubeRedKnight',
+//                 'BID_344_CubeWildCard'
+//             ],
+//             pickaxe: [
+//                 'Pickaxe_ID_451_DarkEaglePurple'
+//             ]
+//         };
+//         for (const type of ['outfit', 'backpack', 'pickaxe']) {
+//             await this.changeCosmeticItem(type, check(cosmetics[type], this.cosmetics.sorted[type]).id);
+//         }
+//         return this;
+//     }
+
+//     async kickPlayer(id) {
+//         return await this.sendRequest(`api/account/party/kick?id=${id}`);
+//     }
+
+//     async hidePlayer(id) {
+//         $(`#${id}.icon`).animate({opacity: 0.5}, 300);
+//         this.hiddenMembers.push({id});
+//         return await this.sendRequest(`api/account/party/member/hide?id=${id}`);
+//     }
+    
+//     async showPlayer(id) {
+//         $(`#${id}.icon`).animate({opacity: 1}, 300);
+//         this.hiddenMembers = this.hiddenMembers.filter(m => m.id !== id);
+//         return await this.sendRequest(`api/account/party/member/show?id=${id}`);
+//     }
+
+//     setSourceEvent(source) {
+//         source.onmessage = this.eventHandler;
+//         return this;
+//     }
+
+//     setMenu() {
+//         this.menu.setUsername(this.displayName);
+//         $('.taskbar').fadeIn();
+//         $('.actionbar').fadeIn();
+//         $('#WBBCOS').click(async () => {
+//             $('#actionContent')[0].innerHTML = '<div class="actionbar-bar"></div>';
+//             for (const type of Object.keys(this.items).filter(e => e !== 'variants')) {
+//                 const value = this.items[type];
+//                 const div = document.createElement('div');
+//                 document.getElementsByClassName('actionbar-bar')[0].appendChild(div);
+//                 div.outerHTML = `<div class="icon" style="margin: 12px;cursor: pointer;"><img draggable="false" src="${value.images.icon}" height="123" width="120"></div>`;
+//             }
+//         });
+//         return this;
+//     }
+
+//     get members() {
+//         if(!this.party) return null;
+//         return this.party.members;
+//     }
+    
+//     get me() {
+//         if(!this.members) return null;
+//         return this.members.find(m => m.id === this.account.id);
+//     }
+// }
+
+
 class Menu {
-    constructor(client) {
-        this.client = client;
+    constructor(System, theme) {
+        this.system = System;
+
         this.icons = {
             platforms: {
                 benbot: {
@@ -40,30 +319,30 @@ class Menu {
                 }
             }
         };
-    }
-
-    getImages(AthenaCosmeticLoadout) {
-        const last = (character, data) => {
-            return data.substring(data.lastIndexOf(character) + 1, data.length);
+        this.themes = {
+            Default: {
+                background: 'black&white',
+                cosmetics: {
+                    outfit: [
+                        "CID_438_Athena_Commando_M_WinterGhoulEclipse",
+                        "CID_439_Athena_Commando_F_SkullBriteEclipse",
+                        "CID_437_Athena_Commando_F_AztecEclipse",
+                        "CID_159_Athena_Commando_M_GumshoeDark"
+                    ],
+                    backpack: [
+                        "BID_287_AztecFemaleEclipse",
+                        "BID_286_WinterGhoulMaleEclipse"
+                    ],
+                    pickaxe: [
+                        "Pickaxe_ID_164_DragonNinja"
+                    ]
+                }
+            }
         }
-        return {
-            character: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.characterDef).replace(/'/g, '')}/icon.png`,
-            backpack: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.backpackDef).replace(/'/g, '')}/icon.png`,
-            pickaxe: `https://fortnite-api.com/images/cosmetics/br/${last('.', AthenaCosmeticLoadout.pickaxeDef).replace(/'/g, '')}/icon.png`
-        }
+        this.theme = this.themes[theme || 'Default'];
+        this.LoadingText = null;
     }
 
-    setIcon() {
-        $('.taskbar').children()[0].children[0].children[0].src =`https://fortnite-api.com/images/cosmetics/br/${this.client.me.meta['Default:AthenaCosmeticLoadout_j'].AthenaCosmeticLoadout.characterDef.replace(/'/g, '').split('/').slice(-1)[0].split('.')[0]}/icon.png`;
-        return this;
-    }
-
-    setUsername(username) {
-        $('.username').html(username);
-        return this;
-    }
-
-    
     async changeMenu(menu, html) {
         menu[0].innerHTML = '<div class="cosmetic"><div style="width: 200px;height: 250px;align-items: center;display: inline-flex;position: relative;text-align: center;align-content: center;left: 50px;">LOADING</div></div>';
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -78,24 +357,24 @@ class Menu {
     }
 
     async setTimeLeft() {
-        // const timerSettings = await this.system.getTimeLeft();
-        // const timer = setInterval(() => {
-        //     const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
-        //     if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
-        //         timerSettings.seconds = 60;
-        //         timerSettings.minutes --;
-        //         document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-        //     }
-        //     if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
-        //         document.getElementById('timer').innerHTML = `None minutes left`;
-        //         clearInterval(timer);
-        //     }
-        //     if(timerSettings.seconds !== 0) {
-        //         timerSettings.seconds --;
-        //         document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
-        //     }
-        // }, 1000);
-        // return this;
+        const timerSettings = await this.system.getTimeLeft();
+        const timer = setInterval(() => {
+            const clock = '<img src="https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Foundation/Textures/Icons/HUD/T-Icon-Clock-128.uasset" width="25">';
+            if(timerSettings.seconds === 0 && timerSettings.minutes !== 0) {
+                timerSettings.seconds = 60;
+                timerSettings.minutes --;
+                document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+            }
+            if(timerSettings.seconds === 0 && timerSettings.minutes === 0) {
+                document.getElementById('timer').innerHTML = `None minutes left`;
+                clearInterval(timer);
+            }
+            if(timerSettings.seconds !== 0) {
+                timerSettings.seconds --;
+                document.getElementById('timer').innerHTML = `${timerSettings.minutes} minutes and ${timerSettings.seconds} seconds left${clock}`;
+            }
+        }, 1000);
+        return this;
     }
 
     async showMenu(cosmeticType, menSu) {
@@ -517,6 +796,11 @@ class Menu {
         return menu;
     }
 
+    changeUsername(username) {
+        $('#username').html(username);
+        return this;
+    }
+
     convertPlatform(platform, url) {
         let ENUMNAME;
         switch(platform) {
@@ -569,283 +853,6 @@ class Menu {
             }, 500);
         }
         return this;
-    }
-}
-
-class Client {
-    constructor ({
-        url,
-        displayName
-    }) {
-        this.url = url || 'https://webfort.herokuapp.com';
-        this.account = null;
-        this.party = null;
-        this.friends = null;
-        this.hiddenMembers = null;
-        this.source = null;
-        this.displayName = displayName;
-        this.messages = {
-            party: null,
-            friends: null,
-            handler: null
-        };
-        this.cosmetics = {
-            sorted: null,
-            variants: null
-        };
-        this.items = {
-            variants: {}
-        };
-        this.menu = new Menu(this);
-        this.eventHandler = async (data) => {
-            const last = (character, data) => {
-                return data.substring(data.lastIndexOf(character) + 1, data.length);
-            }
-            const json = JSON.parse(data.data);
-            if(json.exit) return $('.message-container').fadeIn();
-            if(json.event) {
-                const data = json.data;
-                const event = json.event;
-                switch(event) {
-                    case 'refresh:party': {
-                        system.party = json.party;
-                        this.menu.reloadMembers();
-                        if(data.displayName && data.meta.schema && data.meta.schema['Default:FrontendEmote_j']) {
-                            const emoteItemDef = JSON.parse(data.meta.schema['Default:FrontendEmote_j']).FrontendEmote.emoteItemDef;
-                            if($(`#${data.id}.member`).children('img[type="emote"]')[0]) {
-                                $(`#${data.id}.member`).children('img[type="emote"]')[0].remove();
-                            }
-                            if(emoteItemDef.trim() !== "" && emoteItemDef.trim() !== "None") {
-                                const id = last('.', emoteItemDef).replace(/'/g, '');
-                                const image = `https://fortnite-api.com/images/cosmetics/br/${id}/icon.png`;
-                                $(`#${data.id}.icon`).children('img')[0].outerHTML += `<img style="opacity: 0.5" width="120" height="120" draggable="false" src="${image}">`;
-                            }
-                        }
-                    } break;
-    
-                    case 'friend:message': {
-                        if(!this.messages.friends[data.author.id]) this.messages.friends[data.author.id] = [];
-                        this.messages.friends[data.author.id].push(data);
-                        if(this.messages.handler) this.messages.handler(data);
-                        await this.menu.newNotification('F', `You have a new message from ${data.author.displayName}`);
-                    } break;
-
-                    case 'party:member:joined': {
-                        await this.menu.newNotification('P', `${data.displayName} has joined`);
-                    } break;
-
-                    case 'party:member:left': {
-                        await this.menu.newNotification('P', `${data.displayName} has left`);
-                    } break;
-
-                    case 'party:member:kicked': {
-                        await this.menu.newNotification('P', `${data.displayName} has been kicked`);
-                    } break;
-    
-                    default: {
-                        console.log(data);
-                        console.log(`UNKNOWN EVENT ${event}`);
-                    } break;
-                }
-            }
-        };
-    }
-
-    async authorize() {
-        await this.logout();
-        await this.createSession(this.displayName);
-        this.source = await this.makeSource();
-        window.onbeforeunload = this.logout;
-        await new Promise((resolve) => {
-            this.source.onmessage = (data) => {
-                const json = JSON.parse(data.data);
-                if(json.completed) return resolve();
-            }
-        });
-        await this.setProperties();
-        this.setSourceEvent(this.source);
-
-        return this;
-    }
-
-    async logout() {
-        this.account = null;
-        this.party = null;
-        this.friends = null;
-        return await this.sendRequest('api/account', {
-            method: "DELETE"
-        });
-    }
-
-    async createSession(displayName) {
-        return await this.sendRequest(`api/account?displayName=${displayName}`, {
-            method: "POST"
-        });
-    }
-
-    async changeCosmeticItem(cosmeticType, id) {
-        await this.sendRequest(`api/account/party/me/meta?array=["${id}"]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
-            method: "PUT"
-        });
-        this.items[cosmeticType.toLowerCase()] = this.cosmetics.sorted[cosmeticType.toLowerCase()].find(cosmetic => cosmetic.id === id);
-        return this;
-    }
-
-    async changeVariants(array, cosmeticType) {
-        this.items.variants[cosmeticType] = array;
-        await this.sendRequest(`api/account/party/me/meta?array=["${this.items[cosmeticType].id}", ${JSON.stringify(array)}]&function=set${cosmeticType.toLowerCase().charAt(0).toUpperCase() + cosmeticType.toLowerCase().slice(1)}`, {
-            method: "PUT"
-        });
-        return this;
-    }
-
-    async makeSource() {
-        return new EventSource(`${this.url}/api/account/authorize?auth=${await this.getAuthorizeCode()}`);
-    }
-
-    async getAuthorizeCode() {
-        return (await (await this.sendRequest('api/auth')).json()).auth;
-    }
-
-    async setProperties() {
-        this.account = await this.getAccount();
-        this.party = await this.getParty();
-        this.friends = await this.getFriends();
-        this.hiddenMembers = [];
-        this.messages = {
-            party: [],
-            friends: {},
-            handler: null
-        }
-        this.cosmetics.sorted = {};
-        this.items.variants = [];
-        await this.sortCosmetics();
-        await this.setDefaultItems();
-        this.setMenu();
-        return this;
-    }
-
-    async getAccount() {
-        const response = await (await this.sendRequest('api/account')).json();
-        if(response.authorization === false) return null;
-        return response;
-    }
-
-    async getParty() {
-        return await (await this.sendRequest('api/account/party')).json();
-    }
-
-    async getFriends() {
-        return await (await this.sendRequest('api/account/friends')).json();
-    }
-
-    async getTimeLeft() {
-        return await (await this.sendRequest('api/account/time')).json();
-    }
-
-    async sendRequest(path, options) {
-        return await fetch(`${this.url}/${path}`, {
-            credentials: 'include',
-            headers: {
-                'Access-Control-Allow-Origin': "*"
-            },
-            ...options
-        });
-    }
-
-    async sortCosmetics() {
-        const data = (await (await fetch('https://fortnite-api.com/v2/cosmetics/br')).json()).data;
-        this.cosmetics.all = data;
-        for (const value of data) {
-            if(!this.cosmetics.sorted[value.type.value]) this.cosmetics.sorted[value.type.value] = [];
-            this.cosmetics.sorted[value.type.value].push(value);
-        }
-        return this;
-    }
-
-    async setDefaultItems() {
-        const check = (data, main) => {
-            const t = main.find(e => e.id === data[(Math.floor(Math.random() * data.length - 1) + 1)]);
-            if(!t) return check(data, main);
-            return t;
-        }
-        const cosmetics = {
-            outfit: [
-                'CID_102_Athena_Commando_M_Raven',
-                'CID_105_Athena_Commando_F_SpaceBlack',
-                'CID_337_Athena_Commando_F_Celestial',
-                'CID_175_Athena_Commando_M_Celestial',
-                'ITEM/CID_413_Athena_Commando_M_StreetDemon',
-                'CID_511_Athena_Commando_M_CubePaintWildCard',
-                'CID_512_Athena_Commando_F_CubePaintRedKnight',
-                'CID_513_Athena_Commando_M_CubePaintJonesy',
-                'CID_850_Athena_Commando_F_SkullBriteCube',
-                'CID_849_Athena_Commando_M_DarkEaglePurple',
-                'CID_848_Athena_Commando_F_DarkNinjaPurple',
-                'CID_737_Athena_Commando_F_DonutPlate',
-                'CID_648_Athena_Commando_F_MsAlpine'
-            ],
-            backpack: [
-                'BID_333_Reverb',
-                'BID_338_StarWalker',
-                'BID_343_CubeRedKnight',
-                'BID_344_CubeWildCard'
-            ],
-            pickaxe: [
-                'Pickaxe_ID_451_DarkEaglePurple'
-            ]
-        };
-        for (const type of ['outfit', 'backpack', 'pickaxe']) {
-            await this.changeCosmeticItem(type, check(cosmetics[type], this.cosmetics.sorted[type]).id);
-        }
-        return this;
-    }
-
-    async kickPlayer(id) {
-        return await this.sendRequest(`api/account/party/kick?id=${id}`);
-    }
-
-    async hidePlayer(id) {
-        $(`#${id}.icon`).animate({opacity: 0.5}, 300);
-        this.hiddenMembers.push({id});
-        return await this.sendRequest(`api/account/party/member/hide?id=${id}`);
-    }
-    
-    async showPlayer(id) {
-        $(`#${id}.icon`).animate({opacity: 1}, 300);
-        this.hiddenMembers = this.hiddenMembers.filter(m => m.id !== id);
-        return await this.sendRequest(`api/account/party/member/show?id=${id}`);
-    }
-
-    setSourceEvent(source) {
-        source.onmessage = this.eventHandler;
-        return this;
-    }
-
-    setMenu() {
-        this.menu.setUsername(this.displayName);
-        $('.taskbar').fadeIn();
-        $('.actionbar').fadeIn();
-        $('#WBBCOS').click(async () => {
-            $('#actionContent')[0].innerHTML = '<div class="actionbar-bar"></div>';
-            for (const type of Object.keys(this.items).filter(e => e !== 'variants')) {
-                const value = this.items[type];
-                const div = document.createElement('div');
-                document.getElementsByClassName('actionbar-bar')[0].appendChild(div);
-                div.outerHTML = `<div class="icon" style="margin: 12px;cursor: pointer;"><img draggable="false" src="${value.images.icon}" height="123" width="120"></div>`;
-            }
-        });
-        return this;
-    }
-
-    get members() {
-        if(!this.party) return null;
-        return this.party.members;
-    }
-    
-    get me() {
-        if(!this.members) return null;
-        return this.members.find(m => m.id === this.account.id);
     }
 }
 
@@ -1069,10 +1076,34 @@ class System {
             if(!t) return check(data, main);
             return t;
         }
-        if(this.menu.theme.background === 'black&white') {
-            for (const type of ['outfit', 'backpack', 'pickaxe']) {
-                await this.changeCosmeticItem(type, check(this.menu.theme.cosmetics[type], this.cosmetics.sorted[type]).id);
-            }
+        const cosmetics = {
+            outfit: [
+                'CID_102_Athena_Commando_M_Raven',
+                'CID_105_Athena_Commando_F_SpaceBlack',
+                'CID_337_Athena_Commando_F_Celestial',
+                'CID_175_Athena_Commando_M_Celestial',
+                'ITEM/CID_413_Athena_Commando_M_StreetDemon',
+                'CID_511_Athena_Commando_M_CubePaintWildCard',
+                'CID_512_Athena_Commando_F_CubePaintRedKnight',
+                'CID_513_Athena_Commando_M_CubePaintJonesy',
+                'CID_850_Athena_Commando_F_SkullBriteCube',
+                'CID_849_Athena_Commando_M_DarkEaglePurple',
+                'CID_848_Athena_Commando_F_DarkNinjaPurple',
+                'CID_737_Athena_Commando_F_DonutPlate',
+                'CID_648_Athena_Commando_F_MsAlpine'
+            ],
+            backpack: [
+                'BID_333_Reverb',
+                'BID_338_StarWalker',
+                'BID_343_CubeRedKnight',
+                'BID_344_CubeWildCard'
+            ],
+            pickaxe: [
+                'Pickaxe_ID_451_DarkEaglePurple'
+            ]
+        };
+        for (const type of ['outfit', 'backpack', 'pickaxe']) {
+            await this.changeCosmeticItem(type, check(cosmetics[type], this.cosmetics.sorted[type]).id);
         }
         return this;
     }
@@ -1103,8 +1134,6 @@ class System {
         return this.party.members;
     }
 }
-
-let system = null;
 
 async function showPartyMenu(menu) {
     await changeMenuHtml(menu, `<div class="cosmetic">PARTY<br><div style="font-size: 20px; margin: 10px;"><div id="changeLTM" class="clickHereButton" style="">Change Playlist</div></div><div style="margin: 10px;font-size: 20px;">CREATED AT: ${system.party.createdAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${system.party.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: CAPTAIN</div></div>`);
@@ -1240,7 +1269,12 @@ async function friendsMenu(menu) {
 }
 
 
-const client = new Client({});
+const system = new System({
+    theme: 'Default',
+    eventHandler: console.log,
+    messageHandler: console.log,
+    displayName
+});
 
 $(document).ready(async () => {
     const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
