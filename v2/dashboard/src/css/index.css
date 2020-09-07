@@ -232,12 +232,14 @@ html {
 }
 
 .menu {
-    background-color: black;
+    background-color: #19181F;
     display: inline-block;
     position: absolute;
     z-index: 50;
     color: white;
-    border: 1px solid white;
+    border: 1px solid #322f3d;
+    box-shadow: 2px 4px 9px #19181F, 6px 2px 32px #19181F;
+    border-radius: 11px;
 }
 
 #cosmetics > div {
@@ -282,6 +284,13 @@ html {
     border: 1px solid;
     position: relative;
     top: -15px;
+}
+
+.cosmetic {
+    font-size: 35px;
+    font-family: t;
+    padding: 10px;
+    color: purple;
 }
 
 .text-container {
