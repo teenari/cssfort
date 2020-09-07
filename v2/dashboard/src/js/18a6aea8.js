@@ -849,28 +849,6 @@ class Client {
     }
 }
 
-class Menu {
-    constructor(System, theme) {
-        this.system = System;
-
-        this.icons = {
-            platforms: {
-                benbot: {
-                    PC: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PC_PlatformIcon_64x.uasset",
-                    CONSOLE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Console_PlatformIcon_64x.uasset",
-                    EARTH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Earth_PlatformIcon_64x.uasset",
-                    MOBILE: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Mobile_PlatformIcon_64x.uasset",
-                    XBL: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/xBox_PlatformIcon_64x.uasset",
-                    PSN: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/PS4_w-backing_PlatformIcon_64x.uasset",
-                    SWITCH: "https://benbotfn.tk/api/v1/exportAsset?path=FortniteGame/Content/UI/Friends_UI/Social/Switch_PlatformIcon_64x.uasset"
-                }
-            }
-        };
-        this.LoadingText = null;
-    }
-
-}
-
 class System {
     constructor ({
         url,
