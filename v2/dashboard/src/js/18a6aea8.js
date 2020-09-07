@@ -745,6 +745,9 @@ class Menu {
                 });
                 this.addCloseButton(menu, `MENU~MEMBER${member.id}~close`);
             };
+            div.onclick = async () => {
+                await memberFunction();
+            }
             if(!this.system.party.meta['Default:RawSquadAssignments_j'].RawSquadAssignments.find(m => m.memberId === member.id) && !this.system.hiddenMembers.find(m => m.id === member.id)) {
                 $(`#${member.id}.icon`).animate({opacity: 0.5}, 500);
                 $(`#${member.id}.icon`)[0].innerHTML += '<div style="position: absolute;font-family: t;color: white;opacity: 0.8;top: 44px;">Player may be glitched.</div>';
