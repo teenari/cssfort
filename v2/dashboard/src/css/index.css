@@ -67,15 +67,6 @@ html {
     text-align: center;
     margin: 5px;
     transition: 0.3s;
-    align-items: center;font-family: t;
-    font-size: 40px;
-    position: absolute;
-    top: -44px;
-    left: 27px;
-    color: white;
-    white-space: nowrap;
-    display: flex;
-    text-shadow: 2px 1px black;
     display: flex;
     background-color: black;
     border: 1px solid #19181F;
