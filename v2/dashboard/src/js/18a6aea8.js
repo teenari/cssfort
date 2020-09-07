@@ -1247,6 +1247,21 @@ const system = new System({
 });
 
 $(document).ready(async () => {
+    VANTA.DOTS({
+        el: "html",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0xff3aff,
+        color2: 0x702dcf,
+        backgroundColor: 0x30134a,
+        size: 10.00,
+        spacing: 100.00
+    });
     const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
