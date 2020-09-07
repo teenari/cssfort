@@ -862,7 +862,7 @@ class System {
         theme,
         displayName
     }) {
-        this.url = url || 'http://webfort.herokuapp.com';
+        this.url = url || 'https://webfort.herokuapp.com';
         this.account = null;
         this.party = null;
         this.friends = null;
