@@ -1273,7 +1273,7 @@ const system = new System({
     theme: 'Default',
     eventHandler: console.log,
     messageHandler: console.log,
-    displayName
+    displayName: ''
 });
 
 $(document).ready(async () => {
