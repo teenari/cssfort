@@ -276,13 +276,13 @@ html {
 }
 
 #cosmetics {
-    background: white;
     width: 340px;
     height: 300px;
     overflow-y: scroll;
-    border: 1px solid;
     position: relative;
     top: -15px;
+    border-top: 1px solid #322f3d;
+    border-bottom: 1px solid #322f3d;
 }
 
 .cosmetic {
@@ -320,4 +320,21 @@ html {
 @font-face {
     font-family: t;
     src: url(../fonts/BurbankBigCondensed-Black.otf);
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+  
+::-webkit-scrollbar-track {
+    background: #19181F; 
+    opacity: 0;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: #322f3d;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background: white; 
 }
