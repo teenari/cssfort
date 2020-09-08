@@ -94,8 +94,8 @@ html {
 .icon div:nth-of-type(1) {
     position: absolute;
     font-family: t;
-    color: white;
-    text-shadow: 1px 0px black;
+    color: #32304E;
+    text-shadow: 2px 1px #19181F;
     display: inline-block;
     width: 100px;
     height: 50px;
@@ -104,6 +104,7 @@ html {
     margin-left: -50px;
     overflow: auto;
     margin-top: 23px;
+    font-size: 21px;
 }
 
 .notice {
@@ -327,10 +328,10 @@ html {
     position: absolute;
     top: -44px;
     left: 27px;
-    color: white;
+    color: #322F53;
     white-space: nowrap;
     display: flex;
-    text-shadow: 2px 1px black;
+    text-shadow: 2px 1px #19181F;
 }
 
 @font-face {
