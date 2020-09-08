@@ -389,7 +389,7 @@ class Menu {
             if(!menSu.system.items[cosmeticType.toLowerCase()].variants) return;
             let selectedVariants = [];
             await new Promise((resolve) => setTimeout(resolve, 1));
-            await menSu.changeMenu(menu, `<div class="cosmetic">PICK YOUR VARIANT<div class="clickHereButton" style="padding: 1px;font-size: 25px;cursor: auto;height: auto;position: relative;top: 10px;"><textarea placeholder="Search Here" style="margin: 0px;width: 300px;height: 13px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: t;position: relative;" id="search"></textarea></div><br><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
+            await menSu.changeMenu(menu, `<div class="cosmetic">PICK YOUR VARIANT<div><textarea placeholder="Search Here" style="background: none;color: #322f3d;margin: 0px;width: 301px;height: 16px;resize: none;font-size: 20px;outline: none;border: none;overflow: hidden;font-family: sans-serif;text-align: center;position: relative;" id="search"></textarea></div><br><div id="cosmetics" style="overflow-y: scroll;width: 340px;height: 300px;"></div><div class="clickHereButton" id="SaveVariant" style="padding: 1px;font-size: 20px;">SAVE</div></div>`);
             menSu.addCloseButton(menu, 'MENU~cosmeticMenu~close');
             $('#search').keyup(() => {
                 const searchQuery = $('#search').val().toUpperCase();
@@ -720,7 +720,7 @@ class Menu {
                 let items = '';
                 for (const key of Object.keys(images)) {
                     const value = images[key];
-                    items += `<div class="icon" style="width: 100px; height: 99px;"><img width="100" height="100" draggable="false" src="${value}"></div>`;
+                    items += `<div class="icon" style="width: 100px; height: 99px;background: #322f3d;"><img width="100" height="100" draggable="false" src="${value}"></div>`;
                 }
                 const menuPrefix = `MENU~MEMBER${member.id}~`;
                 menu.html(`<div class="cosmetic">${member.displayName}<br><div style="font-size: 20px; margin: 10px;"><div style="position: relative;align-content: end;align-items: self-end;height: 108px;display: flex;top: -8px;">${items}</div>${this.system.party.members.find(m => m.id === this.system.account.id).role === 'CAPTAIN' && member.id !== this.system.account.id ? `<div style="display: flex;"><div id="${menuPrefix}kickPlayer" class="clickHereButton" style="${member.id === this.system.account.id ? 'border: 1px solid gray;color: gray;' : ''}padding: 4px;width: 97px;">Kick Player</div><div id="${menuPrefix}hiddenPlayer" class="clickHereButton" style="padding: 4px;width: 97px;position: absolute;left: 245px;">${this.system.hiddenMembers.find(m => m.id === member.id) ? 'Show Player' : 'Hide Player'}</div></div>` : ''}</div><div style="margin: 10px;font-size: 20px;">JOINED AT: ${member.joinedAt}</div><div style="margin: 10px;font-size: 20px;">ID: ${member.id}</div><div style="margin: 10px;font-size: 20px;">ROLE: ${member.role}</div></div>`);
