@@ -686,15 +686,12 @@ class Menu {
 
     addCloseButton(menu, id) {
         const div = document.createElement('div');
-        div.setAttribute("style", "font-size: 18px; background-color: rgb(0, 0, 0); border-radius: 4px; color: rgb(255, 255, 255); padding: 11px; cursor: pointer; text-align: center; margin: 12px; position: relative; border: 1px solid;");
+        div.classList.add('clickHereButton');
+        div.setAttribute("style", "font-size: 18px; margin: 12px; position: relative; border-radius: 4px;");
         div.id = id;
         div.innerHTML = 'Close Menu';
         [...document.getElementById(menu[0].id).children].find(e => e.className === 'cosmetic').appendChild(div);
         $(`[id="${id}"]`).click(async () => await this.hideMenu(menu));
-        $(`[id="${id}"]`).unbind('hover').hover(
-            () => $(`[id="${id}"]`).stop().animate({borderRadius: 10}, 100),
-            () => $(`[id="${id}"]`).stop().animate({borderRadius: 4}, 100)
-        );
         return $(`[id="${id}"]`);
     }
 
