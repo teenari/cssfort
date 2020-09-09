@@ -226,6 +226,20 @@ html {
     top: 20vh;
 }
 
+.m {
+    position: absolute;
+    margin: auto;
+    top: 216.226px;
+    left: 150px;
+    color: white;
+    background: rgb(25, 24, 31);
+    padding: 10px;
+    display: inline-block;
+    border-radius: 13px;
+    font-family: t;
+    font-size: 32px;
+}
+
 #fnItems div img:nth-of-type(n+1) {
     position: relative;
     left: 0px;

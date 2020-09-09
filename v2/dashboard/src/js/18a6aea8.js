@@ -660,6 +660,15 @@ class Menu {
             const value = this.system.items[key];
             if(!value.type) continue;
             await this.createImageInElement(document.getElementById('fnItems'), false, [value, 0, 0, null, 120, 123, value.id, true, true]);
+            $(`#${value.id}`).hover(() => {
+                $('.m').css('top', `${$(`#${value.id}`).offset().top - 38 + 77}px`);
+                document.querySelector('body').onresize = () => $('.m').css('top', `${$(`#${value.id}`).offset().top - 38 + 77}px`);
+                $('.m').fadeIn();
+            }, () => {
+                $('.m').fadeOut();
+                document.querySelector('body').onresize = null;
+            });
+            document.querySelector('body').onresize = () => $('.m').css('top', `${$('#CID_337_Athena_Commando_F_Celestial').offset().top - 38 + 77}px`);
         }
         return this;
     }
