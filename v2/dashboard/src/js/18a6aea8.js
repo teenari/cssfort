@@ -568,7 +568,6 @@ class Menu {
             div.appendChild(IMAGE);
         }
         const text = document.createElement('div');
-        text.innerText = argumen[0].type.value.toUpperCase();
         div.appendChild(text);
         const showMenu = this.showMenu;
         const menu = this;
