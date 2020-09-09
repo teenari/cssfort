@@ -24,6 +24,8 @@
  * limitations under the License.
  */
 
+const ifMobile = navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i);
+
 // class Client {
 //     constructor ({
 //         url,
@@ -1256,6 +1258,13 @@ const system = new System({
 });
 
 $(document).ready(async () => {
+    if(ifMobile) {
+        const link = document.createElement('link');  
+        link.rel = 'stylesheet';  
+        link.type = 'text/css'; 
+        link.href = './src/css/mobile.css';  
+        document.getElementsByTagName('HEAD')[0].appendChild(link);
+    }
     const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
