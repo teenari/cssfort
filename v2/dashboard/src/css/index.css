@@ -94,7 +94,7 @@ html {
 .icon div:nth-of-type(1) {
     position: absolute;
     font-family: t;
-    color: #32304E;
+    color: white;
     text-shadow: 2px 1px #19181F;
     display: inline-block;
     width: 100px;
@@ -226,10 +226,6 @@ html {
     top: 20vh;
 }
 
-#fnItems div {
-    border-radius: 8px;
-}
-
 #fnItems div img:nth-of-type(n+1) {
     position: relative;
     left: 0px;
@@ -241,7 +237,7 @@ html {
     display: inline-block;
     position: absolute;
     z-index: 50;
-    color: white;
+    color: #54467A;
     border: 1px solid #322f3d;
     box-shadow: 2px 4px 9px #19181F, 6px 2px 32px #19181F;
     border-radius: 11px;
@@ -328,7 +324,7 @@ html {
     position: absolute;
     top: -44px;
     left: 27px;
-    color: #322F53;
+    color: white;
     white-space: nowrap;
     display: flex;
     text-shadow: 2px 1px #19181F;
