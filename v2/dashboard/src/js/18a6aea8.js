@@ -663,10 +663,9 @@ class Menu {
             $(`#${value.id}`).hover(() => {
                 $('.m').css('top', `${$(`#${value.id}`).offset().top - 38 + 77}px`);
                 document.querySelector('body').onresize = () => $('.m').css('top', `${$(`#${value.id}`).offset().top - 38 + 77}px`);
-                $('.m').html(value.type.value.toUpperCase());
-                $('.m').css('opacity', '1');
+                $('.m').fadeIn(500);
             }, () => {
-                $('.m').css('opacity', '0');
+                $('.m').fadeOut(500);
                 document.querySelector('body').onresize = null;
             });
             document.querySelector('body').onresize = () => $('.m').css('top', `${$('#CID_337_Athena_Commando_F_Celestial').offset().top - 38 + 77}px`);
