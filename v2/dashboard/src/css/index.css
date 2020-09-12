@@ -349,6 +349,11 @@ textarea {
     white-space: nowrap;
 }
 
+::placeholder {
+    color: #54467a;
+    opacity: 1;
+}
+
 .cosmetic {
     font-size: 35px;
     font-family: t;
