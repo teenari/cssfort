@@ -674,7 +674,17 @@ class Menu {
         }
         const buttons = document.createElement('div');
         document.getElementById('fnItems').appendChild(buttons);
-        buttons.outerHTML = '<div class="smallButton"><div>Change Level</div><div>0</div></div>';
+        buttons.outerHTML = '<div class="smallButton"><div id="changeLevel">Change Level</div><div>0</div></div>';
+        $('#changeLevel').click(async () => {
+            const menu = this.createMenu('CHANGELEVEL');
+            menu.innerHTML = `<div class="cosmetic" style="font-size: 23px;"><textarea placeholder="TYPE LEVEL HERE" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" dir="ltr"></textarea><div class="clickHereButton" id="SaveLevel" style="padding: 1px;font-size: 20px;">Save</div></div>`;
+            $(document).click(async (e) => { 
+                if(!$(event.target).closest('[id="MENU~CHANGELEVEL"]').length && $('[id="MENU~CHANGELEVEL"]').is(":visible")) {
+                    await this.hideMenu(menu);
+                    $(document).unbind('click');
+                }
+            });
+        });
         return this;
     }
 

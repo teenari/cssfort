@@ -333,6 +333,22 @@ html {
     text-shadow: 2px 1px #19181f;
 }
 
+textarea {
+    margin: 0px;
+    height: 20px;
+    resize: none;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    overflow: hidden;
+    font-family: t;
+    position: relative;
+    background: none;
+    top: 4px;
+    color: #54467a;
+    white-space: nowrap;
+}
+
 .cosmetic {
     font-size: 35px;
     font-family: t;
