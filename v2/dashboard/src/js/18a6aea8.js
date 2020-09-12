@@ -672,6 +672,9 @@ class Menu {
             });
             document.querySelector('body').onresize = () => $('.m').css('top', `${$('#CID_337_Athena_Commando_F_Celestial').offset().top - 38 + 77}px`);
         }
+        const buttons = document.createElement('div');
+        document.getElementById('fnItems').appendChild(buttons);
+        buttons.outerHTML = '<div class="smallButton"><div>Change Level</div><div>0</div></div>';
         return this;
     }
 

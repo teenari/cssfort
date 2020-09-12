@@ -300,6 +300,39 @@ html {
     border-bottom: 1px solid #322f3d;
 }
 
+.smallButton {
+    background: #19181f;
+    box-shadow: 2px 4px 9px #19181f, 6px 2px 32px #19181f;
+    width: 100px;
+    height: 27px;
+    margin: 16px;
+    transition: .3s;
+    border-radius: 10px;
+    text-align: center;
+    font-family: t;
+    color: #54467a;
+    position: relative;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+}
+
+.smallButton > div:nth-of-type(1) {
+    position: relative;
+    left: 13%;
+}
+
+.smallButton > div:nth-of-type(2) {
+    font-style: italic;
+    position: relative;
+    left: 38px;
+    color: white;
+    white-space: nowrap;
+    display: flex;
+    text-shadow: 2px 1px #19181f;
+}
+
 .cosmetic {
     font-size: 35px;
     font-family: t;
