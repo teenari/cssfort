@@ -680,7 +680,7 @@ class Menu {
             menu.innerHTML = `<div class="cosmetic" style="font-size: 23px;"><textarea placeholder="TYPE LEVEL HERE" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" dir="ltr"></textarea><div class="clickHereButton" id="SaveLevel" style="padding: 1px;font-size: 20px;">Save</div></div>`;
             $(document).click(async (e) => { 
                 if(!$(event.target).closest('[id="MENU~CHANGELEVEL"]').length && $('[id="MENU~CHANGELEVEL"]').is(":visible")) {
-                    await this.hideMenu(menu);
+                    await this.hideMenu($('[id="MENU~CHANGELEVEL"]'));
                     $(document).unbind('click');
                 }
             });
