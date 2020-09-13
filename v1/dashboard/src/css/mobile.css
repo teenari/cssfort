@@ -28,6 +28,10 @@
     top: -34px;
 }
 
+.cosmetic > div {
+    font-size: 105px !important;
+}
+
 #members {
     display: inline;
     width: 422px;
