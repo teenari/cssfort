@@ -4,7 +4,8 @@
 }
 
 .cosmetic {
-    font-size: 93px;
+    font-size: 293px;
+    text-align: center;
 }
 
 .cosmetic > div[id*="Save"] {
@@ -17,7 +18,7 @@
 
 .cosmetic > div[id*="close"] {
     height: 100%;
-    top: 89%;
+    top: 94%;
     position: absolute !important;
     width: 100%;
     left: -28px;
