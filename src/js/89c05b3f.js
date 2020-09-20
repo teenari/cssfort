@@ -12,7 +12,7 @@
  */
 
 $(document).ready(async () => {
-    const user = await (await fetch('https://webfort.herokuapp.com/api/user', {
+    const user = await (await fetch('https://cssfort.herokuapp.com/api/user', {
         credentials: 'include',
         headers: {
             'Access-Control-Allow-Origin': '*'

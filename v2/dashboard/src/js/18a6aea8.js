@@ -1,1 +1,1 @@
-window.location = 'https://dashboard.webfort.dev/';
+window.location = 'https://dashboard.cssfort.com/';
